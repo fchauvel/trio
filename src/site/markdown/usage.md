@@ -17,11 +17,14 @@ system to be completely destroyed
 
 ## Usage
 
-The robustness analyser is a standalone application. It takes three main parameters: 
+The robustness analyser is a standalone application. It takes two main parameters: 
 
- - *Analysis Level* is the level at which the robustness is
-    computed. It can be either 'type' or 'instance'. When type is
-    selected, only the relationship between CloudML types will be
-    considered, whereas
+ - The **topology** to analyse, is the path to file containing a description of 
+the topology of interest
 
-    $> java -jar robustness-final.jar type my-deployment.json 1000
+ - The **number** of extinction sequence to run. This parameter directly impact 
+the strength of the statistical evidence associated with the output indicators.
+
+The following command illustrates how to run TRIO from the command line
+
+    $> java -jar trio-final.jar my-deployment.json 1000
