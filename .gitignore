@@ -20,3 +20,6 @@
 /nbactions.xml
 /samples/cloudml/controller/target/
 /samples/cloudml/robustness/target/
+
+# Emacs
+*~
