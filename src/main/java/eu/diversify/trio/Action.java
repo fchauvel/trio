@@ -1,57 +1,27 @@
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 
 package eu.diversify.trio;
 
 /**
- * Represent an action performed on a population: killing on individual or
- * making them all alive
+ * Action which can be performed on topologies
  */
-public abstract class Action {
+public interface Action {
 
-    public static Action none() {
-        return NoAction.getInstance();
-    }
+    /**
+     * Execute this action on the given topology
+     *
+     * @param topology the topology on which this action shall be performed
+     * @return the topology once the action is performed
+     */
+    Topology executeOn(Topology topology);
+
     
-    public static Action kill(String victim) {
-        return new Kill(victim);
-    }
-
-    public static Action reviveAll() {
-        return ReviveAll.getInstance();
-    }
-
-    private final int killedCount;
-
-    public Action(int killedCount) {
-        this.killedCount = killedCount;
-    }
-    
-    public void applyTo(Simulation simulation) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public int killedCount() {
-        return killedCount;
-    }
-
+    /**
+     * Compare this action with another object
+     * @param object the object to compare with
+     * @return  true if the given object is equivalent to this action
+     */
     @Override
-    public boolean equals(Object other) {
-        return false;
-    }
+    boolean equals(Object object);
+    
 }

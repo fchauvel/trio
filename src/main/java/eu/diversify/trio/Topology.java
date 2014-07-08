@@ -1,0 +1,114 @@
+package eu.diversify.trio;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * One particular configuration of the system
+ */
+public class Topology {
+
+    public static final boolean ACTIVE = true;
+    public static final boolean INACTIVE = !ACTIVE;
+
+    private final System system;
+    private final Map<String, Boolean> status;
+    private final List<Listener> listeners;
+
+    public Topology(System system) {
+        this(system, new Listener[]{});
+    }
+
+    public Topology(System system, Listener... listeners) {
+        this.system = system;
+        this.status = new HashMap<String, Boolean>();
+        for (String eachName: system.getComponentNames()) {
+            this.status.put(eachName, ACTIVE);
+        }
+        this.listeners = new ArrayList<Listener>(Arrays.asList(listeners));
+    }
+    
+    public int getCapacity() {
+        return status.size(); 
+    }
+    
+
+    public boolean isActive(String name) {
+        return statusOf(name);
+    }
+
+    private boolean statusOf(String component) {
+        checkName(component);
+        return status.get(component);
+    }
+
+    public boolean isInactive(String name) {
+        return !isActive(name);
+    }
+
+    public int countActive() {
+        return activeComponents().size();
+    }
+
+    public Collection<String> activeComponents() {
+        final Collection<String> selection = new ArrayList<String>();
+        for (String eachComponent: this.status.keySet()) {
+            if (isActive(eachComponent)) {
+                selection.add(eachComponent);
+            }
+        }
+        return selection;
+    }
+
+    public boolean hasActiveComponents() {
+        return countActive() > 0;
+    }
+
+    private void propagateChangesIn(Topology topology) {
+        boolean updated = true;
+        while (updated) {
+            updated = false;
+            for (String eachComponent: status.keySet()) {
+                final boolean status = topology.isActive(eachComponent);
+                boolean isActive = status && system.requirementOf(eachComponent).isSatisfiedIn(topology);
+                setStatusOf(eachComponent, isActive);
+                updated |= status != isActive;
+            }
+        }
+    }
+
+    public void setStatusOf(String component, boolean isActive) {
+        checkName(component);
+        this.status.put(component, isActive);
+    }
+
+    public void inactivate(String component) {
+        checkName(component);
+        this.status.put(component, INACTIVE);
+        propagateChangesIn(this);
+        for (Listener each: listeners) {
+            each.inactivate(component, this);
+        }
+    }
+
+    public void activate(String component) {
+        checkName(component);
+        this.status.put(component, ACTIVE);
+        propagateChangesIn(this);
+        for (Listener each: listeners) {
+            each.activate(component, this);
+        }
+    }
+
+    private void checkName(String component) throws IllegalArgumentException {
+        if (!status.containsKey(component)) {
+            final String error = String.format("Unknown component '%s' (Components are: %s)", component, status.keySet());
+            throw new IllegalArgumentException(error);
+        }
+    }
+
+}
