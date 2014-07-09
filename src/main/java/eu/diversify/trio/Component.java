@@ -33,9 +33,45 @@ public class Component {
     }
     
     public Component(String name, Requirement requirement) {
-        this.name = name;
-        this.requirement = requirement;
+        this.name = rejectIfNull(name);
+        this.requirement = rejectIfNull(requirement);
     }
+    
+    private String rejectIfNull(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Illegal 'null' value given as name");
+        }
+        return name;
+    }
+    
+    private Requirement rejectIfNull(Requirement requirement) {
+        if (requirement == null) {
+            throw new IllegalArgumentException("Illegal 'null' value given as requirement");
+        }
+        return requirement;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + this.name.hashCode();
+        hash = 83 * hash + this.requirement.hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Component other = (Component) obj;
+        return other.name.equals(name) && other.requirement.equals(requirement);
+    }
+    
+    
 
     public String getName() {
         return name;
@@ -47,6 +83,11 @@ public class Component {
     
     public boolean isSatisfiedIn(Topology topology) {
         return requirement.isSatisfiedBy(topology);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s: %s", name, requirement.toString());
     }
     
 }

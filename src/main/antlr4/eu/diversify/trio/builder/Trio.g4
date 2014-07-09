@@ -9,8 +9,17 @@ system
     ;
 
 component:
-    'component' ID 
+    'component' ID requirements?
     ;
+
+requirements
+    :   expression
+    ;
+
+expression
+    :   ID              # Reference
+    ;
+    
 
 DIGIT
 : [0-9]

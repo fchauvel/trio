@@ -15,48 +15,50 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+package eu.diversify.trio.builder;
 
-package eu.diversify.trio;
-
-import eu.diversify.trio.requirements.Require;
-import junit.framework.TestCase;
+import eu.diversify.trio.Component;
 import org.junit.Test;
+import eu.diversify.trio.System;
+import junit.framework.TestCase;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+import static eu.diversify.trio.builder.Builder.*;
+
+
+
 /**
- * Specifications of components
+ *
  */
 @RunWith(JUnit4.class)
-public class ComponentTest extends TestCase {
+public class BuilderTest extends TestCase {
 
     @Test
-    public void shouldProvideAccessToItsName() {
-        final Component component = new Component("Foo");
+    public void shouldBuildComponentWithoutRequirements() {
+        final String text = "component AA";
+
+        final Component component = build().componentFrom(text);
         
-        assertThat(component.getName(), is(equalTo("Foo"))); 
-    }   
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldRejectNullNames() {
-        new Component(null);
+        assertThat(component, is(equalTo(new Component("AA"))));     
     }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldRejectNullRequirement() {
-        new Component("Foo", null);
-    }
-    
+
     @Test
-    public void shouldProvideAccessToItsRequirement() {
-        final Component component = new Component("Foo", new Require("Bar"));
-        final Requirement expected = new Require("Bar");
-        
-        assertThat(component.getRequirement(), is(equalTo(expected)));   
+    public void readSimpleSystem() {
+        final String text
+                = "component AA"
+                + "component BB";
+
+        final System expected = new System(
+                new Component("AA"),
+                new Component("BB")
+        );
+
+        final System system = build().systemFrom(text);
+
     }
-    
-    
+
 }
