@@ -317,6 +317,7 @@
                     <finalName>trio</finalName>
                     <descriptors>
                         <descriptor>src/assembly/jar.xml</descriptor>
+                        <descriptor>src/assembly/zip.xml</descriptor>
                     </descriptors> 
                     <archive>
                         <manifest>

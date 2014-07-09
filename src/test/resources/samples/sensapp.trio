@@ -2,7 +2,8 @@
 # The SensApp services and their dependencies
 #
 
-system: 'SensApp'
+system: 
+    'SensApp'
 
 components:
     - Admin         requires    Notifier and Registry and Storage
