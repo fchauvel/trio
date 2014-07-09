@@ -35,7 +35,10 @@
         </fileSet>
         <fileSet>
             <directory>src/test/resources/samples</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/samples/</outputDirectory>
+            <includes>
+                <include>*.trio</include>
+            </includes>
         </fileSet>
         <fileSet>
             <directory>${project.build.directory}</directory>
