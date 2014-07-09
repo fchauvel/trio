@@ -5,38 +5,62 @@
 grammar Trio;
 
 system
-    : component+
+    : 'components' ':' component+ tags?
     ;
 
 component:
-    'component' ID requirements?
+    ('-')? ID strength? requirements?
+    ;
+
+strength
+    :   INTEGER
     ;
 
 requirements
-    :   expression
+    :  'requires' expression
     ;
 
 expression
-    :   ID              # Reference
+    :   ID                                              # Reference
+    |   left=expression 'and' right=expression          # Conjunction
+    |   left=expression 'or' right=expression           # Disjunction
+    |   '(' expression ')'                              # Brackets
     ;
     
+tags
+    :   tag+
+    ;
+
+tag
+    :    STRING 'on' ID (',' ID)*
+    ;
 
 DIGIT
-: [0-9]
-;
+    :   [0-9]
+    ;
+
+INTEGER
+    :   DIGIT+
+    ;
 
 LETTER
-: [a-zA-Z\u0080-\u00FF_]
-;
+    :   [a-zA-Z\u0080-\u00FF_]
+    ;
 
 ID
-: LETTER(LETTER|DIGIT)+;
+    :   LETTER(LETTER|DIGIT)+
+    ;
+
+
+STRING
+    :   ["'] (~["'])* ["']
+    ;
 
 
 WS
-: [ \t\n\r]+ -> skip
-;
+    :   [ \t\n\r]+ -> skip
+    ;
 
 LINE_COMMENT
-: '#' ~[\r\n]* -> channel(HIDDEN)
-;
+    :   '#' ~[\r\n]* -> channel(HIDDEN)
+    ;

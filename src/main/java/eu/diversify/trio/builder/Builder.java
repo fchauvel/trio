@@ -18,11 +18,14 @@
 package eu.diversify.trio.builder;
 
 import eu.diversify.trio.Component;
+import eu.diversify.trio.Requirement;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.diversify.trio.System;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Facade to the various 'builder' object that build sub part of the system
@@ -35,12 +38,20 @@ public class Builder {
     public static Builder build() {
         return new Builder();
     }
+    
+    public Requirement requirementFrom(String text) {
+        TrioLexer lexer = new TrioLexer(new ANTLRInputStream(text));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        TrioParser parser = new TrioParser(tokens);
+        ParseTree tree = parser.requirements();
+        return tree.accept(new ExpressionBuilder());
+    }
 
     public Component componentFrom(String text) {
         TrioLexer lexer = new TrioLexer(new ANTLRInputStream(text));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TrioParser parser = new TrioParser(tokens);
-        ParseTree tree = parser.system();
+        ParseTree tree = parser.component();
         return tree.accept(new ComponentBuilder());
     }
 
@@ -51,5 +62,6 @@ public class Builder {
         ParseTree tree = parser.system();
         return tree.accept(new SystemBuilder());
     }
+   
 
 }

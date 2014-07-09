@@ -1,0 +1,18 @@
+#
+# The SensApp services and their dependencies
+#
+
+system: 'SensApp'
+
+components:
+    - Admin         requires    Notifier and Registry and Storage
+    - Notifier
+    - Registry      requires    Storage
+    - Dispatcher    requires    Notifier and Registry and Storage
+    - Storage       requires    DB
+    - DB
+
+tags:
+    - 'platform'  on  DB
+    - 'service'   on  Admin, Registry, Storage, Dispatcher, Notifier
+    

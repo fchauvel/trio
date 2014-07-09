@@ -19,6 +19,8 @@
 package eu.diversify.trio.builder;
 
 import eu.diversify.trio.Requirement;
+import eu.diversify.trio.requirements.Conjunction;
+import eu.diversify.trio.requirements.Disjunction;
 import eu.diversify.trio.requirements.Require;
 
 /**
@@ -34,7 +36,27 @@ public class ExpressionBuilder extends TrioBaseVisitor<Requirement> {
 
     @Override
     public Requirement visitReference(TrioParser.ReferenceContext ctx) {
-        return new Require(ctx.ID().getText());   
+        return new Require(ctx.ID().getText());
     }
+
+    @Override
+    public Requirement visitConjunction(TrioParser.ConjunctionContext ctx) {
+        Requirement left = ctx.left.accept(this);
+        Requirement right = ctx.right.accept(this);
+        return new Conjunction(left, right);
+    }
+
+    @Override
+    public Requirement visitDisjunction(TrioParser.DisjunctionContext ctx) {
+        Requirement left = ctx.left.accept(this);
+        Requirement right = ctx.right.accept(this);
+        return new Disjunction(left, right);
+    }
+
+    @Override
+    public Requirement visitBrackets(TrioParser.BracketsContext ctx) {
+        return ctx.expression().accept(this);
+    }
+
 
 }
