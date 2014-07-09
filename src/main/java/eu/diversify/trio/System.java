@@ -89,7 +89,7 @@ public class System {
     public int hashCode() {
         int hash = 7;
         hash = 41 * hash + this.components.hashCode();
-        hash = 17 * hash + this.tags.hashCode();
+        hash = 41 * hash + this.tags.hashCode();
         return hash;
     }
 
@@ -121,6 +121,11 @@ public class System {
 
     public Component requirementOf(String eachComponent) {
         return components.get(eachComponent);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s ; %s", components.toString(), tags.toString());
     }
 
 }

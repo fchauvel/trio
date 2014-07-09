@@ -28,11 +28,11 @@ expression
     ;
     
 tags
-    :   tag+
+    :   'tags' ':' tag+
     ;
 
 tag
-    :    STRING 'on' ID (',' ID)*
+    :   '-'? STRING 'on' ID (',' ID)*
     ;
 
 DIGIT

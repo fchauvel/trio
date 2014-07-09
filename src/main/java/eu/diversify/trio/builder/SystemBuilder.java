@@ -21,6 +21,7 @@ package eu.diversify.trio.builder;
 
 import eu.diversify.trio.Component;
 import eu.diversify.trio.System;
+import eu.diversify.trio.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +32,28 @@ public class SystemBuilder extends TrioBaseVisitor<System> {
 
     @Override
     public System visitSystem(TrioParser.SystemContext ctx) {
+        final List<Component> components = extractComponents(ctx.component());
+        final List<Tag> tags = extractTags(ctx);
+        return new System(components, tags);
+    }
+    
+    private List<Component> extractComponents(List<TrioParser.ComponentContext> components) {
         final ComponentBuilder componentBuilder = new ComponentBuilder();
-        final List<Component> components = new ArrayList<Component>();
-        for (TrioParser.ComponentContext eachComponent: ctx.component()) {
-            components.add(eachComponent.accept(componentBuilder));
+        final List<Component> results = new ArrayList<Component>();
+        for (TrioParser.ComponentContext eachComponent: components) {
+            results.add(eachComponent.accept(componentBuilder));
         }
-        return new System(components);
+        return results;
+    }
+
+    private List<Tag> extractTags(TrioParser.SystemContext ctx) {
+        final List<Tag> tags = new ArrayList<Tag>();
+        if (ctx.tags() != null) {
+            for (TrioParser.TagContext eachTag: ctx.tags().tag()) {
+                tags.add(eachTag.accept(new TagBuilder()));
+            }
+        }
+        return tags;
     }
     
 }
