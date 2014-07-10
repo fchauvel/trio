@@ -19,6 +19,9 @@
 
 package eu.diversify.trio;
 
+import java.lang.System;
+
+
 /**
  * The options which can be passed to trio
  */
@@ -34,7 +37,16 @@ public class Options {
     }
 
     public void invoke() {
-        
+        throw new UnsupportedOperationException("Not yet implemented!");
+    }
+    
+    
+    private String usage() {
+        final String EOL = System.lineSeparator();
+        return  "Usage: trio [options] input.trio" + EOL +
+                "where 'options' are:" + EOL +
+                "  -o, --out=FILE     the file where the generated data shall be stored" + EOL +
+                "  -r, --run=INTEGER  the number of sample for statistical evidence";
     }
     
 }

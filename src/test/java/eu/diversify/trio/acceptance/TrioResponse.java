@@ -15,33 +15,55 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
 package eu.diversify.trio.acceptance;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- *
+ * The response of Trio
  */
 public class TrioResponse {
+
+    private final Run run;
+
+    public TrioResponse(Run run) {
+        this.run = run;
+    }
 
     public String getVersion() {
         throw new UnsupportedOperationException();
     }
-    
+
     public String getCopyrightOwner() {
         throw new UnsupportedOperationException();
     }
-    
+
     public String getCopyrightYear() {
         throw new UnsupportedOperationException();
     }
-    
+
     public double getRobustness() {
-        throw new UnsupportedOperationException(); 
+        throw new UnsupportedOperationException();
     }
     
+    private static final List<String> ERROR_MARKER = Arrays.asList(new String[]{
+        "error", "Error", "ERROR",
+        "exception", "Exception", "EXCEPTION",
+        "failure", "FAILURE", "Failure"});
+
     public boolean hasError() {
-        throw new UnsupportedOperationException();
+        for(String anyMarker: ERROR_MARKER) {
+            if (run.getStandardError().contains(anyMarker)
+                    || run.getStandardOutput().contains(anyMarker)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String toString() {
+        return run.toString();
     }
 }
