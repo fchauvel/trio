@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class Summary {
 
-    private Map<Metric, Distribution> distributions;
+    private final Map<Metric, Distribution> distributions;
 
     public Summary(DataSet data, Metric... metrics) {
         this.distributions = new HashMap<Metric, Distribution>();
@@ -41,14 +41,15 @@ public class Summary {
     
     public void showOn(OutputStream output) {
         final PrintStream out = new PrintStream(output);
-        out.println("Summary:");
+        out.printf("Summary:\r\n");
+        out.printf("%20s %10s %10s %10s %10s %10s\r\n", "metric", "unit", "mean", "min", "max", "std. dev");
         for(Metric eachMetric: distributions.keySet()) {
             out.println(format(eachMetric, distributions.get(eachMetric)));
         }
     }
 
     private String format(Metric metric, Distribution values) {
-        return String.format(" - %s (%s): %.2f in [%.2f, %.2f] (SD = %.2f)", 
+        return String.format("%20s %10s %10.2f %10.2f %10.2f %10.2f", 
                              metric.getName(), 
                              metric.getUnit(), 
                              values.mean(), 

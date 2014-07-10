@@ -25,7 +25,7 @@ import java.util.List;
 public class Robustness implements Metric {
 
     public String getName() {
-        return "robustness";
+        return "Robustness";
     }
 
     public String getUnit() {

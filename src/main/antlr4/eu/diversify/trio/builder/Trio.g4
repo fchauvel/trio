@@ -5,11 +5,15 @@
 grammar Trio;
 
 system
-    : 'components' ':' component+ tags?
+    : description? 'components' ':' component+ tags?
     ;
 
-component:
-    ('-')? ID strength? requirements?
+description
+    :   'system' ':' STRING
+    ;
+
+component
+    :    ('-')? ID strength? requirements?
     ;
 
 strength

@@ -18,24 +18,23 @@
 
 package eu.diversify.trio;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import static eu.diversify.trio.builder.Builder.build;
-
 /**
- * The Trio application
+ *
  */
-public class Trio {
+public class Length implements Metric {
 
-    void analyse(String inputFile, String outputFile, int runCount) throws IOException {
-        final System system = build().systemFrom(new FileInputStream(inputFile));
-        final DataSet data = new DataSet();
-        final Simulation simulation = new Simulation(system, data);
-        simulation.randomExtinctionSequence(runCount);
-        final Summary summary = new Summary(data, new Robustness(), new Length());        
-        summary.showOn(java.lang.System.out);        
-        data.saveAs(new CSV(outputFile));  
+    public String getName() {
+        return "Length";
     }
 
+    public String getUnit() {
+        return "actions";
+    }
+
+    public double computeOn(Trace input) {
+        return input.length();
+    }
+    
+    
+    
 }

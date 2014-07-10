@@ -40,6 +40,7 @@ class OutputCollector extends Thread {
         try {
             while (null != (line = this.reader.readLine())) {
                 buffer.append(line);
+                buffer.append(System.lineSeparator());
             }
             this.reader.close();
         } catch (IOException ex) {
