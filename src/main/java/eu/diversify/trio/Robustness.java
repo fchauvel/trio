@@ -28,6 +28,12 @@ public class Robustness implements Metric {
         return "robustness";
     }
 
+    public String getUnit() {
+        return "none";
+    }
+    
+    
+
     public double computeOn(Trace trace) {
         double robustness = 0;
         final List<Integer> disruptions = trace.disruptionLevels();

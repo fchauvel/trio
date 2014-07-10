@@ -23,11 +23,11 @@ import java.util.List;
 /**
  * Aggregate information obtained during extinction sequences
  */
-public class Report {
+public class DataSet {
         
     private final List<Trace> traces;
    
-    public Report() {
+    public DataSet() {
         this.traces = new ArrayList<Trace>();
     }
   
@@ -37,6 +37,18 @@ public class Report {
     
     public Trace get(int index) {
         return traces.get(0);
+    }
+    
+    public Distribution distributionOf(Metric metric) {
+        final List<Double> values = new ArrayList<Double>(traces.size());
+        for(Trace eachTrace: traces) {
+            values.add(metric.computeOn(eachTrace));
+        }
+        return new Distribution(values);
+    }
+    
+    public void saveAs(DataFormat format) {
+        
     }
 
 }

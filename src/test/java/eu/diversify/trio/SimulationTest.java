@@ -49,7 +49,7 @@ public class SimulationTest extends TestCase {
     @Test
     public void test() {
         final System system = Samples.A_require_B();
-        final Report traces = new Report();
+        final DataSet traces = new DataSet();
         final Simulation simulation = new Simulation(system, traces);
  
         final Robustness robustness = new Robustness();

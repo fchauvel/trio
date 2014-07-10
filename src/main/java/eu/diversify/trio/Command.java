@@ -2,6 +2,23 @@
  *
  * This file is part of TRIO.
  *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
  * TRIO is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
@@ -34,6 +51,7 @@
  */
 package eu.diversify.trio;
 
+import java.io.IOException;
 import java.lang.System;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -102,7 +120,7 @@ public class Command {
             extractRunCountFrom(command.next());
 
         } else {
-            final String error = String.format("Unknown options '%s'", eachParameter);
+            final String error = String.format("Unknown short option '%s'", eachParameter);
             throw new IllegalArgumentException(error);
         }
     }
@@ -116,7 +134,7 @@ public class Command {
             extractRunCountFrom(parts[1]);
 
         } else {
-            final String error = String.format("Unknown options '%s'! Expecting either '--runs' or '--output'", parts[0]);
+            final String error = String.format("Unknown long option '%s'! Expecting either '--runs' or '--output'", parts[0]);
             throw new IllegalArgumentException(error);
         }
     }
@@ -136,7 +154,7 @@ public class Command {
         }
     }
 
-    public void execute(Trio handler) {
+    public void execute(Trio handler) throws IOException {
         handler.analyse(inputFile, outputFile, runCount);
     }
 

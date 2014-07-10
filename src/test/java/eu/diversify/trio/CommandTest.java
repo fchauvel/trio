@@ -18,6 +18,7 @@
 
 package eu.diversify.trio;
 
+import java.io.IOException;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ import static org.hamcrest.Matchers.*;
 public class CommandTest extends TestCase {
 
     @Test
-    public void shouldProvideDefaultValuesForAllOptions() {
+    public void shouldProvideDefaultValuesForAllOptions() throws IOException {
         final String commandLine = "myfile.trio";
         Command command = Command.from(commandLine);
 
@@ -46,7 +47,7 @@ public class CommandTest extends TestCase {
     }
 
     @Test
-    public void shouldAcceptShortVersionOfOutputFile() {
+    public void shouldAcceptShortVersionOfOutputFile() throws IOException {
         final String commandLine = "-o out.csv myfile.trio";
         Command command = Command.from(commandLine);
 
@@ -59,7 +60,7 @@ public class CommandTest extends TestCase {
     }
 
     @Test
-    public void shouldAcceptLongVersionOutputFile() {
+    public void shouldAcceptLongVersionOutputFile() throws IOException {
         final String commandLine = "--output=out.csv myfile.trio";
         Command command = Command.from(commandLine);
 
@@ -72,7 +73,7 @@ public class CommandTest extends TestCase {
     }
 
     @Test
-    public void shouldAcceptShortVersionRunCount() {
+    public void shouldAcceptShortVersionRunCount() throws IOException {
         final String commandLine = "-r 1234 myfile.trio";
         Command command = Command.from(commandLine);
 
@@ -85,7 +86,7 @@ public class CommandTest extends TestCase {
     }
 
     @Test
-    public void shouldAcceptLongVersionRunCount() {
+    public void shouldAcceptLongVersionRunCount() throws IOException{
         final String commandLine = "--runs=1234 myfile.trio";
         Command command = Command.from(commandLine);
 
@@ -98,7 +99,7 @@ public class CommandTest extends TestCase {
     }
 
     @Test
-    public void shouldAcceptCombinationOfLongAndShortOptions() {
+    public void shouldAcceptCombinationOfLongAndShortOptions() throws IOException {
         final String commandLine = "-o output.csv --runs=1234 myfile.trio";
         Command command = Command.from(commandLine);
 

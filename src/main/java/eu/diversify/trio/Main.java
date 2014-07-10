@@ -19,6 +19,7 @@
 
 package eu.diversify.trio;
 
+import java.io.IOException;
 import java.lang.System;
 
 /**
@@ -34,6 +35,9 @@ public class Main {
             System.out.println(ex.getMessage());
             System.out.println(Command.usage());
         
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+            
         }
     }
     

@@ -96,4 +96,21 @@ public class AcceptanceIT extends TestCase {
 
     }
     
+     @Test
+    public void testSensApp() throws IOException, InterruptedException {
+        final TrioRequest request = new TrioRequest();
+        request.setPathToTopology("samples/sensapp.trio");
+        request.setDestination("test.csv");
+
+        final TrioResponse response = request.execute();
+        System.out.println(response);
+        
+        //assertThat("version", response.getVersion(), is(equalTo("0.1"))); 
+        //assertThat("copyright owner", response.getCopyrightOwner(), is(equalTo("SINTEF ICT")));
+        //assertThat("copyright year", response.getCopyrightYear(), is(equalTo("2014"))); 
+        assertThat("unexpected errors", !response.hasError());
+        //assertThat("robustness", response.getRobustness(), is(closeTo(0.5, 1e-7)));
+
+    }
+    
 }

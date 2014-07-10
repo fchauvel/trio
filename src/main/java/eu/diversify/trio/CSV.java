@@ -16,18 +16,15 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package eu.diversify.trio;
 
 /**
- * Metric as a general function, computed on a trace
+ *
  */
-public interface Metric {
-    
-    String getName();
-    
-    String getUnit();
+public class CSV implements DataFormat {
+
+    public CSV(String destination) {
         
-    double computeOn(Trace input);
+    }
     
 }

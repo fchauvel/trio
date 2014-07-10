@@ -113,7 +113,7 @@ public class System {
         return new Topology(this);
     }
 
-    public Topology instantiate(Report report) {
+    public Topology instantiate(DataSet report) {
         final Trace trace = new Trace(components.size());
         report.include(trace);
         return new Topology(this, new Listener(trace));
