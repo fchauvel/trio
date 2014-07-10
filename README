@@ -3,8 +3,24 @@
 TRIO: Topologies Robustness IndicatOrs
 FP7 - FET DIVERSIFY 
 
-HOW TO BUILD
-------------
+HOW TO RUN TRIO
+---------------
+
+Trio is a java application, which should be run from the command line. The 
+following example show its primary usage.
+
+$> java -jar .\trio-bundle.jar something
+Unknown argument 'something'. Expecting either a path to a TRIO file or an option.
+Usage: trio [options] input.trio
+where 'options' are:
+  -o, --output=FILE  the file where the generated data shall be stored
+  -r, --runs=INTEGER the number of sample for statistical evidence
+Example: trio -o result.csv --run=10000 system.trio
+
+
+
+HOW TO BUILD TRIO
+-----------------
 
 $> mvn clean package
 
