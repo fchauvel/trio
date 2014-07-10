@@ -36,22 +36,22 @@ public class Summary {
         for (Metric eachMetric: metrics) {
             this.distributions.put(eachMetric, data.distributionOf(eachMetric));
         }
-        
-    }
-    
+    } 
+     
     public void showOn(OutputStream output) {
         final PrintStream out = new PrintStream(output);
-        out.printf("Summary:\r\n");
-        out.printf("%20s %10s %10s %10s %10s %10s\r\n", "metric", "unit", "mean", "min", "max", "std. dev");
+        out.println("SEQUENCES SUMMARY:");
+        out.println();
+        out.printf("%20s %10s %10s %10s %10s\r\n", "metric (unit)", "mean", "min", "max", "std. dev");
+        out.println("-----------------------------------------------------------------");
         for(Metric eachMetric: distributions.keySet()) {
             out.println(format(eachMetric, distributions.get(eachMetric)));
         }
     }
 
     private String format(Metric metric, Distribution values) {
-        return String.format("%20s %10s %10.2f %10.2f %10.2f %10.2f", 
-                             metric.getName(), 
-                             metric.getUnit(), 
+        return String.format("%20s %10.2f %10.2f %10.2f %10.2f", 
+                             String.format("%s (%s)", metric.getName(), metric.getUnit()), 
                              values.mean(), 
                              values.minimum(), 
                              values.maximum(), 
