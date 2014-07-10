@@ -318,7 +318,7 @@
                     </descriptors> 
                     <archive>
                         <manifest>
-                            <mainClass>eu.diversify.trio.Trio</mainClass>
+                            <mainClass>eu.diversify.trio.Main</mainClass>
                         </manifest>
                     </archive>                                       
                 </configuration>

@@ -53,7 +53,7 @@ public class TrioRequest {
     }
     
     public TrioResponse execute() throws IOException, InterruptedException {
-        String command = String.format("java -jar %s -i %s", config.jarFile(), pathToTopology);
+        String command = String.format("java -jar %s --output=%s %s", config.jarFile(), destination, pathToTopology);
         Run run = new Run(config.installationDirectory(), command.split("\\s+"));
         return new TrioResponse(run);
     } 

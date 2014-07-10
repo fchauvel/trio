@@ -51,7 +51,6 @@
  */
 package eu.diversify.trio.acceptance;
 
-import java.io.File;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.junit.AfterClass;

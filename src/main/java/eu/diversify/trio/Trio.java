@@ -15,17 +15,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
+ */
 
 package eu.diversify.trio;
 
 /**
- * Entry point of the application
+ *
  */
 public class Trio {
 
-    public static void main(String[] args) {
-        Options.from(args).invoke();
+    void analyse(String inputFile, String outputFile, int runCount) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

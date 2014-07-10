@@ -21,32 +21,20 @@ package eu.diversify.trio;
 
 import java.lang.System;
 
-
 /**
- * The options which can be passed to trio
+ * Entry point of the application
  */
-public class Options {
-    
-    
-    public static Options from(String[] commandLine) {
-        return new Options(commandLine);
-    }
-    
-    private Options(String[] commandLine) {
-        
-    }
+public class Main {
 
-    public void invoke() {
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-    
-    
-    private String usage() {
-        final String EOL = System.lineSeparator();
-        return  "Usage: trio [options] input.trio" + EOL +
-                "where 'options' are:" + EOL +
-                "  -o, --out=FILE     the file where the generated data shall be stored" + EOL +
-                "  -r, --run=INTEGER  the number of sample for statistical evidence";
+    public static void main(String[] args) {
+        try {
+            Command.from(args).execute(new Trio());
+        
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println(Command.usage());
+        
+        }
     }
     
 }
