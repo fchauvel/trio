@@ -3,7 +3,7 @@
 #
 
 system: 
-    'SensApp, topology no. 1'
+    'SensApp, topology no. 2'
 
 components:
     - Admin         requires    Notifier and Registry and Storage and SC1
@@ -11,7 +11,7 @@ components:
     - Registry      requires    Storage and SC2
     - Dispatcher    requires    Notifier and Registry and Storage and SC2
     - Storage       requires    DB and VM2
-    - DB            requires    VM2
+    - DB
     - SC1           requires    JRE1
     - SC2           requires    JRE2
     - JRE1          requires    VM1

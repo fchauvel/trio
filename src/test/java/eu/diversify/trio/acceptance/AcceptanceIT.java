@@ -67,7 +67,7 @@ public class AcceptanceIT extends TestCase {
      @Test
     public void sandbox() throws IOException, InterruptedException {
         final TrioRequest request = new TrioRequest();
-        request.setPathToTopology("samples/sensapp_topo1.trio");
+        request.setPathToTopology("samples/sensapp_topo2.trio");
         request.setDestination("test.csv");
 
         final TrioResponse response = request.execute();
