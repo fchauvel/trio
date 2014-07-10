@@ -1,10 +1,40 @@
+TRIO: Topologies Robustness IndicatOr
+Copyright (C) 2014 - SINTEF ICT
+
+TRIO is a simple domain specific language (DSL) used to describe the topology
+of software deployment and to gain insight regarding their robustness.
+
+1. CONTACT
+----------
+
+Please report any bugs or desired feature at:
+
+    https://github.com/fchauvel/trio/issues
 
 
-TRIO: Topologies Robustness IndicatOrs
-FP7 - FET DIVERSIFY 
+Should you need any additional information, please contact:
 
-HOW TO RUN TRIO
----------------
+    Franck CHAUVEL 
+    Research Scientist - SINTEF ICT
+    franck.chauvel@sintef.no
+
+
+2. HOW TO DOWNLOAD TRIO
+-----------------------
+
+Stable releases are available on the Github page of the projects:
+
+    https://github.com/fchauvel/trio/releases
+
+
+In addition, a binary distribution, continuously updated, is available at:
+
+    http://dist.thingml.org/trio/trio-dist.zip
+
+
+
+3. HOW TO RUN TRIO
+------------------
 
 Trio is a java application, which should be run from the command line. The 
 following example show its primary usage.
@@ -19,15 +49,15 @@ Example: trio -o result.csv --run=10000 system.trio
 
 
 
-HOW TO BUILD TRIO
------------------
+4. HOW TO BUILD TRIO
+--------------------
 
 $> mvn clean package
 
 
 
-HOW TO RELEASE
---------------
+5. HOW TO RELEASE TRIO
+----------------------
 
 Before to create a release, one should ensure the following:
 
