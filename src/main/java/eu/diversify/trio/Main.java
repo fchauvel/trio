@@ -29,7 +29,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            Command.from(args).execute(new Trio());
+            Command.from(args).execute(new Trio(), System.out);
         
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());

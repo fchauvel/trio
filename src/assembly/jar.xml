@@ -32,6 +32,14 @@
             <directory>${project.build.outputDirectory}</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>${basedir}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>${basedir}/src/main/resources/main.properties</include>
+                <include>${basedir}/src/test/resources/test.properties</include>
+            </includes>
+        </fileSet>
     </fileSets>
     <dependencySets>
         <dependencySet>
