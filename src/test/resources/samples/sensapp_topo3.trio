@@ -1,0 +1,31 @@
+#
+# The SensApp services and their dependencies
+#
+
+system: 
+    'SensApp, topology no. 3'
+
+components:
+    - Admin         requires    Notifier and Registry and Storage and SC1
+    - Notifier      requires    SC2
+    - Registry      requires    Storage and SC3
+    - Dispatcher    requires    Notifier and Registry and Storage and SC3
+    - Storage       requires    SC4 and DB
+    - DB            requires    VM3
+    - SC1           requires    JRE1
+    - SC2           requires    JRE2
+    - SC3           requires    JRE3
+    - SC4           requires    JRE4
+    - JRE1          requires    VM1
+    - JRE2          requires    VM2
+    - JRE3          requires    VM2
+    - JRE4          requires    VM3 
+    - VM1
+    - VM2
+    - VM3
+
+tags:
+    - 'infra'     on  VM1, VM2, VM3
+    - 'platform'  on  DB, SC1, SC2, SC3, SC4, JRE1, JRE2, JRE3, JRE4
+    - 'service'   on  Admin, Registry, Storage, Dispatcher, Notifier
+    
