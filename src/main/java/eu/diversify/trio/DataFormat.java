@@ -20,8 +20,10 @@
 package eu.diversify.trio;
 
 /**
- *
+ * Behaviour of any data format
  */
 public interface DataFormat {
+
+    public String convert(int sequenceIndex, String toString, int disruption, int activity, int loss);
     
 }

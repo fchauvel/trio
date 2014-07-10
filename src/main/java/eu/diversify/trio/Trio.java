@@ -35,7 +35,7 @@ public class Trio {
         simulation.randomExtinctionSequence(runCount);
         final Summary summary = new Summary(data, new Robustness(), new Length());        
         summary.showOn(java.lang.System.out);        
-        data.saveAs(new CSV(outputFile));  
+        data.saveAs(new CSV(), outputFile);   
     }
 
 }

@@ -60,4 +60,7 @@ public class State {
         return new State(action, disruption + 1, activityLevel, activity - activityLevel);
     }
 
+    public String to(DataFormat format, int sequenceIndex) { 
+        return format.convert(sequenceIndex, trigger.toString(), disruption, activity, loss);
+    }
 }

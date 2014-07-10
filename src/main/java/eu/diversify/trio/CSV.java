@@ -19,12 +19,13 @@
 package eu.diversify.trio;
 
 /**
- *
+ * Converter to the CSV format
  */
 public class CSV implements DataFormat {
 
-    public CSV(String destination) {
-        
+
+    public String convert(int sequenceIndex, String action, int disruption, int activity, int loss) {
+        return String.format("%d, %s, %d, %d, %d", sequenceIndex, action, disruption, activity, loss);
     }
     
 }
