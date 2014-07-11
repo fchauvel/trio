@@ -15,35 +15,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
-package eu.diversify.trio;
+package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.actions.AbstractAction;
 
 /**
- *
+ * Listen changes made on topologies
  */
-public class Samples {
+public class Listener {
+    
+    private final Trace trace;
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    public Listener(Trace trace) {
+        this.trace = trace;
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+    public void inactivate(String component, Topology topology) {
+        trace.record(AbstractAction.inactivate(component), topology.countActive());
     }
+
     
+    public void activate(String component, Topology topology) {
+        trace.record(AbstractAction.activate(component), topology.countActive());
+    }
+        
 }

@@ -17,33 +17,30 @@
  */
 /*
  */
+package eu.diversify.trio.simulation.actions;
 
-package eu.diversify.trio;
-
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.simulation.actions.AbstractAction;
+import eu.diversify.trio.simulation.Topology;
 
 /**
- *
+ * Inactivate the selected component
  */
-public class Samples {
+public class Inactivate extends AbstractAction {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    private final String target;
+
+    public Inactivate(String target) {
+        this.target = target;
+    }
+
+    public Topology executeOn(Topology topology) {
+        topology.inactivate(target);
+        return topology;
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+    @Override
+    public String toString() {
+        return String.format("inactivate %s", target);
     }
-    
+
 }

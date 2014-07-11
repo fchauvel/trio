@@ -18,32 +18,26 @@
 /*
  */
 
-package eu.diversify.trio;
+package eu.diversify.trio.simulation;
 
+import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
 
 /**
  *
  */
-public class Samples {
+public class Simulation {
+    
+    private final System subject;
+    private final DataSet results;
+    private final int runCount;
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    
+    public Simulation(System subject, int runCount) {
+        this.subject = subject;
+        this.runCount = runCount;
+        this.results = new DataSet();
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
     
 }

@@ -17,33 +17,31 @@
  */
 /*
  */
+package eu.diversify.trio.core.requirements;
 
-package eu.diversify.trio;
-
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.simulation.Topology;
 
 /**
- *
+ * Require that another component exists
  */
-public class Samples {
+public class Require extends AbstractRequirement {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    private final String requiredComponent;
+
+    public Require(String requiredComponent) {
+        this.requiredComponent = requiredComponent;
+    }
+
+    public boolean isSatisfiedBy(Topology topology) {
+        return topology.isActive(requiredComponent);
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+        @Override
+    public String toString() {
+        return String.format("%s", requiredComponent);
     }
-    
+
+    public static Require require(String component) {
+        return new Require(component);
+    }
 }

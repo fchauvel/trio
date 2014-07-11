@@ -18,32 +18,21 @@
 /*
  */
 
-package eu.diversify.trio;
+package eu.diversify.trio.core;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.simulation.Topology;
 
 /**
  *
  */
-public class Samples {
+public interface Requirement {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
-    }
+    Requirement and(Requirement right);
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
+    Requirement or(Requirement right);
+    
+    Requirement not();
+    
+    boolean isSatisfiedBy(Topology topology);
     
 }

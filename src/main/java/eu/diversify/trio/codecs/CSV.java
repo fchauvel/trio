@@ -15,35 +15,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
-package eu.diversify.trio;
-
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+package eu.diversify.trio.codecs;
 
 /**
- *
+ * Converter to the CSV format
  */
-public class Samples {
+public class CSV implements DataFormat {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
-    }
-    
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+
+    public String convert(int sequenceIndex, String action, int disruption, int activity, int loss) {
+        return String.format("%d, %s, %d, %d, %d", sequenceIndex, action, disruption, activity, loss);
     }
     
 }

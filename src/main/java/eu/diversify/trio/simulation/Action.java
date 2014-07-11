@@ -15,35 +15,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
-package eu.diversify.trio;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+package eu.diversify.trio.simulation;
 
 /**
- *
+ * Action which can be performed on topologies
  */
-public class Samples {
+public interface Action {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
-    }
+    /**
+     * Execute this action on the given topology
+     *
+     * @param topology the topology on which this action shall be performed
+     * @return the topology once the action is performed
+     */
+    Topology executeOn(Topology topology);
+
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
+    /**
+     * Compare this action with another object
+     * @param object the object to compare with
+     * @return  true if the given object is equivalent to this action
+     */
+    @Override
+    boolean equals(Object object);
     
 }

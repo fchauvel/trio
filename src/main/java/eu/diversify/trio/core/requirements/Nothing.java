@@ -15,35 +15,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+package eu.diversify.trio.core.requirements;
 
-package eu.diversify.trio;
-
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.core.requirements.AbstractRequirement;
 
 /**
+ * The true boolean value. Singleton value
  *
  */
-public class Samples {
+public class Nothing extends AbstractRequirement {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    private static Nothing instance = null;
+
+    public static Nothing getInstance() {
+        if (instance == null) {
+            instance = new Nothing();
+        }
+        return instance;
     }
-    
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+
+    public boolean isSatisfiedBy(Topology population) {
+        return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return String.format("none");
+    }
+
 }

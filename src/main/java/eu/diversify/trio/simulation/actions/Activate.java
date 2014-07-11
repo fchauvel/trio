@@ -17,33 +17,30 @@
  */
 /*
  */
+package eu.diversify.trio.simulation.actions;
 
-package eu.diversify.trio;
-
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.simulation.actions.AbstractAction;
+import eu.diversify.trio.simulation.Topology;
 
 /**
- *
+ * Activate a given component
  */
-public class Samples {
+public class Activate extends AbstractAction {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    private final String target;
+
+    public Activate(String target) {
+        this.target = target;
     }
-    
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+
+    public Topology executeOn(Topology topology) {
+        topology.activate(target); 
+        return topology;
     }
-    
+
+    @Override
+    public String toString() {
+        return String.format("activate %s", target);
+    }
+
 }

@@ -15,35 +15,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
-package eu.diversify.trio;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
+package eu.diversify.trio.core.requirements;
 
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.simulation.Topology;
 
 /**
- *
+ * The logical negation
  */
-public class Samples {
+public class Negation extends AbstractRequirement {
+    
+    private final Requirement operand;
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    public Negation(Requirement operand) {
+        this.operand = operand;
+    }
+
+
+    public boolean isSatisfiedBy(Topology topology) {
+        return !operand.isSatisfiedBy(topology);
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
     
+    @Override
+    public String toString() {
+        return String.format("(not %s)".format(operand.toString()));
+    }
+
 }

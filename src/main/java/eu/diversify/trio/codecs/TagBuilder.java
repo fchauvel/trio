@@ -18,32 +18,29 @@
 /*
  */
 
-package eu.diversify.trio;
+package eu.diversify.trio.codecs;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.core.Tag;
+import eu.diversify.trio.builder.TrioBaseVisitor;
+import eu.diversify.trio.builder.TrioParser;
+import java.util.ArrayList;
+import java.util.List;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- *
+ * Traverse the AST and build the tag associated with the system
  */
-public class Samples {
+public class TagBuilder extends TrioBaseVisitor<Tag> {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    @Override
+    public Tag visitTag(TrioParser.TagContext ctx) {
+        final List<String> targets = new ArrayList<String>();
+        for (TerminalNode eachTarget: ctx.ID()) {
+            targets.add(eachTarget.getText());
+        }
+        return new Tag(ctx.STRING().getText().replaceAll("[\'\"]", ""), targets);
     }
+
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
     
 }

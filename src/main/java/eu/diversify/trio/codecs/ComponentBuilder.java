@@ -15,35 +15,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
-package eu.diversify.trio;
 
-import eu.diversify.trio.core.System;
+package eu.diversify.trio.codecs;
+
 import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.builder.TrioBaseVisitor;
+import eu.diversify.trio.builder.TrioParser;
+import eu.diversify.trio.core.requirements.Nothing;
 
 /**
- *
+ * Build a component from the AST
  */
-public class Samples {
+public class ComponentBuilder extends TrioBaseVisitor<Component> {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    @Override
+    public Component visitComponent(TrioParser.ComponentContext ctx) {
+        Requirement requirement = Nothing.getInstance();
+        if (ctx.requirements() != null) {
+            requirement = ctx.requirements().accept(new ExpressionBuilder());
+        }
+        return new Component(ctx.ID().getText(), requirement);
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
     
 }

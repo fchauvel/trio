@@ -18,20 +18,27 @@
 
 package eu.diversify.trio;
 
+import eu.diversify.trio.codecs.CSV;
+import eu.diversify.trio.analysis.Summary;
+import eu.diversify.trio.analysis.Robustness;
+import eu.diversify.trio.analysis.Length;
+import eu.diversify.trio.core.System;
+import eu.diversify.trio.simulation.Simulator;
+import eu.diversify.trio.data.DataSet;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static eu.diversify.trio.builder.Builder.build;
+import static eu.diversify.trio.codecs.Builder.build;
 
 /**
  * The Trio application
  */
 public class Trio {
 
-    void analyse(String inputFile, String outputFile, int runCount) throws IOException {
+    public void analyse(String inputFile, String outputFile, int runCount) throws IOException {
         final System system = build().systemFrom(new FileInputStream(inputFile));
         final DataSet data = new DataSet();
-        final Simulation simulation = new Simulation(system, data);
+        final Simulator simulation = new Simulator(system, data);
         simulation.randomExtinctionSequence(runCount);
         final Summary summary = new Summary(data, new Robustness(), new Length());        
         summary.showOn(java.lang.System.out);        

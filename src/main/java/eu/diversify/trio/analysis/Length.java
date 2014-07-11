@@ -15,35 +15,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
 
-package eu.diversify.trio;
+package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.analysis.Metric;
+import eu.diversify.trio.data.Trace;
 
 /**
  *
  */
-public class Samples {
+public class Length implements Metric {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    public String getName() {
+        return "Length";
+    }
+
+    public String getUnit() {
+        return "actions";
+    }
+
+    public double computeOn(Trace input) {
+        return input.length();
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
-    }
+    
     
 }

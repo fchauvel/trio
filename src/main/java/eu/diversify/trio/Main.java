@@ -19,6 +19,7 @@
 
 package eu.diversify.trio;
 
+import eu.diversify.trio.ui.Command;
 import java.io.IOException;
 import java.lang.System;
 

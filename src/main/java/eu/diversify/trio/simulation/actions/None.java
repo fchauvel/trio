@@ -18,32 +18,36 @@
 /*
  */
 
-package eu.diversify.trio;
+package eu.diversify.trio.simulation.actions;
 
-import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Require.require;
+import eu.diversify.trio.simulation.actions.AbstractAction;
+import eu.diversify.trio.simulation.Topology;
 
 /**
- *
+ * The 'do nothing' action
  */
-public class Samples {
+public class None extends AbstractAction {
 
-    public static System A_require_B() {
-        return new System(
-            new Component("A", require("B")),
-            new Component("B"));
+    private static None instance;
+    
+    public static None getInstance() {
+        if (instance == null) {
+            instance = new None();
+        }
+        return instance;
     }
     
-     public static System sample1() {
-        return new System(
-                new Component("A", require("B").and(require("C"))),
-                new Component("B"),
-                new Component("C", require("D").or(require("E"))),
-                new Component("D"),
-                new Component("E")
-        );
+    private None() {}
+
+    @Override
+    public Topology executeOn(Topology topology) {
+        return topology;
     }
+    
+    @Override
+    public String toString() {
+        return "none";
+    }
+    
     
 }
