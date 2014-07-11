@@ -21,6 +21,7 @@ package eu.diversify.trio;
 import eu.diversify.trio.codecs.CSV;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Length;
+import eu.diversify.trio.analysis.Loss;
 import eu.diversify.trio.analysis.Probability;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.System;
@@ -55,7 +56,8 @@ public class Trio {
         final Robustness robustness = new Robustness();
         final Probability probability = new Probability();
         final Length length = new Length();
-        return new Analysis(robustness, length, probability);
+        final Loss loss = new Loss();
+        return new Analysis(robustness, length, loss, probability);
     }
 
 }
