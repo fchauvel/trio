@@ -112,7 +112,7 @@ public class BuilderTest extends TestCase {
         assertThat(system, is(equalTo(expected)));
     }
     
-     @Test
+    @Test
     public void shouldReadASystemWithTags() {
         final String text
                 = "components:"
@@ -129,6 +129,30 @@ public class BuilderTest extends TestCase {
         tags.add(new Tag("t1", "AA", "BB"));
         
         final System expected = new System(components, tags);
+
+        final System system = build().systemFrom(text);
+
+        assertThat(system, is(equalTo(expected)));
+    }
+    
+    @Test
+    public void shouldReadASystemWithTagsAndName() {
+        final String text
+                = "system: 'A Sample System'"
+                + "components:"
+                + "      AA requires BB"
+                + "      BB "
+                + "tags:"
+                + " - 't1' on AA, BB";
+
+        final List<Component> components = new ArrayList<Component>();
+        components.add(new Component("AA", require("BB")));
+        components.add(new Component("BB"));
+        
+        final List<Tag> tags = new ArrayList<Tag>();
+        tags.add(new Tag("t1", "AA", "BB"));
+        
+        final System expected = new System("A Sample System", components, tags);
 
         final System system = build().systemFrom(text);
 

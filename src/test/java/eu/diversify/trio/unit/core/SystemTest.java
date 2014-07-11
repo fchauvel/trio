@@ -20,15 +20,18 @@ package eu.diversify.trio.unit.core;
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.core.Component;
+import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Require;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Specification of a system definition
@@ -46,6 +49,27 @@ public class SystemTest extends TestCase {
     public void shouldRejectEmptyListOfComponent() {
         Collection<Component> components = new ArrayList<Component>();
         new System(components);
+    }
+    
+    @Test
+    public void shouldGiveAccessToTheGivenName() {
+        final String name = "Foo";
+        final List<Component> components = new ArrayList<Component>(); 
+        components.add(new Component("A"));
+        final List<Tag> tags = new ArrayList<Tag>();
+        final System system = new System(name, components, tags);                
+    
+        assertThat(system.getName(), is(equalTo(name)));
+    }
+    
+      @Test
+    public void shouldHaveTheDefaultNameWhenNoneIsGiven() {
+        final List<Component> components = new ArrayList<Component>(); 
+        components.add(new Component("A"));
+        final List<Tag> tags = new ArrayList<Tag>();
+        final System system = new System(components, tags);                
+    
+        assertThat(system.getName(), is(equalTo(System.DEFAULT_NAME))); 
     }
     
     @Test

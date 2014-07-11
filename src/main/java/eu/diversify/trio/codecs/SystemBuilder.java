@@ -34,9 +34,13 @@ public class SystemBuilder extends TrioBaseVisitor<System> {
 
     @Override
     public System visitSystem(TrioParser.SystemContext ctx) {
+        String name = "Anonymous";
+        if (ctx.description() != null) {
+            name = ctx.description().STRING().getText().replaceAll("[\"']", "");
+        }
         final List<Component> components = extractComponents(ctx.component());
         final List<Tag> tags = extractTags(ctx);
-        return new System(components, tags);
+        return new System(name, components, tags);
     }
     
     private List<Component> extractComponents(List<TrioParser.ComponentContext> components) {
