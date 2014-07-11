@@ -26,12 +26,13 @@ import java.util.List;
 /**
  * Compute the probability
  */
-public class Probability extends AbstractDataSetListener {
+public class Probability extends Metric {
 
     final List<Double> probabilities;
-    double probability;
+    private double probability;
 
     public Probability() {
+        super("Probability", "[0, 1]");
         this.probabilities = new ArrayList<Double>();
     }
 
@@ -57,6 +58,10 @@ public class Probability extends AbstractDataSetListener {
         probabilities.add(probability);
     }
  
+    
+    public double value() {  
+        return probability;
+    }
 
     public Distribution distribution() {
         return new Distribution(probabilities);

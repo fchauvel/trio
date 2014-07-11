@@ -20,8 +20,9 @@ package eu.diversify.trio;
 
 import eu.diversify.trio.codecs.CSV;
 import eu.diversify.trio.analysis.Analysis;
-import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.analysis.Length;
+import eu.diversify.trio.analysis.Probability;
+import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.simulation.Simulator;
 import eu.diversify.trio.data.DataSet;
@@ -35,14 +36,26 @@ import static eu.diversify.trio.codecs.Builder.build;
  */
 public class Trio {
 
-    public void analyse(String inputFile, String outputFile, int runCount) throws IOException {
+    public Analysis analyse(String inputFile, String outputFile, int runCount) throws IOException {
         final System system = build().systemFrom(new FileInputStream(inputFile));
         final DataSet data = new DataSet();
+       
         final Simulator simulation = new Simulator(system, data);
         simulation.randomExtinctionSequence(runCount);
-        final Analysis summary = new Analysis(data, new Robustness(), new Length());        
-        summary.showOn(java.lang.System.out);        
-        data.saveAs(new CSV(), outputFile);   
+       
+        data.saveAs(new CSV(), outputFile);  
+        
+        final Analysis analysis = analysis();
+        data.accept(analysis);
+
+        return analysis;
+    }
+    
+    public Analysis analysis() {
+        final Robustness robustness = new Robustness();
+        final Probability probability = new Probability();
+        final Length length = new Length();
+        return new Analysis(robustness, length, probability);
     }
 
 }

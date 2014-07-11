@@ -18,11 +18,11 @@
 package eu.diversify.trio.unit.simulation;
 
 import eu.diversify.trio.Samples;
+import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.simulation.Simulator;
 import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.analysis.Robustness;
 
 import static eu.diversify.trio.simulation.actions.Inactivate.*;
 
@@ -30,8 +30,6 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import static eu.diversify.trio.core.requirements.Require.*;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -63,8 +61,9 @@ public class SimulatorTest extends TestCase {
         final Robustness robustness = new Robustness();
         
         simulation.run(inactivate("B"));
+        traces.accept(robustness);
         
-        assertThat(robustness.computeOn(traces.get(0)), is(closeTo(2D, 1e-6)));
+        assertThat(robustness.value(), is(closeTo(2D, 1e-6)));
     }
 
 }

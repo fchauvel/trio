@@ -20,6 +20,9 @@ package eu.diversify.trio.ui;
 
 import eu.diversify.trio.Configuration;
 import eu.diversify.trio.Trio;
+import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.Distribution;
+import eu.diversify.trio.analysis.Metric;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -138,10 +141,29 @@ public class Command {
         out.println("Licensed under " + config.license());
         out.println();
         
-        handler.analyse(inputFile, outputFile, runCount);
+        report(handler.analyse(inputFile, outputFile, runCount), out);
         
         out.println();
         out.println("That's all folks!");
+    }
+    
+    private void report(Analysis analyzer, PrintStream out) {
+        out.printf("%d SEQUENCE(S) STATISTICS :\n", 10);
+        out.printf("%20s %10s %10s %10s %10s\r\n", "metric (unit)", "mean", "min.", "max.", "std. dev.");
+        out.println("-----------------------------------------------------------------");
+        for(Metric eachMetric: analyzer.metrics()) {
+            format(eachMetric, out);
+        }
+    }
+    
+    private void format(Metric metric, PrintStream out) {
+        Distribution distribution = metric.distribution();
+        out.printf("%20s %10.2f %10.2f %10.2f %10.2f\r\n", 
+                             String.format("%s (%s)", metric.name(), metric.unit()), 
+                             distribution.mean(), 
+                             distribution.minimum(), 
+                             distribution.maximum(), 
+                             distribution.standardDeviation());
     }
 
     public static String usage() {

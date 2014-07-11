@@ -21,60 +21,65 @@ package eu.diversify.trio.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Dispatch event coming from the data set to other listener
  */
-public final class Dispatcher extends AbstractDataSetListener {
+public class Dispatcher extends AbstractDataSetListener {
 
-    private final Collection<DataSetListener> listeners;
+    private final List<DataSetListener> listeners;
 
     public Dispatcher(DataSetListener... listeners) {
         this(Arrays.asList(listeners));
     }
 
-    public Dispatcher(Collection<DataSetListener> listeners) {
+    public Dispatcher(List<DataSetListener> listeners) {
         this.listeners = new ArrayList<DataSetListener>(listeners);
+    }
+    
+    public final List<DataSetListener> getListeners() {
+        return Collections.unmodifiableList(listeners); 
     }
 
     @Override
-    public void exitState(State state) {
+    public final void exitState(State state) {
         for (DataSetListener eachListener: listeners) {
             eachListener.exitState(state);
         }
     }
 
     @Override
-    public void enterState(State state) {
+    public final void enterState(State state) {
         for (DataSetListener eachListener: listeners) {
             eachListener.enterState(state);
         }
     }
 
     @Override
-    public void exitTrace(Trace trace) {
+    public final void exitTrace(Trace trace) {
         for (DataSetListener eachListener: listeners) {
             eachListener.exitTrace(trace);
         }
     }
 
     @Override
-    public void enterTrace(Trace trace) {
+    public final void enterTrace(Trace trace) {
         for (DataSetListener eachListener: listeners) {
             eachListener.enterTrace(trace);
         }
     }
 
     @Override
-    public void exitDataSet(DataSet dataSet) {
+    public final void exitDataSet(DataSet dataSet) {
         for (DataSetListener eachListener: listeners) {
             eachListener.exitDataSet(dataSet);
         }
     }
 
     @Override
-    public void enterDataSet(DataSet dataSet) {
+    public final void enterDataSet(DataSet dataSet) {
         for (DataSetListener eachListener: listeners) {
             eachListener.enterDataSet(dataSet);
         }

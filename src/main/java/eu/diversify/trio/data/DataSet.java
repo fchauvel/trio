@@ -20,7 +20,6 @@ package eu.diversify.trio.data;
 import eu.diversify.trio.codecs.DataFormat;
 import eu.diversify.trio.data.Trace;
 import eu.diversify.trio.analysis.Distribution;
-import eu.diversify.trio.analysis.Metric;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,14 +56,6 @@ public class DataSet {
 
     public Trace get(int index) {
         return traces.get(0);
-    }
-
-    public Distribution distributionOf(Metric metric) {
-        final List<Double> values = new ArrayList<Double>(traces.size());
-        for (Trace eachTrace: traces) {
-            values.add(metric.computeOn(eachTrace));
-        }
-        return new Distribution(values);
     }
 
     public void saveAs(DataFormat format, String output) {

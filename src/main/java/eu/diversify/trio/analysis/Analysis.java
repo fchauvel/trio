@@ -15,51 +15,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
+ */
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.AbstractDataSetListener;
-import eu.diversify.trio.data.DataSet;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
+import eu.diversify.trio.data.DataSetListener;
+import eu.diversify.trio.data.Dispatcher;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
- * Summarise a set of metrics of interest
+ * Specialised dispatcher for metrics
  */
-public class Analysis extends AbstractDataSetListener {
-
-    private final Probability probability;
-    private final Map<Metric, Distribution> distributions;
-
-    public Analysis(DataSet data, Metric... metrics) {
-        this.probability = new Probability();
-        this.distributions = new HashMap<Metric, Distribution>();
-        for (Metric eachMetric: metrics) {
-            this.distributions.put(eachMetric, data.distributionOf(eachMetric));
-        }
-    } 
-     
-    public void showOn(OutputStream output) {
-        final PrintStream out = new PrintStream(output);
-        out.println("SEQUENCES SUMMARY:");
-        out.println();
-        out.printf("%20s %10s %10s %10s %10s\r\n", "metric (unit)", "mean", "min", "max", "std. dev");
-        out.println("-----------------------------------------------------------------");
-        for(Metric eachMetric: distributions.keySet()) {
-            out.println(format(eachMetric, distributions.get(eachMetric)));
-        }
+public class Analysis extends Dispatcher {
+    
+    public Analysis(Metric... listeners) {
+        super(listeners);
     }
-
-    private String format(Metric metric, Distribution values) {
-        return String.format("%20s %10.2f %10.2f %10.2f %10.2f", 
-                             String.format("%s (%s)", metric.getName(), metric.getUnit()), 
-                             values.mean(), 
-                             values.minimum(), 
-                             values.maximum(), 
-                             values.standardDeviation());
+    
+    public Collection<Metric> metrics() {
+        final List<DataSetListener> listeners = getListeners();
+        final List<Metric> result = new ArrayList<Metric>(listeners.size());
+        for (DataSetListener eachListener: listeners) {
+            result.add((Metric) eachListener);            
+        }
+        return result;
     }
     
 }

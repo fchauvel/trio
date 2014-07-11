@@ -19,6 +19,7 @@
 package eu.diversify.trio.unit.ui;
 
 import eu.diversify.trio.Trio;
+import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.ui.Command;
 import java.io.IOException;
 import junit.framework.TestCase;
@@ -150,10 +151,11 @@ public class CommandTest extends TestCase {
         public int runCount;
 
         @Override
-        public void analyse(String inputFile, String outputFile, int runCount) {
+        public Analysis analyse(String inputFile, String outputFile, int runCount) {
             this.inputFile = inputFile;
             this.outputFile = outputFile;
             this.runCount = runCount;
+            return null;
         }
 
     }

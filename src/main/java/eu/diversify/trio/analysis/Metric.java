@@ -15,21 +15,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
+ */
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.data.AbstractDataSetListener;
 
 /**
- * Metric as a general function, computed on a trace
+ * A metric is an value computed on a data set
  */
-public interface Metric {
+public abstract class Metric extends AbstractDataSetListener {
     
-    String getName();
+    private final String name;
+    private final String unit;
+
+    public Metric(String name, String unit) {
+        this.name = name;
+        this.unit = unit;
+    }
     
-    String getUnit();
-        
-    double computeOn(Trace input);
+    public String name() {
+        return this.name;
+    }
+    
+    public String unit() {
+        return this.unit;
+    }
+    
+    public abstract double value();
+    
+    public abstract Distribution distribution();
     
 }
