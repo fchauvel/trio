@@ -1,0 +1,27 @@
+#
+# The SensApp services and their dependencies
+#
+
+system: 
+    'SensApp at the type level'
+
+components:
+    - Admin         requires    Notifier and Registry and Storage and (Tomcat or Jetty)
+    - Notifier      requires    Tomcat or Jetty
+    - Registry      requires    Storage and (Tomcat or Jetty)
+    - Dispatcher    requires    Notifier and Registry and Storage and (Tomcat or Jetty)
+    - Storage       requires    DB and (Tomcat or Jetty)
+    - DB            requires    Linux_large or Linux_medium or Linux_small
+    - Jetty         requires    Jdk_oracle or Jdk_open
+    - Tomcat        requires    Jdk_oracle or Jdk_open
+    - Jdk_oracle    requires    Linux_large or Linux_medium or Linux_small
+    - Jdk_open      requires    Linux_large or Linux_medium or Linux_small
+    - Linux_large   
+    - Linux_medium
+    - Linux_small
+
+tags:
+    - 'infra'     on  Linux_large, Linux_medium, Linux_small
+    - 'platform'  on  DB, Jdk_oracle, Jdk_open, Tomcat, Jetty
+    - 'service'   on  Admin, Registry, Storage, Dispatcher, Notifier
+    

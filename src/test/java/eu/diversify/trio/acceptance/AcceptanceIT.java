@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Configuration;
@@ -41,14 +25,11 @@ import java.util.Collection;
 import junit.framework.TestCase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.junit.runners.Parameterized;
 
 import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 
 /**
  * Check that the file is properly packaged and distributed
@@ -72,11 +53,12 @@ public class AcceptanceIT extends TestCase {
     public static Collection<Object[]> samples() {
         final Collection<Object[]> results = new ArrayList<Object[]>();
 
-        results.add(new Object[]{"sensapp", "samples/sensapp.trio"});
+        results.add(new Object[]{"UCC sensapp", "samples/sensapp.trio"});
         results.add(new Object[]{"UCC topo. no.1", "samples/sensapp_topo1.trio"});
         results.add(new Object[]{"UCC topo. no.2", "samples/sensapp_topo2.trio"});
         results.add(new Object[]{"UCC topo. no.3", "samples/sensapp_topo3.trio"});
         results.add(new Object[]{"UCC topo. no.4", "samples/sensapp_topo4.trio"});
+        results.add(new Object[]{"UCC sensapp types", "samples/sensapp_types.trio"});
 
         return results;
     }
