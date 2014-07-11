@@ -40,6 +40,10 @@ public class State {
         this.activity = activity;
         this.loss = loss;
     }
+    
+    public <T> T accept(DataSetVisitor<T> visitor) {
+        return visitor.visitState(this);
+    }
 
     public Action getTrigger() {
         return trigger;

@@ -17,7 +17,6 @@
  */
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.analysis.Metric;
 import eu.diversify.trio.data.State;
 import eu.diversify.trio.data.Trace;
 import java.util.List;

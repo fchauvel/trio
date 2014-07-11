@@ -19,7 +19,6 @@
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.analysis.Metric;
 import eu.diversify.trio.data.DataSet;
 import java.io.OutputStream;
 import java.io.PrintStream;
