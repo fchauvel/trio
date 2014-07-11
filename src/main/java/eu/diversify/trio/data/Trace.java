@@ -39,10 +39,6 @@ public class Trace {
         states.add(new State(none(), 0, capacity, 0));
     }
 
-    public <T> T accept(DataSetVisitor<T> visitor) {
-        return visitor.visitTrace(this);
-    }
-    
     public void accept(DataSetListener listener) {
         listener.enterTrace(this);
         for(State eachState: states) {

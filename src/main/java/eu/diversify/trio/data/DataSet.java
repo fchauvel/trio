@@ -18,14 +18,11 @@
 package eu.diversify.trio.data;
 
 import eu.diversify.trio.codecs.DataFormat;
-import eu.diversify.trio.data.Trace;
-import eu.diversify.trio.analysis.Distribution;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Aggregate information obtained during extinction sequences
@@ -37,11 +34,7 @@ public class DataSet {
     public DataSet() {
         this.traces = new ArrayList<Trace>();
     }
-    
-    public <T> T accept(DataSetVisitor<T> visitor) {
-        return visitor.visitDataSet(this);
-    }
-    
+       
     public void accept(DataSetListener listener) {
         listener.enterDataSet(this);
         for(Trace eachTrace: traces) {
