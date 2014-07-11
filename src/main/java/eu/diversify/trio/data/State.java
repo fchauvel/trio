@@ -45,6 +45,11 @@ public class State {
         return visitor.visitState(this);
     }
 
+    public void accept(DataSetListener listener) {
+        listener.enterState(this);
+        listener.exitState(this); 
+    }
+    
     public Action getTrigger() {
         return trigger;
     }

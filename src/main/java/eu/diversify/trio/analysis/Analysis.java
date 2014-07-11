@@ -19,6 +19,7 @@
 
 package eu.diversify.trio.analysis;
 
+import eu.diversify.trio.data.AbstractDataSetListener;
 import eu.diversify.trio.data.DataSet;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -28,11 +29,13 @@ import java.util.Map;
 /**
  * Summarise a set of metrics of interest
  */
-public class Summary {
+public class Analysis extends AbstractDataSetListener {
 
+    private final Probability probability;
     private final Map<Metric, Distribution> distributions;
 
-    public Summary(DataSet data, Metric... metrics) {
+    public Analysis(DataSet data, Metric... metrics) {
+        this.probability = new Probability();
         this.distributions = new HashMap<Metric, Distribution>();
         for (Metric eachMetric: metrics) {
             this.distributions.put(eachMetric, data.distributionOf(eachMetric));

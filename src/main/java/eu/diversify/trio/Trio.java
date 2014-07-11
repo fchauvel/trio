@@ -19,7 +19,7 @@
 package eu.diversify.trio;
 
 import eu.diversify.trio.codecs.CSV;
-import eu.diversify.trio.analysis.Summary;
+import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.analysis.Length;
 import eu.diversify.trio.core.System;
@@ -40,7 +40,7 @@ public class Trio {
         final DataSet data = new DataSet();
         final Simulator simulation = new Simulator(system, data);
         simulation.randomExtinctionSequence(runCount);
-        final Summary summary = new Summary(data, new Robustness(), new Length());        
+        final Analysis summary = new Analysis(data, new Robustness(), new Length());        
         summary.showOn(java.lang.System.out);        
         data.saveAs(new CSV(), outputFile);   
     }

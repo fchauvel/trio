@@ -43,6 +43,14 @@ public class Trace {
         return visitor.visitTrace(this);
     }
     
+    public void accept(DataSetListener listener) {
+        listener.enterTrace(this);
+        for(State eachState: states) {
+            eachState.accept(listener); 
+        }
+        listener.exitTrace(this);
+    }
+    
     public List<Integer> disruptionLevels() {
         final List<Integer> levels = new ArrayList<Integer>();
         for (State eachState: states) {

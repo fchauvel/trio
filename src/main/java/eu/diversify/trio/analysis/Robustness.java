@@ -22,7 +22,7 @@ import eu.diversify.trio.data.Trace;
 import java.util.List;
 
 /**
- * Calculate the
+ * Calculate the robustness associated with a given trace
  */
 public class Robustness implements Metric {
 

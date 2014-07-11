@@ -42,6 +42,14 @@ public class DataSet {
     public <T> T accept(DataSetVisitor<T> visitor) {
         return visitor.visitDataSet(this);
     }
+    
+    public void accept(DataSetListener listener) {
+        listener.enterDataSet(this);
+        for(Trace eachTrace: traces) {
+            eachTrace.accept(listener);
+        }
+        listener.exitDataSet(this);
+    }
 
     public void include(Trace trace) {
         this.traces.add(trace);
