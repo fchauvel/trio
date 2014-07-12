@@ -15,34 +15,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.core;
 
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.simulation.Listener;
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.filter.All;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represent the specification of a system under study. A collection component,
@@ -100,6 +86,10 @@ public class System {
     public String getName() {
         return name;
     }
+    
+    public Set<String> taggedAs(String tag) {
+        return tags.get(tag).getTargets();
+    }
 
     @Override
     public int hashCode() {
@@ -122,7 +112,7 @@ public class System {
         return other.name.equals(name) && other.components.equals(components) && other.tags.equals(tags);
     }
 
-    public Collection<String> getComponentNames() {
+    public Set<String> getComponentNames() {
         return components.keySet();
     }
 
@@ -133,7 +123,7 @@ public class System {
     public Topology instantiate(DataSet report) {
         final Trace trace = new Trace(components.size());
         report.include(trace);
-        return new Topology(this, new Listener(trace));
+        return new Topology(this, All.getInstance(), All.getInstance(), new Listener(trace));
     }
 
     public Component requirementOf(String eachComponent) {

@@ -18,6 +18,7 @@
 
 package eu.diversify.trio;
 
+import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.codecs.CSV;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Length;
@@ -25,9 +26,9 @@ import eu.diversify.trio.analysis.Loss;
 import eu.diversify.trio.analysis.Probability;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.System;
-import eu.diversify.trio.simulation.Simulator;
 import eu.diversify.trio.data.DataSet;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static eu.diversify.trio.codecs.Builder.build;
@@ -37,22 +38,29 @@ import static eu.diversify.trio.codecs.Builder.build;
  */
 public class Trio {
 
-    public Analysis analyse(String inputFile, String outputFile, int runCount) throws IOException {
-        final System system = build().systemFrom(new FileInputStream(inputFile));
-        final DataSet data = new DataSet();
-       
-        final Simulator simulation = new Simulator(system, data);
-        simulation.randomExtinctionSequence(runCount);
-       
-        data.saveAs(new CSV(), outputFile);  
-        
-        final Analysis analysis = analysis();
-        data.accept(analysis);
-
-        return analysis;
+    public System loadSystemForm(String path) throws FileNotFoundException, IOException {
+        return build().systemFrom(new FileInputStream(path)); 
     }
     
-    public Analysis analysis() {
+    public DataSet run(Scenario scenario, int runCount) {
+         final DataSet dataCollector = new DataSet();
+         for(int i=0 ; i<runCount; i++) {
+             scenario.run(dataCollector);
+         }
+         return dataCollector;
+    }
+    
+    public Analysis analyse(DataSet data) {
+         final Analysis analysis = buildAnalysis();
+         data.accept(analysis);
+         return analysis;
+    }
+
+    public void saveDataAs(final DataSet data, String outputFile) {
+        data.saveAs(new CSV(), outputFile);
+    }
+    
+    private Analysis buildAnalysis() {
         final Robustness robustness = new Robustness();
         final Probability probability = new Probability();
         final Length length = new Length();

@@ -31,7 +31,8 @@ public class TrioRequest {
     private final Configuration config;
     private String pathToTopology;
     private String destination;
-    
+    private String observation;
+    private String control;
     
     public TrioRequest() {
         this.config = Configuration.forTest();
@@ -52,9 +53,27 @@ public class TrioRequest {
     public void setDestination(String destination) {
         this.destination = destination;
     }
+
+    public String getObservation() {
+        return observation;
+    }
+
+    public void setObservation(String observation) {
+        this.observation = observation;
+    }
+
+    public String getControl() {
+        return control;
+    }
+
+    public void setControl(String control) {
+        this.control = control;
+    }
+    
+    
     
     public TrioResponse execute() throws IOException, InterruptedException {
-        String command = String.format("java -jar %s --output=%s %s", config.jarFile(), destination, pathToTopology);
+        String command = String.format("java -jar %s -o %s -c %s -t %s %s", config.jarFile(), observation, control, destination, pathToTopology);
         Run run = new Run(config.installationDirectory(), command.split("\\s+"));
         return new TrioResponse(run);
     } 

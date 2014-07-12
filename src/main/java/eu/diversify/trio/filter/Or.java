@@ -15,30 +15,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+package eu.diversify.trio.filter;
 
-package eu.diversify.trio.simulation;
-
-import eu.diversify.trio.data.Trace;
-import eu.diversify.trio.simulation.actions.AbstractAction;
+import eu.diversify.trio.core.System;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Listen changes made on topologies
+ * Logical disjunction
  */
-public class Listener {
-    
-    private final Trace trace;
+public class Or extends Filter {
 
-    public Listener(Trace trace) {
-        this.trace = trace;
-    }
-    
-    public void inactivate(String component, Topology topology) {
-        trace.record(AbstractAction.inactivate(component), topology.countActiveAndObserved());
+    private final Filter left;
+    private final Filter right;
+
+    public Or(Filter left, Filter right) {
+        this.left = left;
+        this.right = right;
     }
 
-    
-    public void activate(String component, Topology topology) {
-        trace.record(AbstractAction.activate(component), topology.countActiveAndObserved());
+    @Override
+    public Set<String> resolve(System system) {
+        final Set<String> results = new HashSet<String>();
+        results.addAll(left.resolve(system));
+        results.addAll(right.resolve(system));
+        return results;
     }
-        
+
+    @Override
+    public String toString() {
+        return String.format("(%s or %s)", left.toString(), right.toString());
+    }
+
+    
+    
 }

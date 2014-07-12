@@ -15,29 +15,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+package eu.diversify.trio.filter;
 
-package eu.diversify.trio.simulation;
-
-import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.core.System;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- *
+ * Logical conjunction
  */
-public class Simulation {
-    
-    private final System subject;
-    private final DataSet results;
-    private final int runCount;
+public class And extends Filter {
 
-    
-    public Simulation(System subject, int runCount) {
-        this.subject = subject;
-        this.runCount = runCount;
-        this.results = new DataSet();
+    private final Filter left;
+    private final Filter right;
+
+    public And(Filter left, Filter right) {
+        this.left = left;
+        this.right = right;
     }
-    
-    
+
+    @Override
+    public Set<String> resolve(System system) {
+        final Set<String> results = new HashSet<String>();
+        results.addAll(left.resolve(system));
+        results.retainAll(right.resolve(system));
+        return results;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s and %s)", left.toString(), right.toString());
+    }
+
 }

@@ -16,29 +16,40 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.data.Trace;
-import eu.diversify.trio.simulation.actions.AbstractAction;
+package eu.diversify.trio.filter;
+
+import eu.diversify.trio.core.System;
+import java.util.Set;
 
 /**
- * Listen changes made on topologies
+ * Filter that filter nothing, it select all the components
+ * 
+ * Singleton
  */
-public class Listener {
-    
-    private final Trace trace;
+public class All extends Filter {
 
-    public Listener(Trace trace) {
-        this.trace = trace;
+    private static All instance;
+    
+    public static Filter getInstance() {
+        if (instance == null) {
+            instance = new All();
+        }
+        return instance;
     }
     
-    public void inactivate(String component, Topology topology) {
-        trace.record(AbstractAction.inactivate(component), topology.countActiveAndObserved());
+    private All() {};
+    
+    @Override
+    public Set<String> resolve(System system) {
+        return system.getComponentNames();
     }
 
-    
-    public void activate(String component, Topology topology) {
-        trace.record(AbstractAction.activate(component), topology.countActiveAndObserved());
+    @Override
+    public String toString() {
+        return "*";
     }
-        
+    
+    
+    
 }

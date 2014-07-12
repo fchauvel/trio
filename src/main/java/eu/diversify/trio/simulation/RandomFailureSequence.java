@@ -15,14 +15,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
+ */
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.core.System;
-
-
+import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.filter.Filter;
 import eu.diversify.trio.simulation.Action;
+import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.simulation.actions.Inactivate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,43 +31,26 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Simulate extinction sequence on a given system
+ * Generate a random sequence of failure
  */
-public class Simulator {
+public class RandomFailureSequence extends Scenario {
 
-    private final System system;
-    private final DataSet report;
-
-    public Simulator(System system) {
-        this(system, new DataSet());
+    public RandomFailureSequence(System system) {
+        super(system);
     }
 
-    public Simulator(System system, DataSet report) {
-        this.system = system;
-        this.report = report;
+    public RandomFailureSequence(System system, Filter observation, Filter control) {
+        super(system, observation, control);
     }
 
-    public Topology run(Action... sequence) {
-        final Topology topology = system.instantiate(report);
-        for (Action eachAction: sequence) {
-            eachAction.executeOn(topology);
-        }
-        return topology;
-    }
-
-    public Topology randomExtinctionSequence() {
-        final Topology topology = system.instantiate(report);
-        while (topology.hasActiveComponents()) {
-            Action action = new Inactivate(any(topology.activeComponents()));
+    @Override
+    public Topology run(DataSet collector) {
+        final Topology topology = instantiate(collector);
+        while (topology.hasActiveAndObservedComponents()) {
+            Action action = new Inactivate(any(topology.activeAndControlledComponents()));
             action.executeOn(topology);
         }
         return topology;
-    }
-
-    public void randomExtinctionSequence(int count) {
-        for(int i=0 ; i<count; i++) {
-            randomExtinctionSequence();
-        }
     }
 
     private String any(Collection<String> candidates) {

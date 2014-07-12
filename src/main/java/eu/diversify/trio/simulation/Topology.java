@@ -15,9 +15,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.System;
+import eu.diversify.trio.filter.All;
+import eu.diversify.trio.filter.Filter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,26 +53,33 @@ public class Topology {
     public static final boolean INACTIVE = !ACTIVE;
 
     private final System system;
+    private final Filter observation;
+    private final Filter control;
     private final Map<String, Boolean> status;
     private final List<Listener> listeners;
 
     public Topology(System system) {
-        this(system, new Listener[]{});
+        this(system, All.getInstance(), All.getInstance(), new Listener[]{});
     }
 
-    public Topology(System system, Listener... listeners) {
+    public Topology(System system, Filter observation, Filter control) {
+        this(system, observation, control, new Listener[]{});
+    }
+
+    public Topology(System system, Filter observation, Filter control, Listener... listeners) {
         this.system = system;
+        this.observation = observation;
+        this.control = control;
         this.status = new HashMap<String, Boolean>();
         for (String eachName: system.getComponentNames()) {
             this.status.put(eachName, ACTIVE);
         }
         this.listeners = new ArrayList<Listener>(Arrays.asList(listeners));
     }
-    
+
     public int getCapacity() {
-        return status.size(); 
+        return status.size();
     }
-    
 
     public boolean isActive(String name) {
         return statusOf(name);
@@ -68,22 +94,40 @@ public class Topology {
         return !isActive(name);
     }
 
-    public int countActive() {
-        return activeComponents().size();
+    public int countActiveAndObserved() {
+        return activeAndObservedComponents().size();
     }
 
-    public Collection<String> activeComponents() {
+    public Collection<String> activeAndObservedComponents() {
         final Collection<String> selection = new ArrayList<String>();
         for (String eachComponent: this.status.keySet()) {
-            if (isActive(eachComponent)) {
+            if (isActive(eachComponent) && isObserved(eachComponent)) {
                 selection.add(eachComponent);
             }
         }
         return selection;
     }
+    
+     public Collection<String> activeAndControlledComponents() {
+        final Collection<String> selection = new ArrayList<String>();
+        for (String eachComponent: this.status.keySet()) {
+            if (isActive(eachComponent) && isControlled(eachComponent)) {
+                selection.add(eachComponent);
+            }
+        }
+        return selection;
+    }
+    
+    public boolean isObserved(String component) {
+        return observation.resolve(system).contains(component);
+    }
+    
+    public boolean isControlled(String component) {
+        return control.resolve(system).contains(component);
+    }
 
-    public boolean hasActiveComponents() {
-        return countActive() > 0;
+    public boolean hasActiveAndObservedComponents() {
+        return countActiveAndObserved() > 0;
     }
 
     private void propagateChangesIn(Topology topology) {

@@ -53,21 +53,25 @@ public class AcceptanceIT extends TestCase {
     public static Collection<Object[]> samples() {
         final Collection<Object[]> results = new ArrayList<Object[]>();
 
-        results.add(new Object[]{"UCC sensapp", "samples/sensapp.trio"});
-        results.add(new Object[]{"UCC topo. no.1", "samples/sensapp_topo1.trio"});
-        results.add(new Object[]{"UCC topo. no.2", "samples/sensapp_topo2.trio"});
-        results.add(new Object[]{"UCC topo. no.3", "samples/sensapp_topo3.trio"});
-        results.add(new Object[]{"UCC topo. no.4", "samples/sensapp_topo4.trio"});
-        results.add(new Object[]{"UCC sensapp types", "samples/sensapp_types.trio"});
+        results.add(new Object[]{"UCC sensapp", "'*'", "'*'", "samples/sensapp.trio"});
+        results.add(new Object[]{"UCC topo. no.1", "'*'", "'*'", "samples/sensapp_topo1.trio"});
+        results.add(new Object[]{"UCC topo. no.2", "'*'", "'*'", "samples/sensapp_topo2.trio"});
+        results.add(new Object[]{"UCC topo. no.3", "'*'", "'*'", "samples/sensapp_topo3.trio"});
+        results.add(new Object[]{"UCC topo. no.4", "'*'", "'*'", "samples/sensapp_topo4.trio"});
+        results.add(new Object[]{"UCC sensapp types", "'*'", "'*'", "samples/sensapp_types.trio"});
 
         return results;
     }
 
     private final String name;
+    private final String observation;
+    private final String control;
     private final String pathToFile;
 
-    public AcceptanceIT(String name, String pathToFile) {
+    public AcceptanceIT(String name, String control, String observation, String pathToFile) {
         this.name = name;
+        this.observation = observation;
+        this.control = control;
         this.pathToFile = pathToFile;
     }
 
@@ -76,6 +80,8 @@ public class AcceptanceIT extends TestCase {
         final TrioRequest request = new TrioRequest();
         request.setPathToTopology(pathToFile);
         request.setDestination(ToolBox.randomName(10));
+        request.setControl(control);
+        request.setObservation(observation);
 
         final TrioResponse response = request.execute();
         System.out.println(response);

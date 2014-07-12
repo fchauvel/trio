@@ -42,7 +42,7 @@ public class TopologyTest extends TestCase {
         final System system = new System(new Component("A"), new Component("B"));
         final Topology sut = system.instantiate();
 
-        assertThat("active count", sut.countActive(), is(equalTo(2)));
+        assertThat("active count", sut.countActiveAndObserved(), is(equalTo(2)));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TopologyTest extends TestCase {
         final Topology sut = system.instantiate();
         sut.inactivate("Foo");
 
-        assertThat("Survivor count", sut.countActive(), is(equalTo(1)));
+        assertThat("Survivor count", sut.countActiveAndObserved(), is(equalTo(1)));
 
     }
 
@@ -72,7 +72,7 @@ public class TopologyTest extends TestCase {
         sut.inactivate("Foo");
         sut.activate("Foo");
 
-        assertThat("Survivor count", sut.countActive(), is(equalTo(2)));
+        assertThat("Survivor count", sut.countActiveAndObserved(), is(equalTo(2)));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class TopologyTest extends TestCase {
         final System system = new System(new Component("Foo"), new Component("Bar"));
         final Topology sut = system.instantiate();
 
-        assertThat("should have active components", sut.hasActiveComponents());
+        assertThat("should have active components", sut.hasActiveAndObservedComponents());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class TopologyTest extends TestCase {
         final System system = new System(new Component("Foo"), new Component("Bar"));
         final Topology sut = system.instantiate();
 
-        assertThat("should have active components", sut.activeComponents(), contains("Foo", "Bar"));
+        assertThat("should have active components", sut.activeAndObservedComponents(), contains("Foo", "Bar"));
     }
 
     @Test

@@ -15,30 +15,35 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ */
 
-package eu.diversify.trio.simulation;
+package eu.diversify.trio.filter;
 
-import eu.diversify.trio.data.Trace;
-import eu.diversify.trio.simulation.actions.AbstractAction;
+import eu.diversify.trio.core.System;
+import java.util.Set;
 
 /**
- * Listen changes made on topologies
+ *
  */
-public class Listener {
-    
-    private final Trace trace;
+public class TaggedAs extends Filter {
 
-    public Listener(Trace trace) {
-        this.trace = trace;
+    private final String tag;
+
+    public TaggedAs(String tag) {
+        this.tag = tag;
     }
     
-    public void inactivate(String component, Topology topology) {
-        trace.record(AbstractAction.inactivate(component), topology.countActiveAndObserved());
+    @Override
+    public Set<String> resolve(System system) {
+        return system.taggedAs(tag);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s", tag);
     }
 
     
-    public void activate(String component, Topology topology) {
-        trace.record(AbstractAction.activate(component), topology.countActiveAndObserved());
-    }
-        
+    
 }
