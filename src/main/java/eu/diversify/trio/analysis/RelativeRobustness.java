@@ -30,54 +30,20 @@ import java.util.List;
  */
 public class RelativeRobustness extends Metric {
 
-    private double value;
-    private final List<Double> values;
     private final Robustness robustness;
     
     public RelativeRobustness(Robustness robustness) {
-        super("relative robustness", "%");
+        super("norm. robustness", "%");
         this.robustness = robustness;
-        this.values = new ArrayList<Double>();
     }
-
-    @Override
-    protected void byDefault() throws UnsupportedOperationException {
-    }
-    
     
     @Override
     public void exitTrace(Trace trace) {
         final double min = trace.getObservationCapacity();
         final double max = trace.getObservationCapacity() * trace.getControlCapacity();
-        value = (robustness.value() - min) / (max - min);
-        values.add(value);
-    }
-
-    @Override
-    public void enterTrace(Trace trace) {
-        value = 0;
-    }
-
-    @Override
-    public void exitDataSet(DataSet dataSet) {
+        final double normalizedRobustness = (robustness.value() - min) / (max - min);
+        updateCurrent(getTraceId(), normalizedRobustness);
         
-    }
-
-    @Override
-    public void enterDataSet(DataSet dataSet) {
-        super.enterDataSet(dataSet); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public double value() {
-        return value;
-    }
-
-    @Override
-    public Distribution distribution() {
-        return new Distribution(values);
-    }
-
-    
+    }    
     
 }

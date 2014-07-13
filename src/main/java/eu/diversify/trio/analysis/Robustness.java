@@ -19,7 +19,6 @@
  */
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.AbstractDataSetListener;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.data.State;
 import eu.diversify.trio.data.Trace;
@@ -31,48 +30,21 @@ import java.util.List;
  */
 public class Robustness extends Metric {
 
-    private final List<Double> robustnesses;
-    private double robustness;
-    
     public Robustness() {
         super("Robustness", "none");
-        this.robustnesses = new ArrayList<Double>();
     }
 
-    @Override
-    protected void byDefault() throws UnsupportedOperationException {
-        // Nothing to do
-    }
-
-    @Override
-    public void enterDataSet(DataSet dataSet) {
-        this.robustnesses.clear();
-    }
-    
     @Override
     public void exitTrace(Trace trace) {
+        int robustness = 0;
         final List<Integer> disruptions = trace.disruptionLevels();
         for (int i = 1; i < disruptions.size(); i++) {
             final State previous = trace.afterDisruption(i - 1);
             final State current = trace.afterDisruption(i);
-            int step = current.getDisruptionLevel() - previous.getDisruptionLevel();
+            final int step = current.getDisruptionLevel() - previous.getDisruptionLevel();
             robustness += step * previous.getObservedActivityLevel();
         }
-        robustnesses.add(robustness);
-    }
-
-    @Override
-    public void enterTrace(Trace trace) {
-        this.robustness = 0;
-    }
-
-    
-    public double value() {
-        return robustness;
-    }
-    
-    public Distribution distribution() {
-        return new Distribution(robustnesses);
+        updateCurrent(getTraceId(), robustness);
     }
 
 }

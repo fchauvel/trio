@@ -15,38 +15,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.data.State;
 import eu.diversify.trio.data.Trace;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Compute statistics about the length of sequences
  */
 public class Length extends Metric {
-
-    private double length;
-    private final List<Double> values;
     
     public Length() {
         super("Length", "# actions");
-        values = new ArrayList<Double>();
-    }
-
-    @Override
-    public double value() {
-        return length;
-    }
-
-    @Override
-    public Distribution distribution() {
-        return new Distribution(values);
     }
 
     @Override
@@ -54,29 +35,11 @@ public class Length extends Metric {
     }
 
     @Override
-    public void exitState(State state) {
-        values.add(length);
-    }
-
-    @Override
-    public void enterState(State state) {
-        length += 1;
-    }
-
-    @Override
     public void exitTrace(Trace trace) {
-        super.exitTrace(trace); //To change body of generated methods, choose Tools | Templates.
+        updateCurrent(getTraceId(), trace.length());
     }
 
-    @Override
-    public void enterTrace(Trace trace) {
-        length = 0;
-    }
-
-    @Override
-    public void enterDataSet(DataSet dataSet) {
-        values.clear();
-    }
+   
 
     
     

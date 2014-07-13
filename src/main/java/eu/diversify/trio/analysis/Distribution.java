@@ -18,17 +18,17 @@
 
 package eu.diversify.trio.analysis;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Represent the distribution of a set of values
  */
 public class Distribution {
 
-    private final List<Double> values;
+    private final Collection<Double> values;
     
-    public Distribution(List<Double> values) {
+    public Distribution(Collection<Double> values) {
         this.values = values;
     }
     
