@@ -43,14 +43,15 @@ public class StateTest extends TestCase{
         final int stillActive = 10;
         final int loss = 1;
         
-        final State sut = new State(new Inactivate("A"), disruption, stillActive, loss);
+        final State sut = new State(new Inactivate("A"), disruption, stillActive, stillActive, loss);
         
         final Action trigger = new Inactivate("B");
-        final State next = sut.update(trigger, 8);
+        final State next = sut.update(trigger, 8, 7);
                 
         assertThat("action", next.getTrigger(), is(equalTo(trigger))); 
         assertThat("inactivated", next.getDisruptionLevel(), is(equalTo(disruption + 1)));
-        assertThat("still active", next.getActivityLevel(), is(equalTo(8)));
+        assertThat("still active", next.getObservedActivityLevel(), is(equalTo(8)));
+        assertThat("stil active and controllable", next.getControlledActivityLevel(), is(equalTo(7)));
         assertThat("loss", next.getLoss(), is(equalTo(2)));
     }
     

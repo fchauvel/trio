@@ -54,7 +54,7 @@ public class TraceTest extends TestCase {
         trace.record(inactivate("B"), 6);
         trace.record(inactivate("C"), 0);
 
-        assertThat(trace.afterDisruption(2).getActivityLevel(), is(equalTo(6)));
+        assertThat(trace.afterDisruption(2).getObservedActivityLevel(), is(equalTo(6)));
     }
 
 }

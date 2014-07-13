@@ -31,13 +31,15 @@ public class State {
 
     private final Action trigger;
     private final int disruption;
-    private final int activity;
+    private final int observedActivity;
+    private final int controlledActivity;
     private final int loss;
 
-    public State(Action trigger, int disruption, int activity, int loss) {
+    public State(Action trigger, int disruption, int observedActivity, int controlledActivity, int loss) {
         this.trigger = trigger;
         this.disruption = disruption;
-        this.activity = activity;
+        this.observedActivity = observedActivity;
+        this.controlledActivity = controlledActivity;
         this.loss = loss;
     }
    
@@ -54,19 +56,23 @@ public class State {
         return disruption;
     }
 
-    public int getActivityLevel() {
-        return activity;
+    public int getObservedActivityLevel() {
+        return observedActivity;
+    }
+    
+    public int getControlledActivityLevel() {
+        return controlledActivity;
     }
 
     public int getLoss() {
         return loss;
     }
 
-    public State update(Action action, int activityLevel) {
-        return new State(action, disruption + 1, activityLevel, activity - activityLevel);
+    public State update(Action action, int observedAndActive, int controlledAndActive) {
+        return new State(action, disruption + 1, observedAndActive, controlledAndActive, observedActivity - observedAndActive);
     }
 
     public String to(DataFormat format, int sequenceIndex) { 
-        return format.convert(sequenceIndex, trigger.toString(), disruption, activity, loss);
+        return format.convert(sequenceIndex, trigger.toString(), disruption, observedActivity, loss);
     }
 }

@@ -24,6 +24,7 @@ import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Length;
 import eu.diversify.trio.analysis.Loss;
 import eu.diversify.trio.analysis.Probability;
+import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.data.DataSet;
@@ -62,10 +63,11 @@ public class Trio {
     
     private Analysis buildAnalysis() {
         final Robustness robustness = new Robustness();
+        final RelativeRobustness rRobustness = new RelativeRobustness(robustness);
         final Probability probability = new Probability();
         final Length length = new Length();
         final Loss loss = new Loss();
-        return new Analysis(robustness, length, loss, probability);
+        return new Analysis(robustness, rRobustness, length, loss, probability);
     }
 
 }

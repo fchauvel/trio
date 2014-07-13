@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+
+
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.AbstractDataSetListener;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.data.State;
 import eu.diversify.trio.data.Trace;
@@ -27,52 +26,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Compute the robustness of
+ * Compute a relative robustness
  */
-public class Robustness extends Metric {
+public class RelativeRobustness extends Metric {
 
-    private final List<Double> robustnesses;
-    private double robustness;
+    private double value;
+    private final List<Double> values;
+    private final Robustness robustness;
     
-    public Robustness() {
-        super("Robustness", "none");
-        this.robustnesses = new ArrayList<Double>();
+    public RelativeRobustness(Robustness robustness) {
+        super("relative robustness", "%");
+        this.robustness = robustness;
+        this.values = new ArrayList<Double>();
     }
 
     @Override
     protected void byDefault() throws UnsupportedOperationException {
-        // Nothing to do
     }
-
-    @Override
-    public void enterDataSet(DataSet dataSet) {
-        this.robustnesses.clear();
-    }
+    
     
     @Override
     public void exitTrace(Trace trace) {
-        final List<Integer> disruptions = trace.disruptionLevels();
-        for (int i = 1; i < disruptions.size(); i++) {
-            final State previous = trace.afterDisruption(i - 1);
-            final State current = trace.afterDisruption(i);
-            int step = current.getDisruptionLevel() - previous.getDisruptionLevel();
-            robustness += step * previous.getObservedActivityLevel();
-        }
-        robustnesses.add(robustness);
+        final double min = trace.getObservationCapacity();
+        final double max = trace.getObservationCapacity() * trace.getControlCapacity();
+        value = (robustness.value() - min) / (max - min);
+        values.add(value);
     }
 
     @Override
     public void enterTrace(Trace trace) {
-        this.robustness = 0;
+        value = 0;
     }
 
+    @Override
+    public void exitDataSet(DataSet dataSet) {
+        
+    }
+
+    @Override
+    public void enterDataSet(DataSet dataSet) {
+        super.enterDataSet(dataSet); //To change body of generated methods, choose Tools | Templates.
+    }
     
+    @Override
     public double value() {
-        return robustness;
-    }
-    
-    public Distribution distribution() {
-        return new Distribution(robustnesses);
+        return value;
     }
 
+    @Override
+    public Distribution distribution() {
+        return new Distribution(values);
+    }
+
+    
+    
 }

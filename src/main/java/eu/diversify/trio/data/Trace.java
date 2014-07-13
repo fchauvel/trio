@@ -15,7 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.data;
 
 import eu.diversify.trio.codecs.DataFormat;
@@ -30,23 +46,37 @@ import static eu.diversify.trio.simulation.actions.AbstractAction.*;
  */
 public class Trace {
 
-    private final int capacity;
+    private final int observationCapacity;
+    private final int controlCapacity;
     private final List<State> states;
 
     public Trace(int capacity) {
-        this.capacity = capacity;
-        this.states = new ArrayList<State>();
-        states.add(new State(none(), 0, capacity, 0));
+        this(capacity, capacity);
     }
 
+    public Trace(int observationCapacity, int controlCapacity) {
+        this.observationCapacity = observationCapacity;
+        this.controlCapacity = controlCapacity;
+        this.states = new ArrayList<State>();
+        states.add(new State(none(), 0, observationCapacity, controlCapacity, 0));
+    }
+
+    public int getObservationCapacity() {
+        return observationCapacity;
+    }
+
+    public int getControlCapacity() {
+        return controlCapacity;
+    }
+    
     public void accept(DataSetListener listener) {
         listener.enterTrace(this);
-        for(State eachState: states) {
-            eachState.accept(listener); 
+        for (State eachState: states) {
+            eachState.accept(listener);
         }
         listener.exitTrace(this);
     }
-    
+
     public List<Integer> disruptionLevels() {
         final List<Integer> levels = new ArrayList<Integer>();
         for (State eachState: states) {
@@ -56,7 +86,11 @@ public class Trace {
     }
 
     public void record(Action action, int activityLevel) {
-        final State next = current().update(action, activityLevel);
+        record(action, activityLevel, activityLevel);
+    }
+
+    public void record(Action action, int activeAndObserved, int activeAndControlled) {
+        final State next = current().update(action, activeAndObserved, activeAndControlled);
         this.states.add(next);
     }
 
@@ -85,7 +119,7 @@ public class Trace {
         final String EOL = java.lang.System.lineSeparator();
         final StringBuilder builder = new StringBuilder();
         for (State eachState: states) {
-            builder.append(eachState.to(format, index)).append(EOL); 
+            builder.append(eachState.to(format, index)).append(EOL);
         }
         return builder.toString();
     }
