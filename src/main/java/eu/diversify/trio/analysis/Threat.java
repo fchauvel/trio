@@ -15,34 +15,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/*
+ */
 
 package eu.diversify.trio.analysis;
 
 import eu.diversify.trio.data.Trace;
 
 /**
- * Compute statistics about the length of sequences
+ *
  */
-public class Length extends Metric {
-    
-    public Length() {
-        super("Length", "# actions");
-    }
+public class Threat extends Metric {
 
-    @Override
-    protected void byDefault() throws UnsupportedOperationException {
+    private final RelativeRobustness robustness;
+    private final Probability probability;
+    
+    public Threat(RelativeRobustness robustness, Probability probability) {
+        super("fragility", "none");
+        this.robustness = robustness;
+        this.probability = probability;
     }
 
     @Override
     public void exitTrace(Trace trace) {
-        distribution().record(trace.label(), trace.length()); 
+        final String label = trace.label();
+        distribution().record(label,1D - robustness.valueOf(label) * probability.valueOf(label));
     }
+    
+    
 
-   
-
-    
-    
-    
-    
 }

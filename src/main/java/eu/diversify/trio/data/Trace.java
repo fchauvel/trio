@@ -15,23 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
+
 package eu.diversify.trio.data;
 
 import eu.diversify.trio.codecs.DataFormat;
@@ -59,6 +44,19 @@ public class Trace {
         this.controlCapacity = controlCapacity;
         this.states = new ArrayList<State>();
         states.add(new State(none(), 0, observationCapacity, controlCapacity, 0));
+    }
+    
+    public String label() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("[");
+        for(int i=0 ; i<states.size() ;i++) {
+            buffer.append(states.get(i).getTrigger().toString());
+            if (i < states.size()-1) {
+                buffer.append(", ");
+            }
+        }
+        buffer.append("]");
+        return buffer.toString();
     }
 
     public int getObservationCapacity() {

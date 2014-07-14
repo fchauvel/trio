@@ -15,34 +15,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ */
+package eu.diversify.trio.unit.analysis;
 
+import eu.diversify.trio.analysis.Distribution;
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-package eu.diversify.trio.analysis;
-
-import eu.diversify.trio.data.Trace;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
- * Compute statistics about the length of sequences
+ *
  */
-public class Length extends Metric {
-    
-    public Length() {
-        super("Length", "# actions");
+@RunWith(JUnit4.class)
+public class DistributionTest extends TestCase {
+
+    @Test
+    public void probabilityOf() {
+        Distribution distribution = new Distribution();
+        distribution.record("s1", 6);
+        distribution.record("s2", 5);
+        distribution.record("s1", 4);
+
+        assertThat(distribution.probabilityOf("s1"), is(closeTo(2D / 3, 1e-6)));
     }
 
-    @Override
-    protected void byDefault() throws UnsupportedOperationException {
-    }
-
-    @Override
-    public void exitTrace(Trace trace) {
-        distribution().record(trace.label(), trace.length()); 
-    }
-
-   
-
-    
-    
-    
-    
 }

@@ -50,8 +50,7 @@ public class TrioResponse {
     
     private static final List<String> ERROR_MARKER = Arrays.asList(new String[]{
         "error", "Error", "ERROR",
-        "exception", "Exception", "EXCEPTION",
-        "failure", "FAILURE", "Failure"});
+        "exception", "Exception", "EXCEPTION"});
 
     public boolean hasError() {
         for(String anyMarker: ERROR_MARKER) {

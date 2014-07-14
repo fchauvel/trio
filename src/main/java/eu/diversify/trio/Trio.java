@@ -21,6 +21,7 @@ package eu.diversify.trio;
 import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.codecs.CSV;
 import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.Threat;
 import eu.diversify.trio.analysis.Length;
 import eu.diversify.trio.analysis.Loss;
 import eu.diversify.trio.analysis.Probability;
@@ -67,7 +68,8 @@ public class Trio {
         final Probability probability = new Probability();
         final Length length = new Length();
         final Loss loss = new Loss();
-        return new Analysis(robustness, rRobustness, length, loss, probability);
+        final Threat fragility = new Threat(rRobustness, probability);
+        return new Analysis(robustness, rRobustness, length, loss, probability, fragility);
     }
 
 }

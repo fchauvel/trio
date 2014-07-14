@@ -15,45 +15,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.unit.ui;
 
 import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.Threat;
+import eu.diversify.trio.analysis.Loss;
+import eu.diversify.trio.analysis.Probability;
+import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.data.DataSet;
@@ -272,7 +243,9 @@ public class CommandTest extends TestCase {
 
         @Override
         public Analysis analyse(DataSet data) {
-            return new Analysis();
+            final RelativeRobustness relativeRobustness = new RelativeRobustness(new Robustness());
+            final Probability probability = new Probability();
+            return new Analysis(new Loss(), relativeRobustness, new Threat(relativeRobustness, probability));
         }
 
         @Override

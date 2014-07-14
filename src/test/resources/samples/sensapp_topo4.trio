@@ -11,7 +11,7 @@ components:
     - Registry      requires    Storage and SC2
     - Dispatcher    requires    Notifier and Registry and Storage and SC2
     - Storage       requires    LB and SC2
-    - LB            requires    DB1 or DB2 or DB3
+    - LB            requires    (DB1 or DB2 or DB3) and VM2
     - DB1           requires    VM2
     - DB2           requires    VM2
     - DB3           requires    VM2

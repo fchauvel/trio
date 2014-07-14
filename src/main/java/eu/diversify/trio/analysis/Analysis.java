@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+
 
 package eu.diversify.trio.analysis;
 
@@ -42,6 +41,15 @@ public class Analysis extends Dispatcher {
             result.add((Metric) eachListener);            
         }
         return result;
+    }
+    
+    public Metric metric(String name) {
+        for (DataSetListener listener: getListeners()) {
+            if (((Metric) listener).name().equals(name)) {
+                return (Metric) listener;
+            }
+        }
+        return null;
     }
     
 }

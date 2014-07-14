@@ -43,7 +43,7 @@ public class ProbabilityTest extends TestCase {
         final Probability probability = new Probability();
         trace.accept(probability);
 
-        assertThat(probability.value(), is(closeTo(1D, 1e-6)));
+        assertThat(probability.distribution().mean(), is(closeTo(1D, 1e-6)));
     }
 
     @Test
@@ -55,8 +55,8 @@ public class ProbabilityTest extends TestCase {
         final Probability probability = new Probability();
         trace.accept(probability);
 
-        assertThat(probability.value(), is(both(greaterThan(0D)).and(lessThan(1D))));
-        assertThat(probability.value(), is(closeTo(0.5, 1e-6)));
+        assertThat(probability.distribution().mean(), is(both(greaterThan(0D)).and(lessThan(1D))));
+        assertThat(probability.distribution().mean(), is(closeTo(0.5, 1e-6)));
     }
     
      @Test
@@ -68,8 +68,8 @@ public class ProbabilityTest extends TestCase {
         final Probability probability = new Probability();
         trace.accept(probability);
 
-        assertThat(probability.value(), is(both(greaterThan(0D)).and(lessThan(1D))));
-        assertThat(probability.value(), is(closeTo(0.125, 1e-6)));
+        assertThat(probability.distribution().mean(), is(both(greaterThan(0D)).and(lessThan(1D))));
+        assertThat(probability.distribution().mean(), is(closeTo(0.125, 1e-6)));
     }
 
 }

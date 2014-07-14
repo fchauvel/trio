@@ -44,7 +44,7 @@ public class RobustnessTest extends TestCase {
         final Robustness robustness = new Robustness();
         trace.accept(robustness);
                 
-        assertThat(robustness.value(), is(closeTo(1D, 1e-6)));
+        assertThat(robustness.distribution().mean(), is(closeTo(1D, 1e-6)));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class RobustnessTest extends TestCase {
         final Robustness robustness = new Robustness();
         trace.accept(robustness);
 
-        assertThat(robustness.value(), is(closeTo(6D, 1e-6)));
+        assertThat(robustness.distribution().mean(), is(closeTo(6D, 1e-6)));
     }
 
 }

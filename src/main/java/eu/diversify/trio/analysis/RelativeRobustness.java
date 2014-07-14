@@ -19,11 +19,7 @@
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.data.State;
 import eu.diversify.trio.data.Trace;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Compute a relative robustness
@@ -41,8 +37,8 @@ public class RelativeRobustness extends Metric {
     public void exitTrace(Trace trace) {
         final double min = trace.getObservationCapacity();
         final double max = trace.getObservationCapacity() * trace.getControlCapacity();
-        final double normalizedRobustness = (robustness.value() - min) / (max - min);
-        updateCurrent(getTraceId(), normalizedRobustness);
+        final double normalizedRobustness = (robustness.valueOf(trace.label()) - min) / (max - min);
+        distribution().record(trace.label(), normalizedRobustness);
         
     }    
     

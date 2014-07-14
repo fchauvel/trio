@@ -55,9 +55,21 @@ public class AcceptanceIT extends TestCase {
 
         results.add(new Object[]{"UCC sensapp", "'*'", "'*'", "samples/sensapp.trio"});
         results.add(new Object[]{"UCC topo. no.1", "'*'", "'*'", "samples/sensapp_topo1.trio"});
+        results.add(new Object[]{"UCC topo. no.1 service/infra", "service", "infra", "samples/sensapp_topo1.trio"});
+        results.add(new Object[]{"UCC topo. no.1 service/platform", "service", "platform", "samples/sensapp_topo1.trio"});
+        
         results.add(new Object[]{"UCC topo. no.2", "'*'", "'*'", "samples/sensapp_topo2.trio"});
+        results.add(new Object[]{"UCC topo. no.2 service/infra", "service", "infra", "samples/sensapp_topo2.trio"});
+        results.add(new Object[]{"UCC topo. no.2 service/platform", "service", "platform", "samples/sensapp_topo2.trio"});
+        
         results.add(new Object[]{"UCC topo. no.3", "'*'", "'*'", "samples/sensapp_topo3.trio"});
+        results.add(new Object[]{"UCC topo. no.3 service/infra", "service", "infra", "samples/sensapp_topo3.trio"});
+        results.add(new Object[]{"UCC topo. no.3 service/platform", "service", "platform", "samples/sensapp_topo3.trio"});
+        
         results.add(new Object[]{"UCC topo. no.4", "'*'", "'*'", "samples/sensapp_topo4.trio"});
+        results.add(new Object[]{"UCC topo. no.4 service/infra", "service", "infra", "samples/sensapp_topo4.trio"});
+        results.add(new Object[]{"UCC topo. no.4 service/platform", "service", "platform", "samples/sensapp_topo4.trio"});
+      
         results.add(new Object[]{"UCC sensapp types", "'*'", "'*'", "samples/sensapp_types.trio"});
 
         return results;
@@ -68,7 +80,7 @@ public class AcceptanceIT extends TestCase {
     private final String control;
     private final String pathToFile;
 
-    public AcceptanceIT(String name, String control, String observation, String pathToFile) {
+    public AcceptanceIT(String name,  String observation, String control, String pathToFile) {
         this.name = name;
         this.observation = observation;
         this.control = control;

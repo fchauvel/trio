@@ -32,6 +32,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.ui;
 
 import eu.diversify.trio.Configuration;
@@ -39,18 +56,24 @@ import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Distribution;
+import eu.diversify.trio.analysis.OldDistribution;
 import eu.diversify.trio.analysis.Metric;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
 import eu.diversify.trio.filter.TaggedAs;
+import eu.diversify.trio.simulation.Scenario;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 
 /**
  * The options which can be passed to trio
@@ -179,8 +202,9 @@ public class Command {
         final System system = trio.loadSystemForm(inputFile);
         out.println("SYSTEM: " + system.getName());
         final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
+        out.println("SCENARIO: " + format(scenario));
         final DataSet data = trio.run(scenario, runCount);
-        trio.saveDataAs(data, outputFile);        
+        trio.saveDataAs(data, outputFile);
         report(trio.analyse(data), out);
 
         out.println();
@@ -203,22 +227,52 @@ public class Command {
     }
 
     private void report(Analysis analyzer, PrintStream out) {
-        out.printf("%d SEQUENCE(S) STATISTICS :\n", 10);
-        out.printf("%20s %10s %10s %10s %10s\r\n", "metric (unit)", "mean", "min.", "max.", "std. dev.");
-        out.println("-----------------------------------------------------------------");
-        for (Metric eachMetric: analyzer.metrics()) {
-            format(eachMetric, out);
+        out.println("INDICATORS:");
+        out.printf(" + Robustness: %.4f\n", getRobustness(analyzer).distribution().mean());
+        out.println(" + Five most sensitive components:");
+        int counter = 1;
+        for (Map.Entry<String, Double> entry: getLoss(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {
+            out.printf("   %d: %.4e %s\n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
+            if (counter > 5) {
+                break;
+            }
         }
+        reportHarmfulSequences(out, analyzer);
     }
 
-    private void format(Metric metric, PrintStream out) {
-        Distribution distribution = metric.distribution();
-        out.printf("%20s %10.2f %10.2f %10.2f %10.2f\r\n",
-                   String.format("%s (%s)", metric.name(), metric.unit()),
-                   distribution.mean(),
-                   distribution.minimum(),
-                   distribution.maximum(),
-                   distribution.standardDeviation());
+    public void reportHarmfulSequences(PrintStream out, Analysis analyzer) {
+        out.println(" + Five most harmful sequences:");
+        int counter = 1;
+        for (Map.Entry<String, Double> entry: getFragility(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {
+            out.printf("   %d: %.4e %s\n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
+            if (counter > 5) {
+                break;
+            }
+        } 
+    }
+
+    public static Metric getRobustness(Analysis analyzer) {
+        return analyzer.metric("norm. robustness");
+    }
+    
+     public static Metric getFragility(Analysis analyzer) {
+        return analyzer.metric("fragility");
+    }
+
+    public static Metric getLoss(Analysis analyzer) {
+        return analyzer.metric("Loss");
+    }
+
+    private String format(Scenario scenario) {
+        String observation = String.format("'%s' layer", scenario.getObservation().toString());
+        if (observation.contains("*")) {
+            observation = "system";
+        }
+        String control = String.format("'%s' layer", scenario.getControl().toString());
+        if (control.contains("*")) {
+            control = "system";
+        }
+        return String.format("Robustness of the %s to failure in the %s", observation, control);
     }
 
     public static String usage() {
@@ -226,7 +280,7 @@ public class Command {
         return "Usage: trio [options] input.trio" + EOL
                 + "where 'options' are:" + EOL
                 + "  -o, --observe=TAG  the tag of the components whose activity shall be observed" + EOL
-                + "  -c, --control=TAG  the tag of the components whose activity shall be controlled"
+                + "  -c, --control=TAG  the tag of the components whose activity shall be controlled" + EOL
                 + "  -r, --runs=INTEGER the number of sample for statistical evidence" + EOL
                 + "  -t, --trace=FILE   the file where the generated data shall be stored" + EOL
                 + "Example: trio -o result.csv --run=10000 system.trio";

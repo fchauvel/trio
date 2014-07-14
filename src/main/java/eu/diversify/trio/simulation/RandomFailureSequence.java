@@ -46,7 +46,8 @@ public class RandomFailureSequence extends Scenario {
     @Override
     public Topology run(DataSet collector) {
         final Topology topology = instantiate(collector);
-        while (topology.hasActiveAndObservedComponents()) {
+        while (topology.hasActiveAndObservedComponents() 
+                && topology.hasActiveAndControlledComponents()) {
             Action action = new Inactivate(any(topology.activeAndControlledComponents()));
             action.executeOn(topology);
         }

@@ -34,29 +34,54 @@
  */
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.Trace;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
- * Compute the probability
+ * Represent the distribution of a set of values
  */
-public class Probability extends Metric {
+public class OldDistribution {
 
-
-    public Probability() {
-        super("Probability", "[0, 1]");
+    private final String name;
+    private final Collection<Double> oldValues;
+ 
+    public OldDistribution(Collection<Double> values) {
+        this("anonymous", values);
     }
 
-    @Override
-    public void exitTrace(Trace trace) {
-        double probability = 1;
-        int numberOfAlternatives = trace.getControlCapacity();
-        for (int level: trace.disruptionLevels()) {
-            if (level > 0) {
-                probability *= (1D / numberOfAlternatives);
-            }
-            numberOfAlternatives = trace.afterDisruption(level).getControlledActivityLevel();
+    public OldDistribution(String name, Collection<Double> values) {
+        this.name = name;
+        this.oldValues = values;
+    }
+
+    
+    public double minimum() {
+        return Collections.min(oldValues);
+    }
+
+    public double maximum() {
+        return Collections.max(oldValues);
+    }
+
+    public double mean() {
+        double sum = 0;
+        for (double eachValue: oldValues) {
+            sum += eachValue;
         }
-        distribution().record(trace.label(), probability);
+        return sum / oldValues.size();
+    }
+
+    public double variance() {
+        final double mean = mean();
+        double sum = 0;
+        for (double eachValue: oldValues) {
+            sum += Math.pow(mean - eachValue, 2);
+        }
+        return sum / oldValues.size();
+    }
+
+    public double standardDeviation() {
+        return Math.sqrt(variance());
     }
 
 }

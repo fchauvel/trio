@@ -42,7 +42,7 @@ public class LengthTest extends TestCase {
         final Length length = new Length();
         trace.accept(length);
 
-        assertThat(length.value(), is(closeTo(2D, 1e-6)));
+        assertThat(length.distribution().mean(), is(closeTo(2D, 1e-6)));
     }
 
 }

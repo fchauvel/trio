@@ -19,10 +19,8 @@
  */
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.data.State;
 import eu.diversify.trio.data.Trace;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +42,7 @@ public class Robustness extends Metric {
             final int step = current.getDisruptionLevel() - previous.getDisruptionLevel();
             robustness += step * previous.getObservedActivityLevel();
         }
-        updateCurrent(getTraceId(), robustness);
+        distribution().record(trace.label(), robustness);
     }
 
 }

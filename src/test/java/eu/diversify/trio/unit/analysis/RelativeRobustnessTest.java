@@ -49,7 +49,7 @@ public class RelativeRobustnessTest extends TestCase {
         final Dispatcher metric = new Dispatcher(robustness, relativeRobustness);
         trace.accept(metric);
 
-        assertThat(relativeRobustness.value(), is(closeTo(1D, 1e-6)));
+        assertThat(relativeRobustness.distribution().mean(), is(closeTo(1D, 1e-6)));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class RelativeRobustnessTest extends TestCase {
         final Dispatcher metric = new Dispatcher(robustness, relativeRobustness);
         trace.accept(metric);
 
-        assertThat(relativeRobustness.value(), is(closeTo(0D, 1e-6)));
+        assertThat(relativeRobustness.distribution().mean(), is(closeTo(0D, 1e-6)));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class RelativeRobustnessTest extends TestCase {
         final Dispatcher metric = new Dispatcher(robustness, relativeRobustness);
         trace.accept(metric);
 
-        final double value = relativeRobustness.value();
+        final double value = relativeRobustness.distribution().mean();
         assertThat(value, is(both(greaterThan(0D)).and(lessThan(1D))));
         assertThat(value, is(closeTo(.5, 1e-6)));
     }

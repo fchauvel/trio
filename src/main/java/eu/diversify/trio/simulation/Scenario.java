@@ -19,14 +19,11 @@
  */
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.data.Trace;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
-import eu.diversify.trio.simulation.Listener;
-import eu.diversify.trio.simulation.Topology;
 
 /**
  * The scenario taken as input by Trio
@@ -54,6 +51,7 @@ public abstract class Scenario {
         this.observation = observation;
         this.control = control;
     }
+    
 
     public final Topology instantiate(DataSet report) {
         final Trace trace = new Trace(system.getComponentNames().size());
