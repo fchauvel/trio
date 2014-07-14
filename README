@@ -111,7 +111,7 @@ The Maven release plugin can be run in a "dryRun" mode using the
 option '-DdryRun=true-'. We recommend to get the 'dry run' before to
 run the 'release:prepare' command.
 
-$> mvn --batch-mode release:prepare -DreleaseVersion=1.0 -DdevelopmentVersion=1.1-SNAPSHOT
+$> mvn --batch-mode release:prepare -DreleaseVersion=0.1 -DdevelopmentVersion=0.2-SNAPSHOT
 
 $> mvn release:perform
 
