@@ -29,18 +29,21 @@ import java.util.List;
 public class Robustness extends Metric {
 
     public Robustness() {
-        super("Robustness", "none");
+        super(NAME, "none");
     }
+    public static final String NAME = "Robustness";
 
     @Override
     public void exitTrace(Trace trace) {
         int robustness = 0;
         final List<Integer> disruptions = trace.disruptionLevels();
-        for (int i = 1; i < disruptions.size(); i++) {
-            final State previous = trace.afterDisruption(i - 1);
-            final State current = trace.afterDisruption(i);
-            final int step = current.getDisruptionLevel() - previous.getDisruptionLevel();
-            robustness += step * previous.getObservedActivityLevel();
+        for (int i = 0; i < disruptions.size(); i++) {
+            final State current = trace.afterDisruption(disruptions.get(i));
+            int step = (trace.getControlCapacity() + 1) - i; 
+            if (i < disruptions.size() - 1) {
+                step = disruptions.get(i+1) - i; 
+            }
+            robustness += step * current.getObservedActivityLevel();
         }
         distribution().record(trace.label(), robustness);
     }

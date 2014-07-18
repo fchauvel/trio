@@ -81,7 +81,7 @@ public class RelativeRobustnessTest extends TestCase {
 
         final double value = relativeRobustness.distribution().mean();
         assertThat(value, is(both(greaterThan(0D)).and(lessThan(1D))));
-        assertThat(value, is(closeTo(.5, 1e-6)));
+        assertThat(value, is(closeTo(.4, 1e-6)));
     }
 
 }

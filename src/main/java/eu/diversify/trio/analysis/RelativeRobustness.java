@@ -29,14 +29,15 @@ public class RelativeRobustness extends Metric {
     private final Robustness robustness;
     
     public RelativeRobustness(Robustness robustness) {
-        super("norm. robustness", "%");
+        super(NAME, "[0,1]");
         this.robustness = robustness;
     }
+    public static final String NAME = "norm. robustness";
     
     @Override
     public void exitTrace(Trace trace) {
         final double min = trace.getObservationCapacity();
-        final double max = trace.getObservationCapacity() * trace.getControlCapacity();
+        final double max = trace.getObservationCapacity() * (trace.getControlCapacity() + 1);
         final double normalizedRobustness = (robustness.valueOf(trace.label()) - min) / (max - min);
         distribution().record(trace.label(), normalizedRobustness);
         

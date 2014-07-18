@@ -70,6 +70,11 @@ public class AcceptanceIT extends TestCase {
         results.add(new Object[]{"UCC topo. no.4 service/infra", "service", "infra", "samples/sensapp_topo4.trio"});
         results.add(new Object[]{"UCC topo. no.4 service/platform", "service", "platform", "samples/sensapp_topo4.trio"});
       
+        results.add(new Object[]{"UCC topo. no.5", "'*'", "'*'", "samples/sensapp_topo5.trio"});
+        results.add(new Object[]{"UCC topo. no.5 service/infra", "service", "infra", "samples/sensapp_topo5.trio"});
+        results.add(new Object[]{"UCC topo. no.5 service/platform", "service", "platform", "samples/sensapp_topo5.trio"});
+      
+        
         results.add(new Object[]{"UCC sensapp types", "'*'", "'*'", "samples/sensapp_types.trio"});
 
         return results;
