@@ -5,7 +5,7 @@
     
     <groupId>eu.diversify</groupId>
     <artifactId>eu.diversify.trio</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <name>TRIO</name>
     
     <properties>
