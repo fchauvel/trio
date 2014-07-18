@@ -2,18 +2,18 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
 /*
  */
@@ -23,6 +23,7 @@ import static eu.diversify.trio.Samples.*;
 
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.Length;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.data.DataSet;
@@ -93,7 +94,7 @@ public class TrioTest extends TestCase {
             robustness(),
             Robustness.NAME,
             3D});
- 
+
         results.add(new Object[]{
             "R(A -> B -> C)",
             new RandomFailureSequence(ABC_with_linear_dependencies()),
@@ -132,8 +133,41 @@ public class TrioTest extends TestCase {
             new RandomFailureSequence(ABC_with_linear_dependencies()),
             normalizedRobustness(),
             RelativeRobustness.NAME,
-            (1D / 6) * (3D/9) + (1D / 6) * (2D/9) + (1D / 3) * (1D/9) });
-        
+            (1D / 6) * (3D / 9) + (1D / 6) * (2D / 9) + (1D / 3) * (1D / 9)});
+
+        /*
+         * Length tests
+         */
+        results.add(new Object[]{
+            "L(A -> B or C)",
+            new RandomFailureSequence(A_require_B_or_C()),
+            length(),
+            Length.NAME,
+            16D/6
+        });
+
+        results.add(new Object[]{
+            "L(A -> B and C)",
+            new RandomFailureSequence(A_require_B_and_C()),
+            length(),
+            Length.NAME,
+            (3 * 2D/6) + (2 * 2D/3)
+        });
+
+        results.add(new Object[]{
+            "L(A -> B -> C -> A)",
+            new RandomFailureSequence(ABC_with_circular_dependencies()),
+            length(),
+            Length.NAME,
+            1D});
+
+        results.add(new Object[]{
+            "L(A -> B -> C)",
+            new RandomFailureSequence(ABC_with_linear_dependencies()),
+            length(),
+            Length.NAME,
+            (3 * 1D/6) + (2 * 1D/6) + (2 * 1D/3) + (1 * 1D/3)});
+
         return results;
     }
 
@@ -146,6 +180,11 @@ public class TrioTest extends TestCase {
         final Robustness robustness = new Robustness();
         final RelativeRobustness normalizedRobustness = new RelativeRobustness(robustness);
         return new Analysis(robustness, normalizedRobustness);
+    }
+
+    public static Analysis length() {
+        final Length length = new Length();
+        return new Analysis(length);
     }
 
 }

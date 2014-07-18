@@ -27,8 +27,9 @@ import eu.diversify.trio.data.Trace;
 public class Length extends Metric {
     
     public Length() {
-        super("Length", "# actions");
+        super(NAME, "# actions");
     }
+    public static final String NAME = "Length";
 
     @Override
     protected void byDefault() throws UnsupportedOperationException {
