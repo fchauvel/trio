@@ -15,65 +15,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ */
 
 package eu.diversify.trio.acceptance;
 
-import java.io.File;
-import java.io.IOException;
-
-
 /**
- * Run a given command and collect the standard and error output
+ * Interface of run object
  */
-public class Run {
-    
-    private final OutputCollector standardOutput;
-    private final OutputCollector standardError;
-    private final String[] commandLine;
-   
-    public Run(String directory, String[] arguments) throws IOException, InterruptedException {
-        commandLine = arguments;
-        ProcessBuilder builder = new ProcessBuilder(arguments);
-        builder.directory(new File(directory));
-        Process p = builder.start();
-        standardOutput = new OutputCollector(p.getInputStream());
-        standardError = new OutputCollector(p.getErrorStream());
-        collectOutputs(p);
-        p.waitFor();
-    }
-    
-    @Override
-    public String toString() { 
-        return String.format("\nCommand: %s\n-----\n - STDOUT:\n%s\n----\nSTDERR:\n%s", formatCommandLine(), getStandardOutput(), getStandardError());
-    }
-    
-    private String formatCommandLine() {
-        StringBuilder result = new StringBuilder();
-        for(int i=0 ; i<commandLine.length ; i++) {
-            result.append(commandLine[i]);
-            if (i < commandLine.length - 1) {
-                result.append(" ");
-            }
-        }
-        return result.toString();
-    }
-    
+public interface Run {
 
-    private void collectOutputs(Process p) throws IOException, InterruptedException {
-        p.getOutputStream().close();
-        standardError.start();
-        standardOutput.start();
-        standardOutput.join();
-        standardError.join();
-    }
-       
+    String getStandardError();
 
-    public String getStandardOutput() {
-        return standardOutput.getOutput();
-    }
-
-    public String getStandardError() {
-        return standardError.getOutput();
-    }
-
+    String getStandardOutput();
+    
 }

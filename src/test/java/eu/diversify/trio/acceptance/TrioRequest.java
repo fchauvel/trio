@@ -60,7 +60,7 @@ public class TrioRequest {
     
     public TrioResponse execute() throws IOException, InterruptedException {
         String command = String.format("java -jar %s -o %s -c %s -t %s %s", config.jarFile(), observation, control, destination, pathToTopology);
-        Run run = new Run(config.installationDirectory(), command.split("\\s+"));
+        RunAsThread run = new RunAsThread(config.installationDirectory(), command.split("\\s+"));
         return new TrioResponse(run);
     } 
 

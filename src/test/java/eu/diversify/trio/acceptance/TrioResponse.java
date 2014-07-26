@@ -20,6 +20,8 @@ package eu.diversify.trio.acceptance;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -62,7 +64,21 @@ public class TrioResponse {
             assertThat("Suspicious '" + anyMarker + "' in stderr!\n" + run.toString(), run.getStandardError(), not(containsString(anyMarker)));
         }
     }
-   
+    
+    public void assertRobustnessAbout(double expected, double tolerance) {
+        final double actual = findRobustness();
+        assertThat("robustness", actual, is(closeTo(expected, tolerance)));
+    }
+    
+    private double findRobustness() {
+        final String REGEX = "Robustness:\\s*(\\d*\\.\\d+)";
+        final Matcher matcher = Pattern.compile(REGEX).matcher(run.getStandardOutput());
+        if (matcher.find()) {
+            return Double.parseDouble(matcher.group(1));
+        }
+        final String error = String.format("No robustness found (expected regex '%s').", REGEX);
+        throw new AssertionError(error);
+    } 
     
     public String toString() {
         return run.toString();
