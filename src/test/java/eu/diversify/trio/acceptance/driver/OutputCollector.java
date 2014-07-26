@@ -16,7 +16,7 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.acceptance;
+package eu.diversify.trio.acceptance.driver;
 
 import java.io.BufferedReader;
 import java.io.IOException;

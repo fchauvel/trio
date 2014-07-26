@@ -18,7 +18,7 @@
 /*
  */
 
-package eu.diversify.trio.acceptance;
+package eu.diversify.trio.acceptance.driver;
 
 /**
  * Interface of run object

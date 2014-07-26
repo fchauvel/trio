@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.acceptance;
+package eu.diversify.trio.acceptance.driver;
 
 import junit.framework.TestCase;
 import org.junit.Test;

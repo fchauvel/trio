@@ -18,6 +18,8 @@
 
 package eu.diversify.trio.acceptance;
 
+import eu.diversify.trio.acceptance.driver.TrioRequest;
+import eu.diversify.trio.acceptance.driver.TrioResponse;
 import eu.diversify.trio.Configuration;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,7 +82,7 @@ public class AcceptanceIT extends TestCase {
 
     private final String name;
     private final TrioRequest request;
-    private double robustness;
+    private final double robustness;
 
     public AcceptanceIT(String name,  String observation, String control, String pathToFile, double robustness) {
         this.name = name;

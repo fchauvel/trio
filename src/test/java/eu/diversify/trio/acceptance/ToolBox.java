@@ -2,40 +2,6 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- *
- * This file is part of TRIO.
- *
  * TRIO is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
@@ -52,10 +18,8 @@
 package eu.diversify.trio.acceptance;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -70,10 +34,11 @@ import java.util.zip.ZipFile;
 public class ToolBox {
 
     /**
-     * UNzip a file into the given directory
+     * Unzip a file into the given directory
      *
      * @param pathToZipFile the file that must be unzipped
      * @param destination the directory where the content should be created
+     * @throws java.io.IOException if unexpected IO errors occur
      */
     public static void unzipTo(final String pathToZipFile, final String destination) throws IOException {
         final ZipFile zipFile = new ZipFile(pathToZipFile);
@@ -90,6 +55,13 @@ public class ToolBox {
         }
     }
 
+    /**
+     * Generate a random string of given length. Possible characters are a-z,
+     * A-Z and 0-9.
+     *
+     * @param length the length of the string to generate.
+     * @return the random string generated
+     */
     public static String randomName(int length) {
         final Random random = new Random();
         final StringBuilder builder = new StringBuilder();
@@ -102,6 +74,13 @@ public class ToolBox {
         return builder.toString();
     }
 
+    /**
+     * Delete the given path on disk. If the given path points towards a
+     * directory, its contents will first be recursively deleted before the
+     * directory be deleted.
+     *
+     * @param path the path to delete 
+     */
     public static void delete(final String path) {
         final File file = new File(path);
         if (file.isDirectory()) {
