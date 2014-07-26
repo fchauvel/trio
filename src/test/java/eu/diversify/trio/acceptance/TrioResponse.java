@@ -21,6 +21,9 @@ package eu.diversify.trio.acceptance;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
 /**
  * The response of Trio
  */
@@ -52,15 +55,14 @@ public class TrioResponse {
         "error", "Error", "ERROR",
         "exception", "Exception", "EXCEPTION"});
 
-    public boolean hasError() {
+   
+    public void assertNoError() {
         for(String anyMarker: ERROR_MARKER) {
-            if (run.getStandardError().contains(anyMarker)
-                    || run.getStandardOutput().contains(anyMarker)) {
-                return true;
-            }
+            assertThat("Suspicious '" + anyMarker + "' in stdout!\n" + run.toString(), run.getStandardOutput(), not(containsString(anyMarker)));
+            assertThat("Suspicious '" + anyMarker + "' in stderr!\n" + run.toString(), run.getStandardError(), not(containsString(anyMarker)));
         }
-        return false;
     }
+   
     
     public String toString() {
         return run.toString();

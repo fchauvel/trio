@@ -29,7 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static org.hamcrest.MatcherAssert.*;
 
 /**
  * Check that the file is properly packaged and distributed
@@ -103,8 +102,7 @@ public class AcceptanceIT extends TestCase {
         final TrioResponse response = request.execute();
         System.out.println(response);
 
-        assertThat("unexpected errors" + response.toString(), !response.hasError());
-
+        response.assertNoError();
     }
 
 }
