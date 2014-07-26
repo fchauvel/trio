@@ -72,33 +72,22 @@ public class AcceptanceIT extends TestCase {
         results.add(new Object[]{"UCC topo. no.5", "'*'", "'*'", "samples/sensapp_topo5.trio"});
         results.add(new Object[]{"UCC topo. no.5 service/infra", "service", "infra", "samples/sensapp_topo5.trio"});
         results.add(new Object[]{"UCC topo. no.5 service/platform", "service", "platform", "samples/sensapp_topo5.trio"});
-      
-        
+              
         results.add(new Object[]{"UCC sensapp types", "'*'", "'*'", "samples/sensapp_types.trio"});
 
         return results;
     }
 
     private final String name;
-    private final String observation;
-    private final String control;
-    private final String pathToFile;
+    private final TrioRequest request;
 
     public AcceptanceIT(String name,  String observation, String control, String pathToFile) {
         this.name = name;
-        this.observation = observation;
-        this.control = control;
-        this.pathToFile = pathToFile;
+        this.request = new TrioRequest(pathToFile, ToolBox.randomName(15) + ".csv", observation, control);
     }
 
     @Test
     public void test() throws IOException, InterruptedException {
-        final TrioRequest request = new TrioRequest();
-        request.setPathToTopology(pathToFile);
-        request.setDestination(ToolBox.randomName(10));
-        request.setControl(control);
-        request.setObservation(observation);
-
         final TrioResponse response = request.execute();
         System.out.println(response);
 

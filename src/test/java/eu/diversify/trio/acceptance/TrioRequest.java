@@ -33,43 +33,29 @@ public class TrioRequest {
     private String destination;
     private String observation;
     private String control;
-    
-    public TrioRequest() {
+        
+    public TrioRequest(String path, String trace, String observation, String control) {
         this.config = Configuration.forTest();
+        this.pathToTopology = path;
+        this.destination = trace;
+        this.observation = observation;
+        this.control = control;
     }
-
     public String getPathToTopology() {
         return (pathToTopology == null) ? "" : pathToTopology;
-    }
-
-    public void setPathToTopology(String pathToTopology) {
-        this.pathToTopology = pathToTopology;
     }
     
     public String getDestination() {
         return (destination == null)? "" : destination;
-    }
-    
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
+    }    
 
     public String getObservation() {
         return observation;
     }
 
-    public void setObservation(String observation) {
-        this.observation = observation;
-    }
-
     public String getControl() {
         return control;
     }
-
-    public void setControl(String control) {
-        this.control = control;
-    }
-    
     
     
     public TrioResponse execute() throws IOException, InterruptedException {
@@ -81,6 +67,5 @@ public class TrioRequest {
     public void deleteGeneratedFiles() throws IOException {
         Files.delete(Paths.get(config.installationDirectory()));
     }
-
 
 }
