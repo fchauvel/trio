@@ -75,6 +75,7 @@ public class FiltersTest extends TestCase {
         assertThat(result, containsInAnyOrder("A", "B", "C"));
     }
 
+
     @Test
     public void twoDifferentFiltersShouldNotBeEqual() {
         Filter all = All.getInstance();
@@ -85,12 +86,28 @@ public class FiltersTest extends TestCase {
     }
 
     @Test
+    public void twoDifferentFiltersShouldHaveFifferentHashCode() {
+        Filter all = All.getInstance();
+        Filter tax = new TaggedAs("X");
+
+        assertThat(all.hashCode(), is(not(equalTo(tax.hashCode()))));
+    }
+
+    @Test
     public void twoSimilarFiltersShouldBeEqual() {
         Filter tax1 = new TaggedAs("X");
         Filter tax2 = new TaggedAs("X");
 
         assertThat(tax1, is(equalTo(tax2)));
         assertThat(tax2, is(equalTo(tax1)));
+    }
+    
+        @Test
+    public void twoSimilarFiltersShouldHaveTheSameHashcode() {
+        Filter tax1 = new TaggedAs("X");
+        Filter tax2 = new TaggedAs("X");
+
+        assertThat(tax1.hashCode(), is(equalTo(tax2.hashCode())));
     }
 
     protected List<Tag> defaultTags() {

@@ -199,7 +199,7 @@ public class Command {
         out.println("Licensed under " + config.license());
         out.println();
 
-        final System system = trio.loadSystemForm(inputFile);
+        final System system = trio.loadSystemFrom(inputFile);
         out.println("SYSTEM: " + system.getName());
         final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
         out.println("SCENARIO: " + format(scenario));

@@ -91,7 +91,7 @@ public class AcceptanceIT extends TestCase {
     }
 
     @Test
-    public void test() throws IOException, InterruptedException {
+    public void userAcceptance() throws IOException, InterruptedException {
         final TrioResponse response = request.execute();
         System.out.println(response);
 
