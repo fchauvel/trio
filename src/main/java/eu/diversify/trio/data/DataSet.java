@@ -51,30 +51,4 @@ public class DataSet {
         return traces.get(0);
     }
 
-    public void saveAs(DataFormat format, String output) {
-        FileWriter out = null;
-        try {
-            out = new FileWriter(output);
-            int counter = 0;
-            for (Trace eachTrace: traces) {
-                counter++;
-                out.write(eachTrace.to(format, counter));
-            }
-        } catch (IOException ex) {
-            final String error = String.format("Error: Unexpected I/O error while riting to '%s' (%s).", output, ex.getMessage());
-            throw new RuntimeException(error);
-
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-
-            } catch (IOException ex) {
-                final String error = String.format("Error: Unable to close '%s' (%s).", output, ex.getMessage());
-                throw new RuntimeException(error);
-            }
-        }
-    }
-
 }

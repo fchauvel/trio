@@ -15,40 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
 package eu.diversify.trio.ui;
 
 import eu.diversify.trio.Configuration;
@@ -56,24 +22,19 @@ import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Distribution;
-import eu.diversify.trio.analysis.OldDistribution;
 import eu.diversify.trio.analysis.Metric;
 import eu.diversify.trio.core.System;
+import eu.diversify.trio.data.CSVFormatter;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
 import eu.diversify.trio.filter.TaggedAs;
 import eu.diversify.trio.simulation.Scenario;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 
 /**
  * The options which can be passed to trio
@@ -203,8 +164,10 @@ public class Command {
         out.println("SYSTEM: " + system.getName());
         final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
         out.println("SCENARIO: " + format(scenario));
+              
         final DataSet data = trio.run(scenario, runCount);
         trio.saveDataAs(data, outputFile);
+        
         report(trio.analyse(data), out);
 
         out.println();
