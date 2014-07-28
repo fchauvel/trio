@@ -1,5 +1,0 @@
-sequence,action,disruption,activity,loss
-1,none,0,10,0
-1,inactivate X,1,4,6
-1,inactivate Y,2,3,1
-1,inactivate Z,3,0,3

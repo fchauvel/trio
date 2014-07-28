@@ -2,32 +2,35 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
+import eu.diversify.trio.core.Generator;
 import eu.diversify.trio.filter.TaggedAs;
 
 import static eu.diversify.trio.simulation.actions.AbstractAction.*;
 
 import eu.diversify.trio.simulation.FixedFailureSequence;
-import eu.diversify.trio.simulation.actions.AbstractAction;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,15 +81,37 @@ public class PerformanceIT {
         java.lang.System.out.printf("Random sequence duration: %.6f ms\r\n", averageDuration);
     }
 
+    @Test
+    public void scalability() throws FileNotFoundException {
+        final PrintStream log = new PrintStream(new FileOutputStream("target/scalability.csv"));
+        log.println("size,duration");
+
+        final Generator generate = new Generator();
+
+        final int[] sizes = new int[]{10, 100, 1000, 10000};
+        for (int eachSize: sizes) {
+            for (int i = 0; i < 100; i++) {
+                final System system = generate.randomSystem(eachSize);
+                final Scenario scenario = new RandomFailureSequence(system);
+                long duration = durationOf(scenario);
+                log.print(eachSize);
+                log.print(",");
+                log.println(duration);
+            }
+        }
+
+        log.close();
+    }
+
     public double averageDurationOf(Scenario scenario, int runCount) {
         long total = 0L;
         for (int i = 0; i < runCount; i++) {
-            total += durationOf(trio, scenario);
+            total += durationOf(scenario);
         }
         return total * (1D / runCount);
     }
 
-    public long durationOf(final Trio trio, Scenario scenario) {
+    public long durationOf(Scenario scenario) {
         long start = java.lang.System.currentTimeMillis();
         trio.run(scenario, 1);
         long end = java.lang.System.currentTimeMillis();
