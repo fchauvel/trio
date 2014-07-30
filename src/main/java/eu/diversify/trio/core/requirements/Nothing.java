@@ -17,7 +17,10 @@
  */
 package eu.diversify.trio.core.requirements;
 
+import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.simulation.Topology;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The true boolean value. Singleton value
@@ -47,5 +50,13 @@ public class Nothing extends AbstractRequirement {
     public int getComplexity() {
         return 0;
     }        
+
+    public Set<String> getVariables() {
+        return new HashSet<String>();
+    }
+    
+    public static Requirement nothing() {
+        return Nothing.getInstance();
+    }
 
 }

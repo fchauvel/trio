@@ -20,6 +20,7 @@ package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.simulation.Topology;
+import java.util.Set;
 
 /**
  * Logical conjunction between two requirements
@@ -42,6 +43,12 @@ public class Conjunction extends AbstractRequirement {
         return 1 + left.getComplexity() + right.getComplexity();
     }
 
+    public Set<String> getVariables() {
+       Set<String> result = left.getVariables();
+       result.addAll(right.getVariables());
+       return result;
+    }    
+    
     @Override
     public String toString() {
         return String.format("(%s and %s)", left.toString(), right.toString());

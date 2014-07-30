@@ -8,14 +8,15 @@ par(mar=c(5,5,1,1));
 
 attach(data);
 
-fit <- lm(duration ~ poly(size, degree=2, raw=TRUE));
-#fit <- lm(duration ~ size);
+fit <- lm(duration ~ poly(size, complexity, density, degree=2, raw=TRUE));
+#fit <- lm(duration ~ size + density);
 show(summary(fit));
 
-myBlue <- rgb(0,0,255,50, maxColorValue=255);
+myBlue <- rgb(0,0,255,100, maxColorValue=255);
 
 plot( duration~size, 
         log="xy", 
+        xlim=c(1, max(size)),
         xlab="number of components", 
         ylab="simulation duration (ms)",
         pch=16,

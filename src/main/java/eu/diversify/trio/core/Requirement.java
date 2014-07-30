@@ -21,6 +21,7 @@
 package eu.diversify.trio.core;
 
 import eu.diversify.trio.simulation.Topology;
+import java.util.Set;
 
 /**
  *
@@ -36,4 +37,6 @@ public interface Requirement {
     boolean isSatisfiedBy(Topology topology);
     
     int getComplexity();
+    
+    Set<String> getVariables();
 }

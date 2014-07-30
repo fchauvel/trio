@@ -21,6 +21,7 @@ package eu.diversify.trio.unit.core;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.core.requirements.Require;
+import static eu.diversify.trio.core.requirements.Require.require;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +59,14 @@ public class ComponentTest extends TestCase {
         final Requirement expected = new Require("Bar");
         
         assertThat(component.getRequirement(), is(equalTo(expected)));   
+    }
+    
+    
+    @Test
+    public void valencyShouldBeComputedCorrectly() {
+        final Component c = new Component("A", require("B").or(require("C").and(require("D")))); 
+        
+        assertThat(c.getValency(), is(equalTo(3)));
     }
     
     

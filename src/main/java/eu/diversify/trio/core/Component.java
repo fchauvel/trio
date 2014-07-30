@@ -72,10 +72,13 @@ public class Component {
         return other.name.equals(name) && other.requirement.equals(requirement);
     }
     
-    
-
+  
     public String getName() {
         return name;
+    }
+    
+    public int getValency() {
+        return requirement.getVariables().size();
     }
 
     public Requirement getRequirement() {

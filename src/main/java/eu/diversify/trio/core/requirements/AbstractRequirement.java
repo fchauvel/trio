@@ -51,6 +51,8 @@ public abstract class AbstractRequirement implements Requirement {
     public int hashCode() {
         return toString().hashCode();
     }
+    
+    
 
     @Override
     public abstract String toString();

@@ -141,6 +141,14 @@ public class System {
     public double getMeanComplexity() {
         return ((double) getTotalComplexity()) / components.size();
     }
+    
+    public double getDensity() {
+        double total = 0;
+        for (Component eachComponent: components.values()) {
+            total += eachComponent.getValency();
+        }
+        return total / Math.pow(components.size(), 2);
+    }
   
     @Override
     public String toString() {

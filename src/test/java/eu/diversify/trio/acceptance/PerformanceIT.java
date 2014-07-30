@@ -96,7 +96,7 @@ public class PerformanceIT {
     @Test
     public void scalability() throws FileNotFoundException {
         final PrintStream log = new PrintStream(new FileOutputStream("target/scalability.csv"));
-        log.println("size,duration,complexity");
+        log.println("size,duration,density,complexity");
 
         final Random random = new Random();
 
@@ -106,10 +106,12 @@ public class PerformanceIT {
             final Generator generate = new Generator(alpha);
             final System system = generate.randomSystem(size);
             final Scenario scenario = new RandomFailureSequence(system);
-            double duration = averageDurationOf(scenario, 50);
+            double duration = durationOf(scenario);
             log.print(size);
             log.print(",");
             log.print(duration);
+            log.print(",");
+            log.print(system.getDensity());
             log.print(",");
             log.println(system.getMeanComplexity());
         }

@@ -21,6 +21,7 @@ package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.simulation.Topology;
+import java.util.Set;
 
 /**
  * The logical negation
@@ -41,10 +42,21 @@ public class Negation extends AbstractRequirement {
     public int getComplexity() {
         return 1 + operand.getComplexity();
     }
+
+    @Override
+    public Set<String> getVariables() {
+        return operand.getVariables();
+    }
+    
     
     @Override
     public String toString() {
         return String.format("(not %s)".format(operand.toString()));
+    }
+    
+    
+    public static Requirement not(Requirement operand) {
+        return new Negation(operand);
     }
 
 }
