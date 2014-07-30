@@ -129,7 +129,19 @@ public class System {
     public Component requirementOf(String eachComponent) {
         return components.get(eachComponent);
     }
-
+    
+    public int getTotalComplexity() {
+        int total = 0;
+        for(Component eachComponent: components.values()) {
+            total += eachComponent.getRequirement().getComplexity();
+        }
+        return total;
+    }
+    
+    public double getMeanComplexity() {
+        return ((double) getTotalComplexity()) / components.size();
+    }
+  
     @Override
     public String toString() {
         return String.format("(%s) %s ; %s",name, components.toString(), tags.toString());

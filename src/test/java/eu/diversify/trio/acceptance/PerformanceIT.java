@@ -2,18 +2,18 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 package eu.diversify.trio.acceptance;
 
@@ -31,6 +31,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Random;
+import org.junit.Ignore;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,22 +84,34 @@ public class PerformanceIT {
     }
 
     @Test
+    public void onOneLargeModel() {
+        final Generator generate = new Generator(0.75);
+        final System system = generate.randomSystem(10000);
+        final Scenario scenario = new RandomFailureSequence(system);
+        long duration = durationOf(scenario);
+        java.lang.System.out.printf("Duration: %d ms\n", duration);
+
+    }
+
+    @Test
     public void scalability() throws FileNotFoundException {
         final PrintStream log = new PrintStream(new FileOutputStream("target/scalability.csv"));
-        log.println("size,duration");
+        log.println("size,duration,complexity");
 
-        final Generator generate = new Generator();
+        final Random random = new Random();
 
-        final int[] sizes = new int[]{10, 100, 1000, 10000};
-        for (int eachSize: sizes) {
-            for (int i = 0; i < 100; i++) {
-                final System system = generate.randomSystem(eachSize);
-                final Scenario scenario = new RandomFailureSequence(system);
-                long duration = durationOf(scenario);
-                log.print(eachSize);
-                log.print(",");
-                log.println(duration);
-            }
+        for (int i = 0; i < 500; i++) {
+            int size = 10 + random.nextInt(10000);
+            final double alpha = 0.5 + random.nextDouble() * 0.4;
+            final Generator generate = new Generator(alpha);
+            final System system = generate.randomSystem(size);
+            final Scenario scenario = new RandomFailureSequence(system);
+            double duration = averageDurationOf(scenario, 50);
+            log.print(size);
+            log.print(",");
+            log.print(duration);
+            log.print(",");
+            log.println(system.getMeanComplexity());
         }
 
         log.close();

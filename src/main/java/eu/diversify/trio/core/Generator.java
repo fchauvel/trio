@@ -2,6 +2,23 @@
  *
  * This file is part of TRIO.
  *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
  * TRIO is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
@@ -22,7 +39,7 @@ import eu.diversify.trio.core.requirements.Disjunction;
 import eu.diversify.trio.core.requirements.Negation;
 import eu.diversify.trio.core.requirements.Require;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -34,29 +51,37 @@ public class Generator {
     private final Random random;
 
     public Generator() {
-        this(new Random());
+        this(new Random(), DEFAULT_APLHA);
+    }
+    
+    public Generator(Random random) {
+        this(random, DEFAULT_APLHA);
+    }
+    private static final double DEFAULT_APLHA = 0.75;
+    
+    public Generator(double alpha) {
+        this(new Random(), alpha);
     }
 
-    public Generator(Random random) {
+    public Generator(Random random, double alpha) {
         this.random = random;
+        this.alpha = alpha;
     }
 
     public System randomSystem(int componentCount) {
-        final Collection<String> names = componentNames(componentCount);
-        final List<Component> components = new ArrayList<Component>();
-        for (String eachName: names) {
-            final List<String> otherNames = new ArrayList<String>(names);
-            otherNames.remove(eachName);
-            components.add(randomComponent(otherNames, eachName));
+        final List<String> names = componentNames(componentCount);
+        final List<Component> components = new LinkedList<Component>();
+        for(String eachName: names) {
+            components.add(randomComponent(names, eachName));
         }
         final List<Tag> tags = new ArrayList<Tag>();
         return new System("randomly generated", components, tags);
     }
 
     private List<String> componentNames(int count) {
-        final List<String> results = new ArrayList<String>();
+        final List<String> results = new ArrayList<String>(count);
         for (int i = 0; i < count; i++) {
-            results.add(String.format("C%d", i + 1));
+            results.add("C" + (i + 1));
         }
         return results;
     }
@@ -70,7 +95,7 @@ public class Generator {
     }
 
     public Requirement nextRequirement(List<String> names, int depth) {
-        final double threshold = Math.pow(POWER_LAW, depth);
+        final double threshold = Math.pow(alpha, depth);
         double draw = random.nextDouble();
         if (draw > threshold) {
             return randomRequire(names);
@@ -85,7 +110,8 @@ public class Generator {
             }
         }
     }
-    private static final double POWER_LAW = 0.75;
+    
+    private final double alpha;
 
     public Require randomRequire(List<String> names) {
         return new Require(anyFrom(names));

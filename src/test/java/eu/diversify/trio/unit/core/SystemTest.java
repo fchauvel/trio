@@ -84,5 +84,29 @@ public class SystemTest extends TestCase {
         assertThat("", topology.isActive("Foo"));
         assertThat("", topology.isActive("Bar"));
     }
+    
+    @Test
+    public void shouldComputeTotalComplexityCorrectly() {
+        final System system = new System(
+                new Component("Foo", new Require("Bar")),
+                new Component("Bar", new Require("Baz").or(new Require("Foo"))),
+                new Component("Baz")
+        );
+        
+        assertThat(system.getTotalComplexity(), is(equalTo(4)));
+    }
+    
+    @Test
+    public void shouldComputeMeanComplexityCorrectly() {
+        final System system = new System(
+                new Component("Foo", new Require("Bar")),
+                new Component("Bar", new Require("Baz").or(new Require("Foo"))),
+                new Component("Baz")
+        );
+        
+        assertThat(system.getMeanComplexity(), is(closeTo(4D/3, 1e-8)));
+    }
+    
+    
 
 }

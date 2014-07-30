@@ -18,7 +18,6 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.core.requirements.AbstractRequirement;
 
 /**
  * The true boolean value. Singleton value
@@ -43,5 +42,10 @@ public class Nothing extends AbstractRequirement {
     public String toString() {
         return String.format("none");
     }
+    
+    @Override
+    public int getComplexity() {
+        return 0;
+    }        
 
 }

@@ -15,20 +15,42 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.core.requirements.Conjunction;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
+
+import static eu.diversify.trio.core.requirements.Require.*;
+
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(JUnit4.class)
 public class RequirementsTest extends TestCase {
@@ -133,6 +155,36 @@ public class RequirementsTest extends TestCase {
         final Requirement req = Nothing.getInstance();
 
         assertThat("Should be satisfied", req.isSatisfiedBy(p));
+    }
+
+    @Test
+    public void requireShouldHaveAComplexityOfOne() {
+        final Requirement require = require("X");
+        assertThat(require.getComplexity(), is(equalTo(1)));
+    }
+
+    @Test
+    public void complexityOfConjunctionsShouldBeTheSumOfTheOperandComplexity() {
+        final Requirement require = require("X").and(require("Y").and(require("Z")));
+        assertThat(require.getComplexity(), is(equalTo(5)));
+    }
+
+    @Test
+    public void complexityOfDisjunctionsShouldBeTheSumOfTheOperandComplexity() {
+        final Requirement require = require("X").or(require("Y").or(require("Z")));
+        assertThat(require.getComplexity(), is(equalTo(5)));
+    }
+    
+    @Test
+    public void complexityOfNegationShouldBeOnePlusTheComplexityOfTheOperand() {
+        final Requirement require = require("X").not();
+        assertThat(require.getComplexity(), is(equalTo(2)));
+    }
+    
+    @Test
+    public void complexityOfNothingShouldBeZero() {
+        final Requirement require = Nothing.getInstance();
+        assertThat(require.getComplexity(), is(equalTo(0)));
     }
 
 }

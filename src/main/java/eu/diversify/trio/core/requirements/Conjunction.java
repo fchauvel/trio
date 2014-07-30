@@ -20,7 +20,6 @@ package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.core.requirements.AbstractRequirement;
 
 /**
  * Logical conjunction between two requirements
@@ -37,6 +36,10 @@ public class Conjunction extends AbstractRequirement {
 
     public boolean isSatisfiedBy(Topology topology) {
         return left.isSatisfiedBy(topology) && right.isSatisfiedBy(topology);
+    }
+    
+    public int getComplexity() {
+        return 1 + left.getComplexity() + right.getComplexity();
     }
 
     @Override

@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * One particular configuration of the system
@@ -37,9 +39,9 @@ public class Topology {
     public static final boolean INACTIVE = !ACTIVE;
 
     private final System system;
-    private final Filter observation;
-    private final Filter control;
     private final Map<String, Boolean> status;
+    private final Set<String> observed;
+    private final Set<String> controlled;
     private final List<Listener> listeners;
 
     public Topology(System system) {
@@ -52,9 +54,10 @@ public class Topology {
 
     public Topology(System system, Filter observation, Filter control, Listener... listeners) {
         this.system = system;
-        this.observation = observation;
-        this.control = control;
         this.status = new HashMap<String, Boolean>();
+        this.controlled = control.resolve(system);
+        this.observed = observation.resolve(system);
+        
         for (String eachName: system.getComponentNames()) {
             this.status.put(eachName, ACTIVE);
         }
@@ -84,8 +87,8 @@ public class Topology {
 
     public Collection<String> activeAndObservedComponents() {
         final Collection<String> selection = new ArrayList<String>();
-        for (String eachComponent: this.status.keySet()) {
-            if (isActive(eachComponent) && isObserved(eachComponent)) {
+        for (String eachComponent: observed) {
+            if (isActive(eachComponent)) {
                 selection.add(eachComponent);
             }
         }
@@ -94,8 +97,8 @@ public class Topology {
     
      public Collection<String> activeAndControlledComponents() {
         final Collection<String> selection = new ArrayList<String>();
-        for (String eachComponent: this.status.keySet()) {
-            if (isActive(eachComponent) && isControlled(eachComponent)) {
+        for (String eachComponent: controlled) {
+            if (isActive(eachComponent)) {
                 selection.add(eachComponent);
             }
         }
@@ -103,11 +106,11 @@ public class Topology {
     }
     
     public boolean isObserved(String component) {
-        return observation.resolve(system).contains(component);
+         return observed.contains(component);
     }
     
     public boolean isControlled(String component) {
-        return control.resolve(system).contains(component);
+        return controlled.contains(component);
     }
 
     public boolean hasActiveAndObservedComponents() {
@@ -123,10 +126,10 @@ public class Topology {
         while (updated) {
             updated = false;
             for (String eachComponent: status.keySet()) {
-                final boolean status = topology.isActive(eachComponent);
-                boolean isActive = status && system.requirementOf(eachComponent).isSatisfiedIn(topology);
-                setStatusOf(eachComponent, isActive);
-                updated |= status != isActive;
+                final boolean isActive = topology.isActive(eachComponent);
+                boolean remainActive = isActive && system.requirementOf(eachComponent).isSatisfiedIn(topology);
+                setStatusOf(eachComponent, remainActive);
+                updated |= isActive != remainActive;
             }
         }
     }

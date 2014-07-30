@@ -35,4 +35,5 @@ public interface Requirement {
     
     boolean isSatisfiedBy(Topology topology);
     
+    int getComplexity();
 }

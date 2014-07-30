@@ -33,11 +33,14 @@ public class Negation extends AbstractRequirement {
         this.operand = operand;
     }
 
-
     public boolean isSatisfiedBy(Topology topology) {
         return !operand.isSatisfiedBy(topology);
     }
     
+    @Override
+    public int getComplexity() {
+        return 1 + operand.getComplexity();
+    }
     
     @Override
     public String toString() {
