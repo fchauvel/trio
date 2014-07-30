@@ -35,6 +35,10 @@ public abstract class AbstractRequirement implements Requirement {
     public final Requirement not() {
         return new Negation(this);
     }
+    
+    public final Requirement xor(Requirement right) {
+        return this.or(right).and(this.and(right).not());
+    }
 
     @Override
     public final boolean equals(Object object) {

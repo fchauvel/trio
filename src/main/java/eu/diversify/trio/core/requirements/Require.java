@@ -33,8 +33,4 @@ public class Require extends AbstractRequirement {
     public String toString() {
         return String.format("%s", requiredComponent);
     }
-
-    public static Require require(String component) {
-        return new Require(component);
-    }
 }

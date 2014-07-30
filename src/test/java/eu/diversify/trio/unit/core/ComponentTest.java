@@ -21,7 +21,7 @@ package eu.diversify.trio.unit.core;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.core.requirements.Require;
-import static eu.diversify.trio.core.requirements.Require.require;
+import static eu.diversify.trio.core.requirements.Factory.*;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;

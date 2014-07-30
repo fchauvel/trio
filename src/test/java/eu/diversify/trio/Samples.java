@@ -38,7 +38,7 @@ package eu.diversify.trio;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.core.Component;
 
-import static eu.diversify.trio.core.requirements.Require.require;
+import static eu.diversify.trio.core.requirements.Factory.*;
 
 /**
  * Some typical system

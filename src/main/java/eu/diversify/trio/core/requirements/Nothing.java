@@ -54,9 +54,5 @@ public class Nothing extends AbstractRequirement {
     public Set<String> getVariables() {
         return new HashSet<String>();
     }
-    
-    public static Requirement nothing() {
-        return Nothing.getInstance();
-    }
 
 }

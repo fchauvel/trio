@@ -53,10 +53,5 @@ public class Negation extends AbstractRequirement {
     public String toString() {
         return String.format("(not %s)".format(operand.toString()));
     }
-    
-    
-    public static Requirement not(Requirement operand) {
-        return new Negation(operand);
-    }
 
 }

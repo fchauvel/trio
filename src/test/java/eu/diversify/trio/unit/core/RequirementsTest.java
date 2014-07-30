@@ -7,7 +7,7 @@ import eu.diversify.trio.core.Requirement;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
 
-import static eu.diversify.trio.core.requirements.Require.*;
+import static eu.diversify.trio.core.requirements.Factory.*;
 import static eu.diversify.trio.core.requirements.Negation.*;
 import static eu.diversify.trio.core.requirements.Nothing.*;
 
@@ -198,6 +198,12 @@ public class RequirementsTest extends TestCase {
         final Requirement requirement = require("A");
         
         assertThat(requirement.getVariables(), contains("A"));
+    }
+    
+    public void xorShouldBeExpandedCorrectly() {
+        final Requirement xor = require("X").xor(require("Y"));
+        
+        assertThat(xor, is(equalTo(require("X").or(require("Y").and(not(require("X").and(require("Y"))))))));
     }
 
 }

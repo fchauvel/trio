@@ -18,8 +18,8 @@ plot( duration~size,
         log="xy", 
         xlim=c(1, max(size)),
         xlab="number of components", 
-        ylab="simulation duration (ms)",
-        pch=16,
+        ylab="duration of 1 failure sequence simulation (ms)",
+        pch=1,
         col=myBlue,
         las=1);
 

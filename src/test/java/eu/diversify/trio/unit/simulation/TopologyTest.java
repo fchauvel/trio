@@ -21,7 +21,7 @@ import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.core.Component;
 
-import static eu.diversify.trio.core.requirements.Require.*;
+import static eu.diversify.trio.core.requirements.Factory.*;
 
 import junit.framework.TestCase;
 import org.junit.Test;
