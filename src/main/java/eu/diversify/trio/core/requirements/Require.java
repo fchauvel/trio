@@ -1,5 +1,6 @@
 package eu.diversify.trio.core.requirements;
 
+import eu.diversify.trio.core.SystemListener;
 import eu.diversify.trio.simulation.Topology;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +14,11 @@ public class Require extends AbstractRequirement {
 
     public Require(String requiredComponent) {
         this.requiredComponent = requiredComponent;
+    }
+    
+     public void accept(SystemListener listener) {
+        listener.enterRequire(this);
+        listener.exitRequire(this);
     }
 
     public boolean isSatisfiedBy(Topology topology) {

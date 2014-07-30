@@ -19,6 +19,7 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.core.SystemListener;
 import eu.diversify.trio.simulation.Topology;
 import java.util.Set;
 
@@ -34,6 +35,15 @@ public class Conjunction extends AbstractRequirement {
         this.left = left;
         this.right = right;
     }
+
+    public void accept(SystemListener listener) {
+        listener.enterConjunction(this);
+        left.accept(listener);
+        right.accept(listener);
+        listener.exitConjunction(this);
+    }
+    
+    
 
     public boolean isSatisfiedBy(Topology topology) {
         return left.isSatisfiedBy(topology) && right.isSatisfiedBy(topology);

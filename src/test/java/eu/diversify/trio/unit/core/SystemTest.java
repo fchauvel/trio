@@ -20,12 +20,20 @@ package eu.diversify.trio.unit.core;
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.core.Component;
+import eu.diversify.trio.core.SystemListener;
 import eu.diversify.trio.core.Tag;
+import eu.diversify.trio.core.requirements.Conjunction;
+import eu.diversify.trio.core.requirements.Disjunction;
+import eu.diversify.trio.core.requirements.Negation;
+import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import junit.framework.TestCase;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -119,6 +127,43 @@ public class SystemTest extends TestCase {
         final double expected = (1 + 2) / 9D;
 
         assertThat(density, is(closeTo(expected, 1e-6)));
+    }
+
+    @Test
+    public void acceptShouldTraverseTheWholeSystem() {
+        final Mockery context = new JUnit4Mockery();
+
+        final System system = new System(
+                new Component("A", new Require("B")),
+                new Component("B", new Require("C").xor(new Require("D"))),
+                new Component("C"),
+                new Component("D")
+        );
+
+        final SystemListener listener = context.mock(SystemListener.class);
+
+        context.checking(new Expectations() {
+            {
+                oneOf(listener).enterSystem(system);
+                exactly(4).of(listener).enterComponent(with(any(Component.class)));
+                exactly(4).of(listener).exitComponent(with(any(Component.class)));
+                exactly(5).of(listener).enterRequire(with(any(Require.class)));
+                exactly(5).of(listener).exitRequire(with(any(Require.class)));
+                exactly(2).of(listener).enterConjunction(with(any(Conjunction.class)));
+                exactly(2).of(listener).exitConjunction(with(any(Conjunction.class)));
+                exactly(1).of(listener).enterDisjunction(with(any(Disjunction.class)));
+                exactly(1).of(listener).exitDisjunction(with(any(Disjunction.class)));
+                exactly(1).of(listener).enterNegation(with(any(Negation.class)));
+                exactly(1).of(listener).exitNegation(with(any(Negation.class)));
+                exactly(2).of(listener).enterNothing(with(any(Nothing.class)));
+                exactly(2).of(listener).exitNothing(with(any(Nothing.class)));
+                oneOf(listener).exitSystem(system);
+            }
+        });
+
+        system.accept(listener);
+
+        context.assertIsSatisfied();
     }
 
 }

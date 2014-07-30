@@ -20,6 +20,7 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.core.SystemListener;
 import eu.diversify.trio.simulation.Topology;
 import java.util.Set;
 
@@ -34,6 +35,12 @@ public class Negation extends AbstractRequirement {
         this.operand = operand;
     }
 
+     public void accept(SystemListener listener) {
+        listener.enterNegation(this);
+        operand.accept(listener);
+        listener.exitNegation(this);
+    }
+    
     public boolean isSatisfiedBy(Topology topology) {
         return !operand.isSatisfiedBy(topology);
     }
@@ -51,7 +58,7 @@ public class Negation extends AbstractRequirement {
     
     @Override
     public String toString() {
-        return String.format("(not %s)".format(operand.toString()));
+        return String.format("(not %s)", operand.toString());
     }
 
 }

@@ -2,20 +2,19 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.diversify.trio.core;
 
 import eu.diversify.trio.data.DataSet;
@@ -86,7 +85,25 @@ public class System {
     public String getName() {
         return name;
     }
+
+    /**
+     * Traversal of the system by a listener
+     *
+     * @param listener the listener that should be triggered during the
+     * traversal
+     */
+    public void accept(SystemListener listener) {
+        listener.enterSystem(this);
+        for (Component eachComponent: components.values()) {
+            eachComponent.accept(listener);
+        }
+        for (Tag eachTag: tags.values()) {
+            eachTag.accept(listener);
+        }
+        listener.exitSystem(this);
+    }
     
+
     public Set<String> taggedAs(String tag) {
         return tags.get(tag).getTargets();
     }
@@ -129,19 +146,19 @@ public class System {
     public Component requirementOf(String eachComponent) {
         return components.get(eachComponent);
     }
-    
+
     public int getTotalComplexity() {
         int total = 0;
-        for(Component eachComponent: components.values()) {
+        for (Component eachComponent: components.values()) {
             total += eachComponent.getRequirement().getComplexity();
         }
         return total;
     }
-    
+
     public double getMeanComplexity() {
         return ((double) getTotalComplexity()) / components.size();
     }
-    
+
     public double getDensity() {
         double total = 0;
         for (Component eachComponent: components.values()) {
@@ -149,10 +166,10 @@ public class System {
         }
         return total / Math.pow(components.size(), 2);
     }
-  
+
     @Override
     public String toString() {
-        return String.format("(%s) %s ; %s",name, components.toString(), tags.toString());
+        return String.format("(%s) %s ; %s", name, components.toString(), tags.toString());
     }
 
 }

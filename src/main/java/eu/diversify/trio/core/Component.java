@@ -51,6 +51,12 @@ public class Component {
         }
         return requirement;
     }
+    
+    public void accept(SystemListener listener) {
+        listener.enterComponent(this);
+        requirement.accept(listener);
+        listener.exitComponent(this);
+    }
 
     @Override
     public int hashCode() {
