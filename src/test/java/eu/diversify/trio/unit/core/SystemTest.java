@@ -27,6 +27,7 @@ import eu.diversify.trio.core.requirements.Disjunction;
 import eu.diversify.trio.core.requirements.Negation;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
+import static eu.diversify.trio.core.requirements.Factory.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -78,6 +79,15 @@ public class SystemTest extends TestCase {
         final System system = new System(components, tags);
 
         assertThat(system.getName(), is(equalTo(System.DEFAULT_NAME)));
+    }
+    
+    
+    @Test
+    public void shouldGivenAccessToTheComponentByIndex() {
+        final System system = new System(new Component("A"), new Component("B", require("A"))); 
+        
+        assertThat(system.getComponent(0), is(equalTo(new Component("A"))));
+        assertThat(system.getComponent(1), is(equalTo(new Component("B", require("A")))));
     }
 
     @Test
