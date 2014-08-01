@@ -25,6 +25,8 @@ import static eu.diversify.trio.simulation.actions.AbstractAction.*;
 
 import eu.diversify.trio.simulation.FixedFailureSequence;
 import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.statistics.Analysis;
+import eu.diversify.trio.core.statistics.SystemStatistics;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
 import java.io.FileNotFoundException;
@@ -96,7 +98,7 @@ public class PerformanceIT {
     @Test
     public void scalability() throws FileNotFoundException {
         final PrintStream log = new PrintStream(new FileOutputStream("target/scalability.csv"));
-        log.println("size,duration,density,complexity");
+        log.println("size,duration,density,conjunction,disjunction,require,negation,complexity");
 
         final Random random = new Random();
 
@@ -107,11 +109,22 @@ public class PerformanceIT {
             final System system = generate.randomSystem(size);
             final Scenario scenario = new RandomFailureSequence(system);
             double duration = durationOf(scenario);
+            
+            SystemStatistics stats = new Analysis(system).getResults();
+            
             log.print(size);
             log.print(",");
             log.print(duration);
             log.print(",");
             log.print(system.getDensity());
+            log.print(",");
+            log.print(stats.getConjunctionRatio());
+            log.print(",");
+            log.print(stats.getDisjunctionRatio());
+            log.print(",");
+            log.print(stats.getRequireRatio());
+            log.print(",");
+            log.print(stats.getNegationRatio());
             log.print(",");
             log.println(system.getMeanComplexity());
         }

@@ -7,9 +7,8 @@ data <- read.csv("scalability.csv");
 par(mar=c(5,5,1,1));
 
 attach(data);
-
-fit <- lm(duration ~ poly(size, complexity, density, degree=2, raw=TRUE));
-#fit <- lm(duration ~ size + density);
+fit <- lm(duration ~ poly(size, density, conjunction, disjunction, require, negation, degree=3, raw=TRUE));
+#fit <- lm(duration ~ size + density + conjunction + disjunction + negation + require);
 show(summary(fit));
 
 myBlue <- rgb(0,0,255,100, maxColorValue=255);

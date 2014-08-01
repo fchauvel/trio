@@ -44,7 +44,7 @@ public class SandBoxIT extends TestCase {
         final eu.diversify.trio.core.System system = generate.randomSystem(10000);
         final Scenario scenario = new RandomFailureSequence(system);
         long duration = 0;
-        final int RUN_COUNT = 5;
+        final int RUN_COUNT = 1;
         for (int i = 0; i < RUN_COUNT; i++) {
             duration += durationOf(scenario);
         }
