@@ -80,14 +80,28 @@ public class SystemTest extends TestCase {
 
         assertThat(system.getName(), is(equalTo(System.DEFAULT_NAME)));
     }
-    
-    
+
     @Test
     public void shouldGivenAccessToTheComponentByIndex() {
-        final System system = new System(new Component("A"), new Component("B", require("A"))); 
-        
+        final System system = new System(new Component("A"), new Component("B", require("A")));
+
         assertThat(system.getComponent(0), is(equalTo(new Component("A"))));
         assertThat(system.getComponent(1), is(equalTo(new Component("B", require("A")))));
+    }
+
+    @Test
+    public void shouldProvideTheNumberOfComponentItContains() {
+        final System system = new System(new Component("A"), new Component("B", require("A")));
+
+        assertThat(system.size(), is(equalTo(2)));
+    }
+
+    @Test
+    public void shouldProvideTheIndexOfAComponentWithAGivenNmae() {
+        final System system = new System(new Component("A"), new Component("B", require("A")));
+
+        assertThat(system.indexOf("A"), is(equalTo(0)));
+        assertThat(system.indexOf("B"), is(equalTo(1)));
     }
 
     @Test

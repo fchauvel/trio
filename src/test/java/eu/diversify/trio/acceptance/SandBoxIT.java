@@ -21,16 +21,15 @@ import eu.diversify.trio.Trio;
 import eu.diversify.trio.core.Generator;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- *
+ * A single test to play with
  */
 @RunWith(JUnit4.class)
-public class SandBoxIT extends TestCase {
+public class SandBoxIT {
 
     private final Trio trio;
 

@@ -8,8 +8,7 @@ import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
 
 import static eu.diversify.trio.core.requirements.Factory.*;
-import static eu.diversify.trio.core.requirements.Negation.*;
-import static eu.diversify.trio.core.requirements.Nothing.*;
+
 
 import junit.framework.TestCase;
 import org.junit.Test;

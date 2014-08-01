@@ -22,11 +22,9 @@ import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * One particular configuration of the system
@@ -37,9 +35,9 @@ public class Topology {
     public static final boolean INACTIVE = !ACTIVE;
 
     private final System system;
-    private final Map<String, Boolean> status;
-    private final Set<String> observed;
-    private final Set<String> controlled;
+    private final BitSet isActive;
+    private final BitSet isObserved;
+    private final BitSet isControlled;
     private final List<Listener> listeners;
 
     public Topology(System system) {
@@ -52,129 +50,122 @@ public class Topology {
 
     public Topology(System system, Filter observation, Filter control, Listener... listeners) {
         this.system = system;
-        this.status = new HashMap<String, Boolean>();
-        this.controlled = control.resolve(system);
-        this.observed = observation.resolve(system);
-
-        for (String eachName: system.getComponentNames()) {
-            this.status.put(eachName, ACTIVE);
+        this.isActive = new BitSet(system.size());
+        this.isActive.set(0, system.size(), true);
+        this.isObserved = new BitSet(system.size());
+        for (String name: observation.resolve(system)) {
+            isObserved.flip(system.indexOf(name));
+        }
+        this.isControlled = new BitSet(system.size());
+        for (String name: control.resolve(system)) {
+            isControlled.flip(system.indexOf(name));
         }
         this.listeners = new ArrayList<Listener>(Arrays.asList(listeners));
     }
 
     public int getCapacity() {
-        return status.size();
+        return system.size();
     }
 
-    public boolean isActive(String name) {
-        return statusOf(name);
+    public boolean isActive(String componentName) {
+        return statusOf(componentName);
     }
 
-    private boolean statusOf(String component) {
-        //checkName(component);
-        return status.get(component);
+    private boolean statusOf(String componentName) {
+        return isActive.get(system.indexOf(componentName));
     }
 
-    public boolean isInactive(String name) {
-        return !isActive(name);
+    public boolean isInactive(String componentName) {
+        return !isActive(componentName);
     }
 
     public int countActiveAndObserved() {
-        int count = 0;
-        for (String eachComponent: observed) {
-            if (status.get(eachComponent)) {
-                count++;
-            }
-        }
-        return count;
+        BitSet isActiveCopy = activeAndObserved();
+        return isActiveCopy.cardinality();
+    }
+
+    private BitSet activeAndObserved() {
+        final BitSet isActiveCopy = (BitSet) isActive.clone();
+        isActiveCopy.and(isObserved);
+        return isActiveCopy;
     }
 
     public Collection<String> activeAndObservedComponents() {
-        final Collection<String> selection = new ArrayList<String>();
-        for (String eachComponent: observed) {
-            if (isActive(eachComponent)) {
-                selection.add(eachComponent);
-            }
+        final Collection<String> selection = new ArrayList<String>(isObserved.cardinality());
+        final BitSet activeAndObserved = activeAndObserved();
+        for (int i = activeAndObserved.nextSetBit(0);
+                i >= 0;
+                i = activeAndObserved.nextSetBit(i + 1)) {
+            selection.add(system.getComponent(i).getName());
         }
         return selection;
     }
 
-    private int countActiveAndControlled() {
-        int count = 0;
-        for (String eachComponent: controlled) {
-            if (status.get(eachComponent)) {
-                count++;
-            }
-        }
-        return count;
+    private BitSet activeAndControlled() {
+        final BitSet isActiveCopy = (BitSet) isActive.clone();
+        isActiveCopy.and(isControlled);
+        return isActiveCopy;
     }
 
     public Collection<String> activeAndControlledComponents() {
-        final Collection<String> selection = new ArrayList<String>();
-        for (String eachComponent: controlled) {
-            if (isActive(eachComponent)) {
-                selection.add(eachComponent);
-            }
+        final Collection<String> selection = new ArrayList<String>(isControlled.cardinality());
+        final BitSet activeAndControlled = activeAndControlled();
+        for (int i = activeAndControlled.nextSetBit(0);
+                i >= 0;
+                i = activeAndControlled.nextSetBit(i + 1)) {
+            selection.add(system.getComponent(i).getName());
         }
         return selection;
     }
 
-    public boolean isObserved(String component) {
-        return observed.contains(component);
+    public boolean isObserved(String componentName) {
+        return isObserved.get(system.indexOf(componentName));
     }
 
-    public boolean isControlled(String component) {
-        return controlled.contains(component);
+    public boolean isControlled(String componentName) {
+        return isControlled.get(system.indexOf(componentName));
     }
 
     public boolean hasActiveAndObservedComponents() {
-        return countActiveAndObserved() > 0;
+        return isActive.intersects(isObserved);
     }
 
     public boolean hasActiveAndControlledComponents() {
-        return countActiveAndControlled() > 0;
+        return isActive.intersects(isControlled);
     }
 
-    private void propagateChangesIn(Topology topology) {
+    private void propagateChanges() {
         boolean updated = true;
         while (updated) {
             updated = false;
-            for (String eachComponent: status.keySet()) {
-                final boolean isActive = topology.isActive(eachComponent);
-                boolean remainActive = isActive && system.requirementOf(eachComponent).isSatisfiedIn(topology);
-                setStatusOf(eachComponent, remainActive);
-                updated |= isActive != remainActive;
+            final BitSet remainActive = new BitSet(system.size());
+            for (int i = isActive.nextSetBit(0);
+                    i >= 0;
+                    i = isActive.nextSetBit(i + 1)) {
+                remainActive.set(i, isActive.get(i) && system.getComponent(i).isSatisfiedIn(this));
+                updated |= isActive.get(i) != remainActive.get(i);
             }
+            this.isActive.and(remainActive);
         }
     }
 
     public void setStatusOf(String component, boolean isActive) {
-        //checkName(component);
-        this.status.put(component, isActive);
+        this.isActive.set(system.indexOf(component), isActive);
     }
 
     public void inactivate(String component) {
-        //checkName(component);
-        this.status.put(component, INACTIVE);
-        propagateChangesIn(this);
+        setStatusOf(component, INACTIVE);
+        propagateChanges();
         for (Listener each: listeners) {
             each.inactivate(component, this);
         }
     }
 
     public void activate(String component) {
-        //checkName(component);
-        this.status.put(component, ACTIVE);
-        propagateChangesIn(this);
+        setStatusOf(component, ACTIVE);
+        propagateChanges();
         for (Listener each: listeners) {
             each.activate(component, this);
-        }
-    }
-
-    private void checkName(String component) throws IllegalArgumentException {
-        if (!status.containsKey(component)) {
-            final String error = String.format("Unknown component '%s' (Components are: %s)", component, status.keySet());
-            throw new IllegalArgumentException(error);
         }
     }
 

@@ -35,8 +35,6 @@ public class GeneratorTest extends TestCase {
     private static final class RandomStub extends Random {
 
         private static final long serialVersionUID = 1L;
-
-        
         
         @Override
         public int nextInt(int n) {
@@ -61,7 +59,7 @@ public class GeneratorTest extends TestCase {
         final System random = generate.randomSystem(2);
 
         final Collection<Component> components = new ArrayList<Component>();
-        components.add(new Component("C1", require("C2")));
+        components.add(new Component("C1", require("C1")));
         components.add(new Component("C2", require("C1")));
         final Collection<Tag> tags = new ArrayList<Tag>();
         final System expected = new System("randomly generated", components, tags);

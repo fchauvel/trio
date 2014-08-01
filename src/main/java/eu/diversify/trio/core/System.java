@@ -40,7 +40,7 @@ public class System {
 
     private final String name;
     private final List<Component> components;
-    private final Map<String, Component> byName;
+    private final Map<String, Integer> indexByName;
     private final Map<String, Tag> tags;
 
     public System(Component... components) {
@@ -64,9 +64,10 @@ public class System {
         }
         this.name = name;
         this.components = new ArrayList<Component>(components);
-        this.byName = new HashMap<String, Component>();
+        this.indexByName = new HashMap<String, Integer>(components.size());
+        int counter = 0;
         for (Component each: components) {
-            this.byName.put(each.getName(), each);
+            this.indexByName.put(each.getName(), counter++);
         }
         this.tags = validateTags(tags);
     }
@@ -75,10 +76,7 @@ public class System {
         final Map<String, Tag> results = new HashMap<String, Tag>();
         for (Tag eachTag: tags) {
             for (String eachTarget: eachTag.getTargets()) {
-                if (!byName.containsKey(eachTarget)) {
-                    final String error = String.format("Unable to find the component '%s' refered by tag '%s'", eachTarget, eachTag.getLabel());
-                    throw new IllegalArgumentException(error);
-                }
+                validate(eachTarget);
             }
             results.put(eachTag.getLabel(), eachTag);
         }
@@ -90,6 +88,25 @@ public class System {
     }
 
     /**
+     * @return the number of components in the systems
+     */
+    public int size() {
+        return this.components.size();
+    }
+
+    public int indexOf(String name) {
+        return indexByName.get(validate(name));
+    }
+
+    private String validate(String componentName) throws IllegalArgumentException {
+        if (!indexByName.containsKey(componentName)) {
+            final String error = String.format("Unknown component '%s' (Components are: %s)", componentName, indexByName.keySet());
+            throw new IllegalArgumentException(error);
+        }
+        return componentName;
+    }
+
+    /**
      * Traversal of the system by a listener
      *
      * @param listener the listener that should be triggered during the
@@ -97,7 +114,7 @@ public class System {
      */
     public void accept(SystemListener listener) {
         listener.enterSystem(this);
-        for (Component eachComponent: byName.values()) {
+        for (Component eachComponent: components) {
             eachComponent.accept(listener);
         }
         for (Tag eachTag: tags.values()) {
@@ -105,7 +122,6 @@ public class System {
         }
         listener.exitSystem(this);
     }
-    
 
     public Set<String> taggedAs(String tag) {
         return tags.get(tag).getTargets();
@@ -115,7 +131,7 @@ public class System {
     public int hashCode() {
         int hash = 7;
         hash = 41 * hash + this.name.hashCode();
-        hash = 41 * hash + this.byName.hashCode();
+        hash = 41 * hash + this.components.hashCode();
         hash = 41 * hash + this.tags.hashCode();
         return hash;
     }
@@ -129,13 +145,13 @@ public class System {
             return false;
         }
         final System other = (System) obj;
-        return other.name.equals(name) && other.byName.equals(byName) && other.tags.equals(tags);
+        return other.name.equals(name) && other.components.equals(components) && other.tags.equals(tags);
     }
 
     public Set<String> getComponentNames() {
-        return byName.keySet();
+        return indexByName.keySet();
     }
-    
+
     public Component getComponent(int index) {
         return components.get(index);
     }
@@ -145,38 +161,38 @@ public class System {
     }
 
     public Topology instantiate(DataSet report) {
-        final Trace trace = new Trace(byName.size());
+        final Trace trace = new Trace(size());
         report.include(trace);
         return new Topology(this, All.getInstance(), All.getInstance(), new Listener(trace));
     }
 
-    public Component requirementOf(String eachComponent) {
-        return byName.get(eachComponent);
+    public Component requirementOf(String componentName) {
+        return getComponent(indexOf(componentName));
     }
 
     public int getTotalComplexity() {
         int total = 0;
-        for (Component eachComponent: byName.values()) {
+        for (Component eachComponent: components) {
             total += eachComponent.getRequirement().getComplexity();
         }
         return total;
     }
 
     public double getMeanComplexity() {
-        return ((double) getTotalComplexity()) / byName.size();
+        return ((double) getTotalComplexity()) / size();
     }
 
     public double getDensity() {
         double total = 0;
-        for (Component eachComponent: byName.values()) {
+        for (Component eachComponent: components) {
             total += eachComponent.getValency();
         }
-        return total / Math.pow(byName.size(), 2);
+        return total / Math.pow(size(), 2);
     }
 
     @Override
     public String toString() {
-        return String.format("(%s) %s ; %s", name, byName.toString(), tags.toString());
+        return String.format("(%s) %s ; %s", name, components.toString(), tags.toString());
     }
 
 }
