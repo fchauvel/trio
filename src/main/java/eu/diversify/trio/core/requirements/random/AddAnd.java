@@ -1,0 +1,40 @@
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package eu.diversify.trio.core.requirements.random;
+
+/**
+ * Trigger the creation of a conjunction in the tree under construction
+ */
+public final class AddAnd implements Command {
+
+    @Override
+    public void randomize(Goal goal) {
+    }    
+
+    @Override
+    public void sendTo(Builder target) {
+        target.addAnd();
+    } 
+
+    @Override
+    public String toString() {
+        return "ADD(and)";
+    }
+       
+}

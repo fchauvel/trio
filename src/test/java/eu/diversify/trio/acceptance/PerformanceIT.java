@@ -15,38 +15,50 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
-import eu.diversify.trio.core.Generator;
-import eu.diversify.trio.filter.TaggedAs;
-
-import static eu.diversify.trio.simulation.actions.AbstractAction.*;
-
-import eu.diversify.trio.simulation.FixedFailureSequence;
 import eu.diversify.trio.core.System;
-import eu.diversify.trio.core.statistics.Analysis;
-import eu.diversify.trio.core.statistics.SystemStatistics;
-import eu.diversify.trio.simulation.RandomFailureSequence;
-import eu.diversify.trio.simulation.Scenario;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.core.statistics.Statistics;
+import eu.diversify.trio.filter.TaggedAs;
+import eu.diversify.trio.simulation.*;
+import eu.diversify.trio.util.random.Distribution;
+import java.io.*;
 import java.util.Random;
 import org.junit.Ignore;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.hamcrest.Matchers.*;
+import static eu.diversify.trio.core.Evaluation.evaluate;
+import static eu.diversify.trio.simulation.actions.AbstractAction.*;
+
 import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Monitor regression regarding performance, i.e., response time
  */
 @RunWith(JUnit4.class)
+@Ignore
 public class PerformanceIT {
 
     private final Trio trio;
@@ -57,7 +69,6 @@ public class PerformanceIT {
 
     @Test
     public void responseTimeOfFixedSequence() throws IOException {
-        final Trio trio = new Trio();
 
         System system = trio.loadSystemFrom("src/test/resources/samples/sensapp_topo4.trio");
         FixedFailureSequence scenario = new FixedFailureSequence(system, new TaggedAs("service"), new TaggedAs("platform"),
@@ -74,7 +85,6 @@ public class PerformanceIT {
 
     @Test
     public void responseTimeOfRandomSequence() throws IOException {
-        final Trio trio = new Trio();
 
         System system = trio.loadSystemFrom("src/test/resources/samples/sensapp_topo4.trio");
         RandomFailureSequence scenario = new RandomFailureSequence(system, new TaggedAs("service"), new TaggedAs("platform"));
@@ -86,47 +96,48 @@ public class PerformanceIT {
     }
 
     @Test
-    public void onOneLargeModel() {
-        final Generator generate = new Generator(0.75);
-        final System system = generate.randomSystem(10000);
+    public void simulationOfOneLargeModel() {
+        final int SYSTEM_SIZE = 10000;
+
+        final Generator generate = new Generator();
+        final System system = generate.system(SYSTEM_SIZE, Distribution.uniform(0, SYSTEM_SIZE));
+
         final Scenario scenario = new RandomFailureSequence(system);
         long duration = durationOf(scenario);
-        java.lang.System.out.printf("Duration: %d ms\n", duration);
 
+        java.lang.System.out.printf("Simulating failure sequences on a system with %d component(s) in %d ms\n", SYSTEM_SIZE, duration);
     }
 
     @Test
     public void scalability() throws FileNotFoundException {
         final PrintStream log = new PrintStream(new FileOutputStream("target/scalability.csv"));
-        log.println("size,duration,density,conjunction,disjunction,require,negation,complexity");
+        log.println("duration,size,density,disjunction,conjunction,negation");
+
+        final Generator generate = new Generator();
 
         final Random random = new Random();
 
-        for (int i = 0; i < 500; i++) {
-            int size = 10 + random.nextInt(10000);
-            final double alpha = 0.5 + random.nextDouble() * 0.4;
-            final Generator generate = new Generator(alpha);
-            final System system = generate.randomSystem(size);
+        final int MAX_COMPONENT_COUNT = 1000;
+        final int MIN_COMPONENT_COUNT = 1;
+        final int runCount = 500; 
+
+        for (int i = 0; i < runCount; i++) {
+            int size = MIN_COMPONENT_COUNT + random.nextInt(MAX_COMPONENT_COUNT - MIN_COMPONENT_COUNT);
+            final Distribution meanValenceDistribution = Distribution.uniform(0, size);
+            final double mean = meanValenceDistribution.sample();
+            final Distribution density = Distribution.normal(mean, mean / 4);
+            final System system = generate.system(size, density);
             final Scenario scenario = new RandomFailureSequence(system);
             double duration = durationOf(scenario);
+
+            final Statistics stats = new Statistics();
+            evaluate(stats).on(system);
             
-            SystemStatistics stats = new Analysis(system).getResults();
-            
-            log.print(size);
-            log.print(",");
             log.print(duration);
             log.print(",");
-            log.print(system.getDensity());
+            log.print(system.size());
             log.print(",");
-            log.print(stats.getConjunctionRatio());
-            log.print(",");
-            log.print(stats.getDisjunctionRatio());
-            log.print(",");
-            log.print(stats.getRequireRatio());
-            log.print(",");
-            log.print(stats.getNegationRatio());
-            log.print(",");
-            log.println(system.getMeanComplexity());
+            log.print(stats.toCsvENtry());
         }
 
         log.close();

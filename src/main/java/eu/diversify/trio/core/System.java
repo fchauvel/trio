@@ -2,6 +2,23 @@
  *
  * This file is part of TRIO.
  *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
  * TRIO is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
@@ -22,6 +39,7 @@ import eu.diversify.trio.simulation.Listener;
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.data.Trace;
 import eu.diversify.trio.filter.All;
+import eu.diversify.trio.util.Require;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,7 +52,7 @@ import java.util.Set;
  * Represent the specification of a system under study. A collection component,
  * uniquely identified by their name.
  */
-public class System {
+public class System implements SystemPart {
 
     public static final String DEFAULT_NAME = "Anonymous";
 
@@ -56,18 +74,17 @@ public class System {
     }
 
     public System(String name, Collection<Component> components, Collection<Tag> tags) {
-        if (components == null) {
-            throw new IllegalArgumentException("Invalid value 'null' given as list of components!");
-        }
-        if (components.isEmpty()) {
-            throw new IllegalArgumentException("Invalid value [] given as list of components!");
-        }
+        Require.notNull(name, "Invalid value 'null', given as system name!");
         this.name = name;
+
+        Require.notNull(components, "Invalid value 'null' given as list of components!");
+        Require.notEmpty(components, "Invalid value [] given as list of components!");
         this.components = new ArrayList<Component>(components);
         this.indexByName = new HashMap<String, Integer>(components.size());
         int counter = 0;
         for (Component each: components) {
-            this.indexByName.put(each.getName(), counter++);
+            this.indexByName.put(each.getName(), counter);
+            counter++;
         }
         this.tags = validateTags(tags);
     }
@@ -106,22 +123,20 @@ public class System {
         return componentName;
     }
 
-    /**
-     * Traversal of the system by a listener
-     *
-     * @param listener the listener that should be triggered during the
-     * traversal
-     */
-    public void accept(SystemListener listener) {
-        listener.enterSystem(this);
-        for (Component eachComponent: components) {
-            eachComponent.accept(listener);
-        }
-        for (Tag eachTag: tags.values()) {
-            eachTag.accept(listener);
-        }
-        listener.exitSystem(this);
+    public Collection<SystemPart> subParts() {
+        final List<SystemPart> subparts = new ArrayList<SystemPart>(components.size() + tags.size());
+        subparts.addAll(components);
+        subparts.addAll(tags.values());
+        return subparts;
     }
+
+    public void begin(SystemVisitor visitor) {
+        visitor.enter(this);
+    }
+    
+    public void end(SystemVisitor visitor) {
+        visitor.exit(this);
+    }    
 
     public Set<String> taggedAs(String tag) {
         return tags.get(tag).getTargets();
@@ -168,26 +183,6 @@ public class System {
 
     public Component requirementOf(String componentName) {
         return getComponent(indexOf(componentName));
-    }
-
-    public int getTotalComplexity() {
-        int total = 0;
-        for (Component eachComponent: components) {
-            total += eachComponent.getRequirement().getComplexity();
-        }
-        return total;
-    }
-
-    public double getMeanComplexity() {
-        return ((double) getTotalComplexity()) / size();
-    }
-
-    public double getDensity() {
-        double total = 0;
-        for (Component eachComponent: components) {
-            total += eachComponent.getValency();
-        }
-        return total / Math.pow(size(), 2);
     }
 
     @Override

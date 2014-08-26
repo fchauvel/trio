@@ -20,7 +20,7 @@
 package eu.diversify.trio.codecs;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.builder.TrioBaseVisitor;
 import eu.diversify.trio.builder.TrioParser;
 import eu.diversify.trio.core.requirements.Nothing;

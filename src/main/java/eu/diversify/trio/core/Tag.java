@@ -1,15 +1,29 @@
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.core;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import eu.diversify.trio.util.Require;
+import java.util.*;
 
 /**
- * A 'tag' used to classify the component of the system
+ * A 'tag' used to classify the components of the system
  */
-public class Tag {
+public class Tag implements SystemPart {
 
     private final String label;
     private final Set<String> targets;
@@ -19,30 +33,25 @@ public class Tag {
     }
 
     public Tag(String label, Collection<String> targets) {
-        this.label = abortIfInvalid(label);
-        this.targets = new HashSet<String>(abortIfInvalid(targets));
+        Require.notNull(label, "Invalid 'null' value given a tag label!");
+        this.label = label;
+
+        Require.notNull(targets, "Invalid 'null' values given as tag's target");
+        Require.notEmpty(targets, "Invalid tags without any target ([] found)!");
+        this.targets = new HashSet<String>(targets);
     }
 
-    private String abortIfInvalid(String label) {
-        if (label == null) {
-            throw new IllegalArgumentException("Invalid 'null' value given a tag label!");
-        }
-        return label;
+    public Collection<SystemPart> subParts() {
+        final List<SystemPart> subparts = new ArrayList<SystemPart>(0);
+        return subparts;
     }
 
-    private Collection<String> abortIfInvalid(Collection<String> targets) {
-        if (targets == null) {
-            throw new IllegalArgumentException("Invalid 'null' values given as tag's target");
-        }
-        if (targets.isEmpty()) {
-            throw new IllegalArgumentException("Invalid tags without any target ([] found)!");
-        }
-        return targets;
+    public void begin(SystemVisitor visitor) {
+        visitor.enter(this);
     }
-    
-    public void accept(SystemListener listener) {
-        listener.enterTag(this);
-        listener.exitTag(this);
+
+    public void end(SystemVisitor visitor) {
+        visitor.exit(this);
     }
 
     @Override

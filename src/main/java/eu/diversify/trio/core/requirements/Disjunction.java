@@ -1,49 +1,54 @@
-
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.core.requirements;
 
-import eu.diversify.trio.core.Requirement;
-import eu.diversify.trio.core.SystemListener;
+import eu.diversify.trio.core.SystemVisitor;
 import eu.diversify.trio.simulation.Topology;
-import java.util.Set;
 
 /**
  * Logical disjunction between requirements
  */
-public class Disjunction extends AbstractRequirement {
-
-    private final Requirement left;
-    private final Requirement right;
+public final class Disjunction extends BinaryOperator {
 
     public Disjunction(Requirement left, Requirement right) {
-        this.left = left;
-        this.right = right;
+        super(LogicalOperator.OR, left, right);
     }
 
-     public void accept(SystemListener listener) {
-        listener.enterDisjunction(this);
-        left.accept(listener);
-        right.accept(listener);
-        listener.exitDisjunction(this);
+    public void begin(SystemVisitor visitor) {
+        visitor.enter(this);
     }
-    
+
+    public void end(SystemVisitor visitor) {
+        visitor.exit(this);
+    }
+
     public boolean isSatisfiedBy(Topology topology) {
-        return left.isSatisfiedBy(topology) || right.isSatisfiedBy(topology);
-    }
-    
-    @Override
-    public int getComplexity() {
-        return 1 + left.getComplexity() + right.getComplexity();
+        return getLeft().isSatisfiedBy(topology) || getRight().isSatisfiedBy(topology);
     }
 
-    public Set<String> getVariables() {
-        Set<String> result = left.getVariables();
-        result.addAll(right.getVariables());
-        return result;
-    }
+    private String formatted;
 
     @Override
     public String toString() {
-        return String.format("(%s or %s)", left.toString(), right.toString());
+        if (formatted == null) {
+            formatted = String.format("(%s or %s)", getLeft().toString(), getRight().toString());
+        }
+        return formatted;
     }
 
 }

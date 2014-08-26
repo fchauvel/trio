@@ -19,7 +19,7 @@
 package eu.diversify.trio.unit.codecs;
 
 import eu.diversify.trio.core.Tag;
-import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.System;
 import java.util.ArrayList;

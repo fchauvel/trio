@@ -18,7 +18,7 @@
 package eu.diversify.trio.codecs;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.Requirement;
+import eu.diversify.trio.core.requirements.Requirement;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;

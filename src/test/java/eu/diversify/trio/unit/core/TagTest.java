@@ -18,11 +18,17 @@
 
 package eu.diversify.trio.unit.core;
 
+import eu.diversify.trio.core.Component;
+import eu.diversify.trio.core.DefaultSystemVisitor;
+import eu.diversify.trio.core.SystemVisitor;
 import eu.diversify.trio.core.Tag;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import junit.framework.TestCase;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -66,4 +72,42 @@ public class TagTest extends TestCase {
         Collection<String> targets = new ArrayList<String>();
         new Tag("foo", targets);
     }
+    
+       @Test
+    public void beginShouldTriggerEnterOnTheVisitor() {
+        final Mockery context = new JUnit4Mockery();
+
+        final Tag tag = new Tag("foo", "on x");
+
+        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+
+        context.checking(new Expectations() {
+            {
+                oneOf(visitor).enter(tag);
+            }
+        });
+
+        tag.begin(visitor);
+
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void endShouldTriggerExitOnTheVisitor() {
+        final Mockery context = new JUnit4Mockery();
+
+        final Tag tag = new Tag("foo", "on x");
+
+        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+
+        context.checking(new Expectations() {
+            {
+                oneOf(visitor).exit(tag);
+            }
+        });
+
+        tag.end(visitor);
+
+        context.assertIsSatisfied();
+    } 
 }
