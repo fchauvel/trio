@@ -17,9 +17,7 @@
  */
 package eu.diversify.trio.unit.core.requirements;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
 import eu.diversify.trio.core.SystemVisitor;
-import eu.diversify.trio.core.requirements.Disjunction;
 import eu.diversify.trio.core.requirements.Require;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

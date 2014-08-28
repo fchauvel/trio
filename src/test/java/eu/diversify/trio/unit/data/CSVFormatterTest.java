@@ -54,7 +54,7 @@ public class CSVFormatterTest extends TestCase {
 
         state.accept(formatter);
 
-        final String expectation = "0,inactivate X,1,5,1\r\n";
+        final String expectation = "0,inactivate X,1,5,1" + EOL;
 
         assertThat(csv.toString(), is(equalTo(expectation)));
     }
