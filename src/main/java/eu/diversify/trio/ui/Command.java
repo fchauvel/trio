@@ -24,7 +24,6 @@ import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Distribution;
 import eu.diversify.trio.analysis.Metric;
 import eu.diversify.trio.core.System;
-import eu.diversify.trio.data.CSVFormatter;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;

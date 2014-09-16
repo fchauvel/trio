@@ -19,7 +19,6 @@
  */
 package eu.diversify.trio.simulation.actions;
 
-import eu.diversify.trio.simulation.actions.AbstractAction;
 import eu.diversify.trio.simulation.Topology;
 
 /**

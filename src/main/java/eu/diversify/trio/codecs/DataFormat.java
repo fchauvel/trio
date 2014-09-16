@@ -24,6 +24,6 @@ package eu.diversify.trio.codecs;
  */
 public interface DataFormat {
 
-    public String convert(int sequenceIndex, String toString, int disruption, int activity, int loss);
+    String convert(int sequenceIndex, String toString, int disruption, int activity, int loss);
     
 }

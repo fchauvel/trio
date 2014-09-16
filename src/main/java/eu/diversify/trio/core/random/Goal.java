@@ -165,7 +165,7 @@ public class Goal {
 
     };
 
-    private static interface Build {
+    private interface Build {
 
         Result build(State state, Goal goal);
 

@@ -75,10 +75,7 @@ public class Require extends Requirement {
             return false;
         }
         final Require other = (Require) obj;
-        if ((this.requiredComponent == null) ? (other.requiredComponent != null) : !this.requiredComponent.equals(other.requiredComponent)) {
-            return false;
-        }
-        return true;
+        return this.requiredComponent.equals(other.requiredComponent);
     }
 
     @Override

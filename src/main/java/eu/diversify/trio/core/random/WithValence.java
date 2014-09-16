@@ -19,14 +19,8 @@
  */
 package eu.diversify.trio.core.random;
 
-import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.core.requirements.Conjunction;
-import eu.diversify.trio.core.requirements.Disjunction;
-import eu.diversify.trio.core.requirements.Negation;
-import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
 import java.util.BitSet;
-import java.util.Random;
 
 /**
  * Generator where the size is the number of variables used in the expression.

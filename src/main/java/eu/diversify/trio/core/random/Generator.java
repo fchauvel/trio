@@ -28,23 +28,16 @@ import eu.diversify.trio.util.random.Distribution;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Generate randomised system description
  */
 public class Generator {
 
-    private final Random random;
     private final RequirementFactory factory;
     private final Goal goal;
 
     public Generator() {
-        this(new Random());
-    }
-
-    public Generator(Random random) {
-        this.random = random;
         this.factory = new CachedLiteralFactory(10000);
         this.goal = new Goal(10000, factory);
     }
