@@ -15,7 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio;
 
 import java.io.IOException;
@@ -55,12 +71,24 @@ public class Configuration {
 
     private Configuration(String source) {
         properties = new Properties();
+        InputStream input = null;
         try {
-            InputStream input = Configuration.class.getResourceAsStream(source);
+            input = Configuration.class.getResourceAsStream(source);
             properties.load(input);
 
         } catch (IOException ex) {
             throw new RuntimeException(ex);
+
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+
+                } catch (IOException ex) {
+                    throw new RuntimeException("Unable to close the stream to configuration", ex);
+                
+                }
+            }
         }
     }
 
@@ -79,7 +107,7 @@ public class Configuration {
     public String version() {
         return String.format("%s v%s", trioName(), versionNumber());
     }
-    
+
     public String description() {
         return get("trio.description");
     }
@@ -91,11 +119,11 @@ public class Configuration {
     public String copyrightYears() {
         return get("trio.copyright.years");
     }
-    
+
     public String copyright() {
         return String.format("Copyright (C) %s - %s", copyrightYears(), copyrightOwner());
     }
-    
+
     public String license() {
         return get("trio.license");
     }

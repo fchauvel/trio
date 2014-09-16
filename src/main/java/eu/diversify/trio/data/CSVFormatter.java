@@ -19,6 +19,7 @@ package eu.diversify.trio.data;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Format a data set into a CSV file
@@ -29,7 +30,13 @@ public class CSVFormatter extends AbstractDataSetListener {
     private int traceCounter;
 
     public CSVFormatter(OutputStream output) {
-        out = new PrintStream(output);
+        try {
+            out = new PrintStream(output, true, "UTF-8");
+        
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException("Unable to write UTF-8", ex);
+        
+        } 
     }
 
     @Override

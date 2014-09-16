@@ -19,6 +19,7 @@ package eu.diversify.trio.core.requirements.stats;
 
 import eu.diversify.trio.core.DefaultSystemVisitor;
 import eu.diversify.trio.core.requirements.*;
+import java.util.Arrays;
 
 /**
  * Count logical operators in a given requirement
@@ -77,7 +78,7 @@ public class OperatorDistribution extends DefaultSystemVisitor {
     }
 
     public int[] counts() {
-        return counts;
+        return Arrays.copyOf(counts, counts.length);
     }
 
 }

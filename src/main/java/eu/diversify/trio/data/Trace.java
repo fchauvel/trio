@@ -88,7 +88,7 @@ public class Trace {
     }
 
     public void record(Action action, int activeAndObserved, int activeAndControlled) {
-        final State next = current().update(action, activeAndObserved, activeAndControlled);
+        final State next = this.current().update(action, activeAndObserved, activeAndControlled);
         this.states.add(next);
     }
 

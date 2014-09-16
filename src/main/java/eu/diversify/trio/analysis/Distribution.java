@@ -18,6 +18,7 @@
 
 package eu.diversify.trio.analysis;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -113,7 +114,9 @@ public class Distribution {
         return results;
     }
 
-    private static class Decreasing implements Comparator<String> {
+    private static class Decreasing implements Comparator<String>, Serializable {
+        
+        private static final long serialVersionUID = 1L;
 
         Map<String, Double> base;
 
@@ -131,7 +134,8 @@ public class Distribution {
         }
     }
     
-    private static class Increasing implements Comparator<String> {
+    private static class Increasing implements Comparator<String>, Serializable {
+        private static final long serialVersionUID = 1L;
 
         Map<String, Double> base;
 
@@ -155,7 +159,7 @@ public class Distribution {
 
     }
 
-    public static Function mean = new Mean();
+    public static final Function mean = new Mean();
 
     private static class Mean implements Function {
 

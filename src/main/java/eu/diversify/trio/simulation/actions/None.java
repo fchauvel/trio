@@ -24,11 +24,14 @@ import eu.diversify.trio.simulation.Topology;
  */
 public class None extends AbstractAction {
 
+    private static final Object lock = new Object();
     private static None instance;
 
     public static None getInstance() {
-        if (instance == null) {
-            instance = new None();
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new None();
+            }
         }
         return instance;
     }

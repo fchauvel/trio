@@ -32,8 +32,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 package eu.diversify.trio;
 
 import eu.diversify.trio.simulation.Scenario;
@@ -61,7 +59,25 @@ import static eu.diversify.trio.codecs.Builder.build;
 public class Trio {
 
     public System loadSystemFrom(String path) throws FileNotFoundException, IOException {
-        return build().systemFrom(new FileInputStream(path));
+
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(path);
+            return build().systemFrom(fileInputStream);
+
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to open the stream from '" + path + "'", ex);
+
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                
+                } catch (IOException ex) {
+                    throw new RuntimeException("Unable to close the stream from '" + path + "'", ex);
+                }
+            }
+        }
     }
 
     public DataSet run(Scenario scenario, int runCount) {
@@ -89,17 +105,19 @@ public class Trio {
         try {
             output = new FileOutputStream(outputFile);
             CSVFormatter formatter = new CSVFormatter(output);
-            data.accept(formatter); 
-            
+            data.accept(formatter);
+
         } catch (FileNotFoundException ex) {
             throw new RuntimeException(ex);
-        
+
         } finally {
-            try {
-                output.close();
-                
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            if (output != null) {
+                try {
+                    output.close();
+
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
     }

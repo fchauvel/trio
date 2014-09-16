@@ -45,23 +45,30 @@ public class CachedLiteralFactory extends RequirementFactory {
         }
     }
     
+    @Override
     public Requirement createRequire(int hash) {
         return (prebuilt[hash] != null) ? prebuilt[hash] : new Require("C" + hash);
     }
 
+    @Override
     public Requirement createRequire(String componentName) {
-        int index = componentName.hashCode() % CAPACITY;
+        final int hashCode = componentName.hashCode();
+        assert hashCode >= 0: "calculating remainder of a negative hashcode";
+        int index = hashCode % CAPACITY;
         return (prebuilt[index] != null) ? prebuilt[index] : new Require(componentName);
     }
 
+    @Override
     public Requirement createConjunction(Requirement left, Requirement right) {
         return new Conjunction(left, right);
     }
 
+    @Override
     public Requirement createDisjunction(Requirement left, Requirement right) {
         return new Disjunction(left, right);
     }
 
+    @Override
     public Requirement createNegation(Requirement operand) {
         return new Negation(operand);
     }

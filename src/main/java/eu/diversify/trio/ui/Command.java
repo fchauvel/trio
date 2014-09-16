@@ -15,6 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.ui;
 
 import eu.diversify.trio.Configuration;
@@ -152,26 +169,41 @@ public class Command {
 
     public void execute(Trio trio, OutputStream output) throws IOException {
         final Configuration config = Configuration.forProduction();
-        final PrintStream out = new PrintStream(output);
 
-        out.println(config.version() + " -- " + config.description());
-        out.println(config.copyright());
-        out.println("Licensed under " + config.license());
-        out.println();
+        PrintStream out = null;
 
-        final System system = trio.loadSystemFrom(inputFile);
-        out.println("SYSTEM: " + system.getName());
-        final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
-        out.println("SCENARIO: " + format(scenario));
-              
-        final DataSet data = trio.run(scenario, runCount);
-        trio.saveDataAs(data, outputFile);
+        try {
+            out = new PrintStream(output, AUTO_FLUSH, UTF_8);
+
+            out.println(config.version() + " -- " + config.description());
+            out.println(config.copyright());
+            out.println("Licensed under " + config.license());
+            out.println();
+
+            final System system = trio.loadSystemFrom(inputFile);
+            out.println("SYSTEM: " + system.getName());
+            final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
+            out.println("SCENARIO: " + this.format(scenario));
+
+            final DataSet data = trio.run(scenario, runCount);
+            trio.saveDataAs(data, outputFile);
+
+            report(trio.analyse(data), out);
+
+            out.println();
+            out.println("That's all folks!");
         
-        report(trio.analyse(data), out);
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to write on the given output stream", ex);
 
-        out.println();
-        out.println("That's all folks!");
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
     }
+    private static final boolean AUTO_FLUSH = true;
+    private static final String UTF_8 = "UTF-8";
 
     private Filter observation() {
         return parseTag(observation);
@@ -190,11 +222,11 @@ public class Command {
 
     private void report(Analysis analyzer, PrintStream out) {
         out.println("INDICATORS:");
-        out.printf(" + Robustness: %.4f\n", getRobustness(analyzer).distribution().mean());
+        out.printf(" + Robustness: %.4f%n", getRobustness(analyzer).distribution().mean());
         out.println(" + Five most sensitive components:");
         int counter = 1;
         for (Map.Entry<String, Double> entry: getLoss(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {
-            out.printf("   %d: %.4e %s\n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
+            out.printf("   %d: %.4e %s%n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
             if (counter > 5) {
                 break;
             }
@@ -206,18 +238,18 @@ public class Command {
         out.println(" + Five most harmful sequences:");
         int counter = 1;
         for (Map.Entry<String, Double> entry: getFragility(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {
-            out.printf("   %d: %.4e %s\n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
+            out.printf("   %d: %.4e %s%n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
             if (counter > 5) {
                 break;
             }
-        } 
+        }
     }
 
     public static Metric getRobustness(Analysis analyzer) {
         return analyzer.metric("norm. robustness");
     }
-    
-     public static Metric getFragility(Analysis analyzer) {
+
+    public static Metric getFragility(Analysis analyzer) {
         return analyzer.metric("fragility");
     }
 
