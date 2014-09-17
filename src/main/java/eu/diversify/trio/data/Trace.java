@@ -48,14 +48,14 @@ public class Trace {
     
     public String label() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("[");
+        buffer.append('[');
         for(int i=0 ; i<states.size() ;i++) {
             buffer.append(states.get(i).getTrigger().toString());
             if (i < states.size()-1) {
                 buffer.append(", ");
             }
         }
-        buffer.append("]");
+        buffer.append(']');
         return buffer.toString();
     }
 
