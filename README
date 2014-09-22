@@ -32,92 +32,9 @@ In addition, a binary distribution, continuously updated, is available at:
     http://dist.thingml.org/trio/trio-dist.zip
 
 
+3. PROJECT DOCUMENTATION
+------------------------
 
-3. HOW TO RUN TRIO
-------------------
+The documentation of Trio (in version 0.2-SNAPSHOT) is available at:
 
-Trio is a java application, which should be run from the command line. The 
-following example show its primary usage.
-
-
-Usage: trio [options] input.trio
-where 'options' are:
-  -o, --observe=TAG  the tag of the components whose activity shall be observed
-  -c, --control=TAG  the tag of the components whose activity shall be controlled
-  -r, --runs=INTEGER the number of sample for statistical evidence
-  -t, --trace=FILE   the file where the generated data shall be stored
-Example: trio -o result.csv --run=10000 system.trio
-
-
-Below is an example of output of succesful invocation
-
-$> java -jar trio-bundle.jar -o service -c infra -t trace.csv samples/sensapp_topo4.trio
-Trio v0.1 -- Topology Robustness IndicatOr
-Copyright (C) 2014 - SINTEF ICT
-Licensed under LGPLv3
-
-SYSTEM: SensApp, topology no. 4
-SCENARIO: Robustness of the 'service' layer to failure in the 'infra' layer
-INDICATORS:
- + Robustness: 0.0297
- + Five most sensitive components:
-   1: 1.7375e+00  VM2
-   2: 8.2376e-01  VM1
-   3: 6.8183e-01  VM4
-   4: 6.6244e-01  VM3
-   5: 5.6873e-01  VM5
- + Five most harmful sequences:
-   1: 1.9200e-01 [none,  VM2]
-   2: 5.6990e-02 [none,  VM3,  VM2]
-   3: 5.2990e-02 [none,  VM4,  VM2]
-   4: 5.1991e-02 [none,  VM1,  VM2]
-   5: 3.1994e-02 [none,  VM5,  VM2]
-
-That's all folks!
-
-
-4. HOW TO BUILD TRIO
---------------------
-
-$> mvn clean package
-
-
-
-5. HOW TO RELEASE TRIO
-----------------------
-
-Before to create a release, one should ensure the following:
-
- - Read/write access to the git repository 
-
- - Valid credentials to connect on the "deployment" server are
-   configured in .m2/settings.xml
-
-The configuration of the SCM maven plugin can be tested using the
-following command:
-
-$> mvn scm:validate
-
-Under Windows, one shall set up an ssh agent to avoid that the git
-command hang waiting for a passphrase. The following commands are
-necessary (run on the git-bash):
-
-$> eval `ssh-agent`
-$> env | grep SSH
-$> ssh-add "/c/Users/franckc/.ssh/id_rsa"
-   enter passphrase : XXXXXXXX
-
-The Maven release plugin can be run in a "dryRun" mode using the
-option '-DdryRun=true-'. We recommend to get the 'dry run' before to
-run the 'release:prepare' command.
-
-$> mvn --batch-mode release:prepare -DreleaseVersion=0.1 -DdevelopmentVersion=0.2-SNAPSHOT
-
-$> mvn release:perform
-
-If anything goes wrong during the prepare or perform command, on can
-revert the info committed in the repository using the following
-commands:
-
-$> git reset --hard <id of the commit you want to reset to>
-$> git push origin master --force
+    http://fchauvel.github.io/trio/0.2-SNAPSHOT/

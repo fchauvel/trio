@@ -29,6 +29,7 @@
         </head>
         <menu name="Documentation">
             <item name="Usage" href="usage.html" />
+             <item name="How to contribute?" href="how_to_contribute.html" />
         </menu>
         
         <links>
