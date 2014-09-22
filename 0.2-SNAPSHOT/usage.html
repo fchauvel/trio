@@ -163,9 +163,38 @@
 <p>The <b>number</b> of extinction sequence to run. This parameter directly impact the strength of the statistical evidence associated with the output indicators.</p></li>
 </ul>
 <p>The following command illustrates how to run TRIO from the command line</p>
+<p>Trio is a java application, which should be run from the command line. The following example show its primary usage.</p>
+<p>Usage: trio [options] input.trio where &#x2018;options&#x2019; are:  -o, &#x2013;observe=TAG the tag of the components whose activity shall be observed  -c, &#x2013;control=TAG the tag of the components whose activity shall be controlled  -r, &#x2013;runs=INTEGER the number of sample for statistical evidence  -t, &#x2013;trace=FILE the file where the generated data shall be stored Example: </p>
 
 <div class="source">
-<pre>$&gt; java -jar trio-final.jar my-deployment.json 1000
+<pre>trio -o result.csv --run=10000 system.trio
+</pre></div>
+<p>Below is an example of output of successful invocation</p>
+
+<div class="source">
+<pre>$&gt; java -jar trio-bundle.jar -o service -c infra -t trace.csv samples/sensapp_topo4.trio
+Trio v0.1 -- Topology Robustness IndicatOr
+Copyright (C) 2014 - SINTEF ICT
+Licensed under LGPLv3
+
+SYSTEM: SensApp, topology no. 4
+SCENARIO: Robustness of the 'service' layer to failure in the 'infra' layer
+INDICATORS:
+ + Robustness: 0.0297
+ + Five most sensitive components:
+   1: 1.7375e+00  VM2
+   2: 8.2376e-01  VM1
+   3: 6.8183e-01  VM4
+   4: 6.6244e-01  VM3
+   5: 5.6873e-01  VM5
+ + Five most harmful sequences:
+   1: 1.9200e-01 [none,  VM2]
+   2: 5.6990e-02 [none,  VM3,  VM2]
+   3: 5.2990e-02 [none,  VM4,  VM2]
+   4: 5.1991e-02 [none,  VM1,  VM2]
+   5: 3.1994e-02 [none,  VM5,  VM2]
+
+That's all folks!
 </pre></div>
 <div class="section">
 <h3>Describing the topology of the system<a name="Describing_the_topology_of_the_system"></a></h3>
