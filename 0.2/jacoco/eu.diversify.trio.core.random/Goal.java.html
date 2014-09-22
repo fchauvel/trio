@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Goal.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core.random</a> &gt; <span class="el_source">Goal.java</span></div><h1>Goal.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/*
+ */
+package eu.diversify.trio.core.random;
+
+import eu.diversify.trio.core.requirements.Requirement;
+import eu.diversify.trio.core.requirements.Conjunction;
+import eu.diversify.trio.core.requirements.Disjunction;
+import eu.diversify.trio.core.requirements.Negation;
+import eu.diversify.trio.core.requirements.Require;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ *
+ */
+public class Goal {
+
+    private final int numberOfVariables;
+    private final int desiredSize;
+    private final Random random;
+
+    private final List&lt;Build&gt; builders;
+
+<span class="nc" id="L42">    public Goal(int desiredSize, int numberOfVariables) {</span>
+<span class="nc" id="L43">        this.random = new Random();</span>
+<span class="nc" id="L44">        this.desiredSize = desiredSize;</span>
+<span class="nc" id="L45">        this.numberOfVariables = numberOfVariables;</span>
+<span class="nc" id="L46">        this.builders = new ArrayList&lt;Build&gt;();</span>
+<span class="nc" id="L47">        this.builders.add(new BuildRequire());</span>
+<span class="nc" id="L48">        this.builders.add(new BuildConjunction());</span>
+        //this.builders.add(new BuildDisjunction());
+        //this.builders.add(new BuildNegation());
+<span class="nc" id="L51">    }</span>
+
+    public Requirement build() {
+<span class="nc" id="L54">        return buildRequirement(new State()).expression;</span>
+    }
+
+    public Result buildRequirement(State current) {
+<span class="nc" id="L58">        Build action = pickAny(current.selectRelevant(builders));</span>
+<span class="nc" id="L59">        return action.build(current, this);</span>
+    }
+
+    private Build pickAny(List&lt;Build&gt; candidates) {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (candidates.isEmpty()) {</span>
+<span class="nc" id="L64">            throw new IllegalArgumentException(&quot;Cannot pick randomly from an empty collection!&quot;);</span>
+        }
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (candidates.size() == 1) {</span>
+<span class="nc" id="L67">            return candidates.get(0);</span>
+        }
+<span class="nc" id="L69">        final int draw = random.nextInt(candidates.size());</span>
+<span class="nc" id="L70">        return candidates.get(draw);</span>
+    }
+
+    private Result buildConjunction(State current) {
+<span class="nc" id="L74">        final Result left = buildRequirement(current.addBinaryNode());</span>
+<span class="nc" id="L75">        final Result right = buildRequirement(left.state);</span>
+<span class="nc" id="L76">        return new Result(new Conjunction(left.expression, right.expression), right.state);</span>
+    }
+
+    private Result buildDisjunction(State current) {
+<span class="nc" id="L80">        final Result left = buildRequirement(current.addBinaryNode());</span>
+<span class="nc" id="L81">        final Result right = buildRequirement(left.state);</span>
+<span class="nc" id="L82">        return new Result(new Disjunction(left.expression, right.expression), right.state);</span>
+    }
+
+    private Result buildNegation(State current) {
+<span class="nc" id="L86">        final Result operand = buildRequirement(current.addUnaryNode());</span>
+<span class="nc" id="L87">        return new Result(new Negation(operand.expression), operand.state);</span>
+    }
+
+    private Result buildRequire(State current) {
+<span class="nc" id="L91">        return new Result(new Require(pickAVariable()), current.addLeaf());</span>
+    }
+
+    private String pickAVariable() {
+<span class="nc" id="L95">        return &quot;C&quot; + random.nextInt(numberOfVariables);</span>
+    }
+
+    public class State {
+
+        private final int localSize;
+        private final int minimumGlobalSize;
+
+        public State() {
+<span class="nc" id="L104">            this(0, 1);</span>
+<span class="nc" id="L105">        }</span>
+
+<span class="nc" id="L107">        public State(int localSize, int minimumGlobalSize) {</span>
+<span class="nc" id="L108">            this.localSize = localSize;</span>
+<span class="nc" id="L109">            this.minimumGlobalSize = minimumGlobalSize;</span>
+<span class="nc" id="L110">        }</span>
+
+        public boolean acceptNewLeaf() {
+<span class="nc bnc" id="L113" title="All 4 branches missed.">            return !(wouldCloseTheTree() &amp;&amp; !isBigEnough());</span>
+        }
+
+        private boolean wouldCloseTheTree() {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            return minimumGlobalSize - localSize == 1;</span>
+        }
+
+        public boolean acceptNewNode() {
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            return !isBigEnough();</span>
+        }
+
+        private boolean isBigEnough() {
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            return desiredSize == minimumGlobalSize;</span>
+        }
+
+        public State addLeaf() {
+<span class="nc" id="L129">            return new State(localSize + 1, minimumGlobalSize);</span>
+        }
+
+        public State addBinaryNode() {
+<span class="nc" id="L133">            return new State(localSize, minimumGlobalSize + 1);</span>
+        }
+        
+         public State addUnaryNode() {
+<span class="nc" id="L137">            return new State(localSize, minimumGlobalSize);</span>
+        }
+
+        public List&lt;Build&gt; selectRelevant(List&lt;Build&gt; candidates) {
+<span class="nc" id="L141">            final List&lt;Build&gt; selection = new ArrayList&lt;Build&gt;(candidates.size());</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            for (Build each: candidates) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                if (each.isLegalIn(this)) {</span>
+<span class="nc" id="L144">                    selection.add(each);</span>
+                }
+<span class="nc" id="L146">            }</span>
+<span class="nc" id="L147">            return selection;</span>
+        }
+
+        public String toString() {
+<span class="nc" id="L151">            return &quot;[S=&quot; + localSize + &quot; ; M=&quot; + minimumGlobalSize + &quot;]&quot;;</span>
+        }
+
+    }
+
+    private static class Result {
+
+        private final State state;
+        private final Requirement expression;
+
+<span class="nc" id="L161">        public Result(Requirement expression, State state) {</span>
+<span class="nc" id="L162">            this.state = state;</span>
+<span class="nc" id="L163">            this.expression = expression;</span>
+<span class="nc" id="L164">        }</span>
+
+    };
+
+    private interface Build {
+
+        Result build(State state, Goal goal);
+
+        boolean isLegalIn(State current);
+
+    }
+
+<span class="nc" id="L176">    public static class BuildRequire implements Build {</span>
+
+        @Override
+        public Result build(State state, Goal goal) {
+<span class="nc" id="L180">            return goal.buildRequire(state);</span>
+        }
+
+        @Override
+        public boolean isLegalIn(State current) {
+<span class="nc" id="L185">            return current.acceptNewLeaf();</span>
+        }
+
+    }
+
+<span class="nc" id="L190">    public static class BuildConjunction implements Build {</span>
+
+        @Override
+        public Result build(State state, Goal goal) {
+<span class="nc" id="L194">            return goal.buildConjunction(state);</span>
+        }
+
+        @Override
+        public boolean isLegalIn(State current) {
+<span class="nc" id="L199">            return current.acceptNewNode();</span>
+        }
+
+    }
+
+<span class="nc" id="L204">    public static class BuildDisjunction implements Build {</span>
+
+        @Override
+        public Result build(State state, Goal goal) {
+<span class="nc" id="L208">            return goal.buildDisjunction(state);</span>
+        }
+
+        @Override
+        public boolean isLegalIn(State current) {
+<span class="nc" id="L213">            return current.acceptNewNode();</span>
+        }
+
+    }
+
+<span class="nc" id="L218">    public static class BuildNegation implements Build {</span>
+
+        @Override
+        public Result build(State state, Goal goal) {
+<span class="nc" id="L222">            return goal.buildNegation(state);</span>
+        }
+
+        @Override
+        public boolean isLegalIn(State current) {
+<span class="nc" id="L227">            return true;</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Trio.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio</a> &gt; <span class="el_source">Trio.java</span></div><h1>Trio.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio;
+
+import eu.diversify.trio.simulation.Scenario;
+import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.Threat;
+import eu.diversify.trio.analysis.Length;
+import eu.diversify.trio.analysis.Loss;
+import eu.diversify.trio.analysis.Probability;
+import eu.diversify.trio.analysis.RelativeRobustness;
+import eu.diversify.trio.analysis.Robustness;
+import eu.diversify.trio.core.System;
+import eu.diversify.trio.data.CSVFormatter;
+import eu.diversify.trio.data.DataSet;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import static eu.diversify.trio.codecs.Builder.build;
+
+/**
+ * The Trio application
+ */
+<span class="nc" id="L76">public class Trio {</span>
+
+    public System loadSystemFrom(String path) throws FileNotFoundException, IOException {
+
+<span class="nc" id="L80">        FileInputStream fileInputStream = null;</span>
+        try {
+<span class="nc" id="L82">            fileInputStream = new FileInputStream(path);</span>
+<span class="nc" id="L83">            return build().systemFrom(fileInputStream);</span>
+
+<span class="nc" id="L85">        } catch (IOException ex) {</span>
+<span class="nc" id="L86">            throw new RuntimeException(&quot;Unable to open the stream from '&quot; + path + &quot;'&quot;, ex);</span>
+
+        } finally {
+<span class="nc bnc" id="L89" title="All 4 branches missed.">            if (fileInputStream != null) {</span>
+                try {
+<span class="nc" id="L91">                    fileInputStream.close();</span>
+
+<span class="nc" id="L93">                } catch (IOException ex) {</span>
+<span class="nc" id="L94">                    throw new RuntimeException(&quot;Unable to close the stream from '&quot; + path + &quot;'&quot;, ex);</span>
+<span class="nc" id="L95">                }</span>
+            }
+        }
+    }
+
+    public DataSet run(Scenario scenario, int runCount) {
+<span class="nc" id="L101">        final DataSet dataCollector = new DataSet();</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for (int i = 0; i &lt; runCount; i++) {</span>
+<span class="nc" id="L103">            scenario.run(dataCollector);</span>
+        }
+<span class="nc" id="L105">        return dataCollector;</span>
+    }
+
+    public DataSet run(Scenario scenario) {
+<span class="nc" id="L109">        final DataSet dataCollector = new DataSet();</span>
+<span class="nc" id="L110">        scenario.run(dataCollector);</span>
+<span class="nc" id="L111">        return dataCollector;</span>
+    }
+
+    public Analysis analyse(DataSet data) {
+<span class="nc" id="L115">        final Analysis analysis = buildAnalysis();</span>
+<span class="nc" id="L116">        data.accept(analysis);</span>
+<span class="nc" id="L117">        return analysis;</span>
+    }
+
+    public void saveDataAs(final DataSet data, String outputFile) {
+<span class="nc" id="L121">        OutputStream output = null;</span>
+        try {
+<span class="nc" id="L123">            output = new FileOutputStream(outputFile);</span>
+<span class="nc" id="L124">            CSVFormatter formatter = new CSVFormatter(output);</span>
+<span class="nc" id="L125">            data.accept(formatter);</span>
+
+<span class="nc" id="L127">        } catch (FileNotFoundException ex) {</span>
+<span class="nc" id="L128">            throw new RuntimeException(ex);</span>
+
+        } finally {
+<span class="nc bnc" id="L131" title="All 4 branches missed.">            if (output != null) {</span>
+                try {
+<span class="nc" id="L133">                    output.close();</span>
+
+<span class="nc" id="L135">                } catch (IOException ex) {</span>
+<span class="nc" id="L136">                    throw new RuntimeException(ex);</span>
+<span class="nc" id="L137">                }</span>
+            }
+        }
+<span class="nc" id="L140">    }</span>
+
+    private Analysis buildAnalysis() {
+<span class="nc" id="L143">        final Robustness robustness = new Robustness();</span>
+<span class="nc" id="L144">        final RelativeRobustness rRobustness = new RelativeRobustness(robustness);</span>
+<span class="nc" id="L145">        final Probability probability = new Probability();</span>
+<span class="nc" id="L146">        final Length length = new Length();</span>
+<span class="nc" id="L147">        final Loss loss = new Loss();</span>
+<span class="nc" id="L148">        final Threat fragility = new Threat(rRobustness, probability);</span>
+<span class="nc" id="L149">        return new Analysis(robustness, rRobustness, length, loss, probability, fragility);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

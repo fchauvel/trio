@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Or.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.filter</a> &gt; <span class="el_source">Or.java</span></div><h1>Or.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio.filter;
+
+import eu.diversify.trio.core.System;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Logical disjunction
+ */
+public class Or extends Filter {
+
+    private final Filter left;
+    private final Filter right;
+
+<span class="nc" id="L32">    public Or(Filter left, Filter right) {</span>
+<span class="nc" id="L33">        this.left = left;</span>
+<span class="nc" id="L34">        this.right = right;</span>
+<span class="nc" id="L35">    }</span>
+
+    @Override
+    public Set&lt;String&gt; resolve(System system) {
+<span class="nc" id="L39">        final Set&lt;String&gt; results = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L40">        results.addAll(left.resolve(system));</span>
+<span class="nc" id="L41">        results.addAll(right.resolve(system));</span>
+<span class="nc" id="L42">        return results;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L47">        return String.format(&quot;(%s or %s)&quot;, left.toString(), right.toString());</span>
+    }
+
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

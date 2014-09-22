@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>State.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.data</a> &gt; <span class="el_source">State.java</span></div><h1>State.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio.data;
+
+import eu.diversify.trio.codecs.DataFormat;
+import eu.diversify.trio.simulation.Action;
+
+/**
+ * One state in the trace. It gathers the action that trigger this state, the
+ * strength of the disruption, the activity level observed in the system (number
+ * of active component) and the loss of activity (the number of component
+ * inactivated by the associated action).
+ * 
+ */
+public class State {
+
+    private final Action trigger;
+    private final int disruption;
+    private final int observedActivity;
+    private final int controlledActivity;
+    private final int loss;
+
+<span class="fc" id="L38">    public State(Action trigger, int disruption, int observedActivity, int controlledActivity, int loss) {</span>
+<span class="fc" id="L39">        this.trigger = trigger;</span>
+<span class="fc" id="L40">        this.disruption = disruption;</span>
+<span class="fc" id="L41">        this.observedActivity = observedActivity;</span>
+<span class="fc" id="L42">        this.controlledActivity = controlledActivity;</span>
+<span class="fc" id="L43">        this.loss = loss;</span>
+<span class="fc" id="L44">    }</span>
+   
+    public void accept(DataSetListener listener) {
+<span class="fc" id="L47">        listener.enterState(this);</span>
+<span class="fc" id="L48">        listener.exitState(this); </span>
+<span class="fc" id="L49">    }</span>
+    
+    public Action getTrigger() {
+<span class="fc" id="L52">        return trigger;</span>
+    }
+
+    public int getDisruptionLevel() {
+<span class="fc" id="L56">        return disruption;</span>
+    }
+
+    public int getObservedActivityLevel() {
+<span class="fc" id="L60">        return observedActivity;</span>
+    }
+    
+    public int getControlledActivityLevel() {
+<span class="fc" id="L64">        return controlledActivity;</span>
+    }
+
+    public int getLoss() {
+<span class="fc" id="L68">        return loss;</span>
+    }
+
+    public State update(Action action, int observedAndActive, int controlledAndActive) {
+<span class="fc" id="L72">        return new State(action, disruption + 1, observedAndActive, controlledAndActive, observedActivity - observedAndActive);</span>
+    }
+
+    public String to(DataFormat format, int sequenceIndex) { 
+<span class="nc" id="L76">        return format.convert(sequenceIndex, trigger.toString(), disruption, observedActivity, loss);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

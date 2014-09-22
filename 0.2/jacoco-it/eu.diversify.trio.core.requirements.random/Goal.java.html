@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Goal.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core.requirements.random</a> &gt; <span class="el_source">Goal.java</span></div><h1>Goal.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio.core.requirements.random;
+
+import eu.diversify.trio.core.requirements.Nothing;
+import eu.diversify.trio.core.requirements.RequirementFactory;
+import eu.diversify.trio.core.requirements.Requirement;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Generate a random sequence of commands, sent to the builder
+ */
+public final class Goal {
+
+    private int variableCount;
+    private final Random random;
+    private final Builder generation;
+
+    public Goal(int variableCount) {
+<span class="nc" id="L53">        this(variableCount, new CachedLiteralFactory(variableCount));</span>
+<span class="nc" id="L54">    }</span>
+
+<span class="nc" id="L56">    public Goal(int variableCount, RequirementFactory factory) {</span>
+<span class="nc" id="L57">        this.variableCount = variableCount;</span>
+<span class="nc" id="L58">        this.random = new Random();</span>
+<span class="nc" id="L59">        this.generation = new Builder(factory);</span>
+
+<span class="nc" id="L61">    }</span>
+
+    public void setVariableCount(int variableCount) {
+<span class="nc" id="L64">        this.variableCount = variableCount;</span>
+<span class="nc" id="L65">    }</span>
+
+    public Requirement build(int desiredSize) {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (desiredSize == 0) {</span>
+<span class="nc" id="L69">            return Nothing.getInstance();</span>
+        }
+
+<span class="nc" id="L72">        generation.reset(desiredSize);</span>
+        do {
+<span class="nc" id="L74">            final Command command = pickAny(generation.possibleCommands());</span>
+<span class="nc" id="L75">            command.randomize(this);</span>
+<span class="nc" id="L76">            command.sendTo(generation);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        } while (generation.isRunning());</span>
+
+<span class="nc" id="L79">        return generation.getResult();</span>
+    }
+
+    private Command pickAny(List&lt;Command&gt; candidates) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (candidates.isEmpty()) {</span>
+<span class="nc" id="L84">            throw new IllegalArgumentException(&quot;Cannot pick from an empty collection&quot;);</span>
+        }
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (candidates.size() == 1) {</span>
+<span class="nc" id="L87">            return candidates.get(0);</span>
+        }
+<span class="nc" id="L89">        return candidates.get(random.nextInt(candidates.size()));</span>
+    }
+
+    public int randomLeafIndex() {
+<span class="nc" id="L93">        return random.nextInt(variableCount);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

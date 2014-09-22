@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TrioBaseVisitor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.builder</a> &gt; <span class="el_source">TrioBaseVisitor.java</span></div><h1>TrioBaseVisitor.java</h1><pre class="source lang-java linenums">// Generated from eu\diversify\trio\builder\Trio.g4 by ANTLR 4.3
+package eu.diversify.trio.builder;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+
+/**
+ * This class provides an empty implementation of {@link TrioVisitor},
+ * which can be extended to create a visitor which only needs to handle a subset
+ * of the available methods.
+ *
+ * @param &lt;T&gt; The return type of the visit operation. Use {@link Void} for
+ * operations with no return type.
+ */
+<span class="fc" id="L14">public class TrioBaseVisitor&lt;T&gt; extends AbstractParseTreeVisitor&lt;T&gt; implements TrioVisitor&lt;T&gt; {</span>
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L21">	@Override public T visitTags(@NotNull TrioParser.TagsContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L29">	@Override public T visitDisjunction(@NotNull TrioParser.DisjunctionContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L37">	@Override public T visitSystem(@NotNull TrioParser.SystemContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L45">	@Override public T visitComponent(@NotNull TrioParser.ComponentContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L53">	@Override public T visitTag(@NotNull TrioParser.TagContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L61">	@Override public T visitStrength(@NotNull TrioParser.StrengthContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L69">	@Override public T visitDescription(@NotNull TrioParser.DescriptionContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L77">	@Override public T visitReference(@NotNull TrioParser.ReferenceContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L85">	@Override public T visitBrackets(@NotNull TrioParser.BracketsContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L93">	@Override public T visitConjunction(@NotNull TrioParser.ConjunctionContext ctx) { return visitChildren(ctx); }</span>
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * &lt;p&gt;The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.&lt;/p&gt;
+	 */
+<span class="nc" id="L101">	@Override public T visitRequirements(@NotNull TrioParser.RequirementsContext ctx) { return visitChildren(ctx); }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

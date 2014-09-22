@@ -1,0 +1,16 @@
+eu.diversify.trio
+eu.diversify.trio.acceptance
+eu.diversify.trio.acceptance.driver
+eu.diversify.trio.unit
+eu.diversify.trio.unit.analysis
+eu.diversify.trio.unit.codecs
+eu.diversify.trio.unit.core
+eu.diversify.trio.unit.core.random
+eu.diversify.trio.unit.core.requirements
+eu.diversify.trio.unit.core.requirements.random
+eu.diversify.trio.unit.core.requirements.stats
+eu.diversify.trio.unit.core.statistics
+eu.diversify.trio.unit.data
+eu.diversify.trio.unit.filters
+eu.diversify.trio.unit.simulation
+eu.diversify.trio.unit.ui
