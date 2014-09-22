@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Evaluation.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core</a> &gt; <span class="el_source">Evaluation.java</span></div><h1>Evaluation.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio.core;
+
+import eu.diversify.trio.util.Require;
+import java.util.*;
+
+/**
+ * Iterate through the sub parts of a system and notifies the associated
+ * listener of the progress.
+ */
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">public class Evaluation {</span>
+
+    public static Evaluation evaluate(SystemVisitor visitor) {
+<span class="fc" id="L30">        return new Evaluation(visitor);</span>
+    }
+
+    public static Evaluation evaluate(SystemVisitor... visitors) {
+<span class="nc" id="L34">        return new Evaluation(new Dispatcher(visitors));</span>
+    }
+
+    private final SystemVisitor listener;
+    private final Deque&lt;Memento&gt; stack;
+
+<span class="fc" id="L40">    public Evaluation(SystemVisitor listener) {</span>
+<span class="fc" id="L41">        this.stack = new LinkedList&lt;Memento&gt;();</span>
+<span class="fc" id="L42">        this.listener = listener;</span>
+<span class="fc" id="L43">    }</span>
+
+    public void on(SystemPart singleRoot) {
+<span class="fc" id="L46">        on(Collections.singleton(singleRoot));</span>
+<span class="fc" id="L47">    }</span>
+
+    public void on(Collection&lt;SystemPart&gt; roots) {
+<span class="fc" id="L50">        this.stack.clear();</span>
+<span class="fc" id="L51">        this.stack.push(new Memento(roots));</span>
+<span class="fc" id="L52">        run();</span>
+<span class="fc" id="L53">    }</span>
+
+    private void run() {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        while (hasNext()) {</span>
+<span class="fc" id="L57">            next();</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    public boolean hasNext() {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        return !stack.isEmpty();</span>
+    }
+
+    public SystemPart next() {
+<span class="fc" id="L66">        Require.isTrue(hasNext(), &quot;There is no next element&quot;);</span>
+
+<span class="fc" id="L68">        final SystemPart next = currentPart().next();</span>
+<span class="fc" id="L69">        push(next);</span>
+<span class="fc" id="L70">        backtrack();</span>
+<span class="fc" id="L71">        return next;</span>
+    }
+
+    private void push(final SystemPart next) {
+<span class="fc" id="L75">        final Memento memento = new Memento(next);</span>
+<span class="fc" id="L76">        stack.push(memento);</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (listener != null) {</span>
+<span class="fc" id="L78">            next.begin(listener);</span>
+        }
+<span class="fc" id="L80">    }</span>
+
+    private void backtrack() {
+<span class="fc bfc" id="L83" title="All 4 branches covered.">        while (!stack.isEmpty() &amp;&amp; !currentPart().hasNext()) {</span>
+<span class="fc" id="L84">            pop();</span>
+        }
+
+<span class="pc bpc" id="L87" title="2 of 6 branches missed.">        assert stack.isEmpty() || currentPart().hasNext(): &quot;Wrong usage of the stack&quot;;</span>
+<span class="fc" id="L88">    }</span>
+
+    private void pop() {
+<span class="fc" id="L91">        final Memento memento = stack.pop();</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (listener != null) {</span>
+<span class="fc" id="L93">            memento.end(listener);</span>
+        }
+<span class="fc" id="L95">    }</span>
+
+    private Memento currentPart() {
+<span class="fc" id="L98">        return stack.peek();</span>
+    }
+
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    private static class Memento {</span>
+
+        private final SystemPart parent;
+        private final Iterator&lt;SystemPart&gt; children;
+
+        public Memento(Collection&lt;SystemPart&gt; children) {
+<span class="fc" id="L107">            this(null, children.iterator());</span>
+<span class="fc" id="L108">        }</span>
+
+        public Memento(SystemPart parent) {
+<span class="fc" id="L111">            this(parent, parent.subParts().iterator());</span>
+<span class="fc" id="L112">        }</span>
+
+<span class="fc" id="L114">        public Memento(SystemPart parent, Iterator&lt;SystemPart&gt; iterator) {</span>
+<span class="pc bpc" id="L115" title="2 of 4 branches missed.">            assert iterator != null: &quot;A 'null' iterator shall not be pushed on the stack!&quot;;</span>
+
+<span class="fc" id="L117">            this.parent = parent;</span>
+<span class="fc" id="L118">            this.children = iterator;</span>
+<span class="fc" id="L119">        }</span>
+
+        public boolean hasNext() {
+<span class="fc" id="L122">            return this.children.hasNext();</span>
+        }
+
+        public SystemPart next() {
+<span class="fc" id="L126">            return this.children.next();</span>
+        }
+
+        public void end(SystemVisitor visitor) {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">            if (parent != null) {</span>
+<span class="fc" id="L131">                parent.end(visitor);</span>
+            }
+<span class="fc" id="L133">        }</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

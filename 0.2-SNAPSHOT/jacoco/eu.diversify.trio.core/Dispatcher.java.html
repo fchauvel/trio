@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Dispatcher.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core</a> &gt; <span class="el_source">Dispatcher.java</span></div><h1>Dispatcher.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio.core;
+
+import eu.diversify.trio.core.requirements.Conjunction;
+import eu.diversify.trio.core.requirements.Disjunction;
+import eu.diversify.trio.core.requirements.Negation;
+import eu.diversify.trio.core.requirements.Nothing;
+import eu.diversify.trio.core.requirements.Require;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Dispatch visit events (i.e., enter, exit) to other visitors, to factor out
+ * the cost of traversing large models.
+ */
+public class Dispatcher extends DefaultSystemVisitor {
+
+    private final List&lt;SystemVisitor&gt; listeners;
+
+    public Dispatcher(SystemVisitor... listeners) {
+<span class="fc" id="L38">        this(Arrays.asList(listeners));</span>
+<span class="fc" id="L39">    }</span>
+
+<span class="fc" id="L41">    public Dispatcher(List&lt;SystemVisitor&gt; listeners) {</span>
+<span class="fc" id="L42">        eu.diversify.trio.util.Require.notNull(listeners, &quot;Invalid 'null' value provided as listeners!&quot;);</span>
+<span class="fc" id="L43">        eu.diversify.trio.util.Require.notEmpty(listeners, &quot;Invalid empty list [] provided as listeners!&quot;);</span>
+<span class="fc" id="L44">        this.listeners = new ArrayList&lt;SystemVisitor&gt;(listeners);</span>
+<span class="fc" id="L45">    }</span>
+
+    @Override
+    public final void enter(Nothing nothing) {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L50">            each.enter(nothing);</span>
+<span class="fc" id="L51">        }</span>
+<span class="fc" id="L52">    }</span>
+
+    @Override
+    public final void exit(Nothing nothing) {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L57">            each.exit(nothing);</span>
+<span class="fc" id="L58">        }</span>
+<span class="fc" id="L59">    }</span>
+
+    @Override
+    public final void enter(Require require) {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L64">            each.enter(require);</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">    }</span>
+
+    @Override
+    public final void exit(Require require) {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L71">            each.exit(require);</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">    }</span>
+
+    @Override
+    public final void enter(Conjunction conjunction) {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L78">            each.enter(conjunction);</span>
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">    }</span>
+
+    @Override
+    public final void exit(Conjunction conjunction) {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L85">            each.exit(conjunction);</span>
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">    }</span>
+
+    @Override
+    public final void enter(Disjunction disjunction) {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L92">            each.enter(disjunction);</span>
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">    }</span>
+
+    @Override
+    public final void exit(Disjunction disjunction) {
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L99">            each.exit(disjunction);</span>
+<span class="fc" id="L100">        }</span>
+<span class="fc" id="L101">    }</span>
+
+    @Override
+    public final void enter(Negation negation) {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L106">            each.enter(negation);</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
+
+    @Override
+    public final void exit(Negation negation) {
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L113">            each.exit(negation);</span>
+<span class="fc" id="L114">        }</span>
+<span class="fc" id="L115">    }</span>
+
+    @Override
+    public final void enter(Component component) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L120">            each.enter(component);</span>
+<span class="fc" id="L121">        }</span>
+<span class="fc" id="L122">    }</span>
+
+    @Override
+    public final void exit(Component component) {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L127">            each.exit(component);</span>
+<span class="fc" id="L128">        }</span>
+<span class="fc" id="L129">    }</span>
+
+    @Override
+    public final void enter(Tag tag) {
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L134">            each.enter(tag);</span>
+<span class="fc" id="L135">        }</span>
+<span class="fc" id="L136">    }</span>
+
+    @Override
+    public final void exit(Tag tag) {
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L141">            each.exit(tag);</span>
+<span class="fc" id="L142">        }</span>
+<span class="fc" id="L143">    }</span>
+    
+     @Override
+    public final void enter(System system) {
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L148">            each.enter(system);</span>
+<span class="fc" id="L149">        }</span>
+<span class="fc" id="L150">    }</span>
+
+    @Override
+    public final void exit(System system) {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for (SystemVisitor each: listeners) {</span>
+<span class="fc" id="L155">            each.exit(system);</span>
+<span class="fc" id="L156">        }</span>
+<span class="fc" id="L157">    }</span>
+
+    @Override
+    protected final void defaultVisit() {
+<span class="nc" id="L161">        throw new RuntimeException(&quot;Should never be called!&quot;);</span>
+    }
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
