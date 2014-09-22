@@ -2,6 +2,23 @@
  *
  * This file is part of TRIO.
  *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
  * TRIO is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
@@ -24,29 +41,29 @@ import eu.diversify.trio.simulation.Topology;
  */
 public class None extends AbstractAction {
 
-<span class="fc" id="L27">    private static final Object lock = new Object();</span>
+<span class="fc" id="L44">    private static final Object lock = new Object();</span>
     private static None instance;
 
     public static None getInstance() {
-<span class="fc" id="L31">        synchronized (lock) {</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">            if (instance == null) {</span>
-<span class="fc" id="L33">                instance = new None();</span>
+<span class="fc" id="L48">        synchronized (lock) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (instance == null) {</span>
+<span class="fc" id="L50">                instance = new None();</span>
             }
-<span class="pc" id="L35">        }</span>
-<span class="fc" id="L36">        return instance;</span>
+<span class="pc" id="L52">        }</span>
+<span class="fc" id="L53">        return instance;</span>
     }
 
-<span class="fc" id="L39">    private None() {</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L56">    private None() {</span>
+<span class="fc" id="L57">    }</span>
 
     @Override
     public Topology executeOn(Topology topology) {
-<span class="nc" id="L44">        return topology;</span>
+<span class="nc" id="L61">        return topology;</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L49">        return &quot;none&quot;;</span>
+<span class="fc" id="L66">        return &quot;none&quot;;</span>
     }
 
 }

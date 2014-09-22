@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CachedFactory.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core.requirements</a> &gt; <span class="el_source">CachedFactory.java</span></div><h1>CachedFactory.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/*
+ */
+package eu.diversify.trio.core.requirements;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ *
+ */
+public class CachedFactory extends RequirementFactory {
+
+//    private static class Cache&lt;T&gt; {
+//
+//        private final int capacity;
+//        private final Map&lt;Integer, SoftReference&lt;T&gt;&gt; cache;
+//
+//        public Cache() {
+//            this(10);
+//        }
+//
+//        public Cache(final int capacity) {
+//            this.capacity = capacity;
+//            this.cache = new LinkedHashMap&lt;Integer, SoftReference&lt;T&gt;&gt;(capacity) {
+//
+//                private static final long serialVersionUID = 1L;
+//
+//                @Override
+//                protected boolean removeEldestEntry(Map.Entry&lt;Integer, SoftReference&lt;T&gt;&gt; eldest) {
+//                    return size() &gt;= capacity;
+//                }
+//
+//            };
+//        }
+//
+//        private long access;
+//        private long failure;
+//
+//        public T get(int key) {
+//            access++;
+//            final SoftReference&lt;T&gt; entry = cache.get(key);
+//            if (entry == null) {
+//                failure++;
+//                return null;
+//            }
+//            //showHitRatio();
+//            return entry.get();
+//        }
+//
+//        public void put(int key, T object) {
+//
+//            cache.put(key, new SoftReference&lt;T&gt;(object));
+//        }
+//
+//        private void showHitRatio() {
+//            if (access % 1000 == 0) {
+//                double hits = access - failure;
+//                double ratio = 100 * hits / access;
+//                System.out.printf(&quot;HR: %.3f %% \n&quot;, ratio);
+//                access = 0;
+//                failure = 0;
+//            }
+//
+//        }
+//
+//    }
+    private final Map&lt;Integer, Requirement&gt; terminals;
+    //private final Cache&lt;Requirement&gt; subTrees;
+
+<span class="nc" id="L87">    public CachedFactory() {</span>
+<span class="nc" id="L88">        this.terminals = new HashMap&lt;Integer, Requirement&gt;();</span>
+        //this.subTrees = new Cache&lt;Requirement&gt;();
+<span class="nc" id="L90">    }</span>
+
+    public int terminalCount() {
+<span class="nc" id="L93">        return terminals.size();</span>
+    }
+
+    public Requirement nothing() {
+<span class="nc" id="L97">        return Nothing.getInstance();</span>
+    }
+
+    public Requirement createNegation(Requirement requirement) {
+//        return cachedNot(requirement);
+<span class="nc" id="L102">        return new Negation(requirement);</span>
+    }
+
+//    private Requirement cachedNot(Requirement requirement) {
+//        final int hash = Objects.hash(requirement);
+//        Requirement result = subTrees.get(hash);
+//        if (result == null) {
+//            result = new Negation(requirement);
+//            subTrees.put(hash, result);
+//        }
+//        return result;
+//    }
+    public Requirement createDisjunction(Requirement left, Requirement right) {
+        //      return cachedOr(left, right);
+<span class="nc" id="L116">        return new Disjunction(left, right);</span>
+    }
+
+//    private Requirement cachedOr(Requirement left, Requirement right) {
+//        final int hash = Objects.hash(BinaryOperator.Operator.AND, left, right);
+//        Requirement result = subTrees.get(hash);
+//        if (result == null) {
+//            result = new Disjunction(left, right);
+//            subTrees.put(hash, result);
+//        }
+//        return result;
+//    }
+    public Requirement createConjunction(Requirement left, Requirement right) {
+//       return cachedAnd(left, right);
+<span class="nc" id="L130">        return new Conjunction(left, right);</span>
+    }
+
+//    private Requirement cachedAnd(Requirement left, Requirement right) {
+//        final int hash = Objects.hash(BinaryOperator.Operator.AND, left, right);
+//        Requirement result = subTrees.get(hash);
+//        if (result == null) {
+//            result = new Conjunction(left, right);
+//            subTrees.put(hash, result);
+//        }
+//        return result;
+//    }
+    public Requirement createRequire(String componentName) {
+<span class="nc" id="L143">        final int hash = componentName.hashCode();</span>
+<span class="nc" id="L144">        Requirement result = terminals.get(hash);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (result == null) {</span>
+<span class="nc" id="L146">            result = new Require(componentName);</span>
+<span class="nc" id="L147">            terminals.put(hash, result);</span>
+        }
+<span class="nc" id="L149">        return result;</span>
+    }
+
+    public Requirement createRequire(int hash) {
+<span class="nc" id="L153">        Requirement result = terminals.get(hash);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (result == null) {</span>
+<span class="nc" id="L155">            result = new Require(&quot;C&quot; + hash);</span>
+<span class="nc" id="L156">            terminals.put(hash, result);</span>
+        }
+<span class="nc" id="L158">        return result;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

@@ -2,6 +2,23 @@
  *
  * This file is part of TRIO.
  *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
  * TRIO is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
@@ -27,57 +44,57 @@ import java.util.Collection;
  * The true boolean value. Singleton value
  *
  */
-<span class="fc" id="L30">public class Nothing extends Requirement {</span>
+<span class="fc" id="L47">public class Nothing extends Requirement {</span>
 
-<span class="fc" id="L32">    private static final Object lock = new Object();</span>
-<span class="fc" id="L33">    private static Nothing instance = null;</span>
+<span class="fc" id="L49">    private static final Object lock = new Object();</span>
+<span class="fc" id="L50">    private static Nothing instance = null;</span>
 
     public static Nothing getInstance() {
-<span class="fc" id="L36">        synchronized (lock) {</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (instance == null) {</span>
-<span class="fc" id="L38">                instance = new Nothing();</span>
+<span class="fc" id="L53">        synchronized (lock) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (instance == null) {</span>
+<span class="fc" id="L55">                instance = new Nothing();</span>
             }
-<span class="pc" id="L40">        }</span>
-<span class="fc" id="L41">        return instance;</span>
+<span class="pc" id="L57">        }</span>
+<span class="fc" id="L58">        return instance;</span>
     }
 
     public void begin(SystemVisitor visitor) {
-<span class="fc" id="L45">        visitor.enter(this);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L62">        visitor.enter(this);</span>
+<span class="fc" id="L63">    }</span>
 
     public void end(SystemVisitor visitor) {
-<span class="fc" id="L49">        visitor.exit(this);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L66">        visitor.exit(this);</span>
+<span class="fc" id="L67">    }</span>
 
     public final Collection&lt;SystemPart&gt; subParts() {
-<span class="fc" id="L53">        return new ArrayList&lt;SystemPart&gt;(0);</span>
+<span class="fc" id="L70">        return new ArrayList&lt;SystemPart&gt;(0);</span>
     }
 
     public boolean isSatisfiedBy(Topology population) {
-<span class="fc" id="L57">        return true;</span>
+<span class="fc" id="L74">        return true;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L62">        int hash = 7;</span>
-<span class="nc" id="L63">        hash = 89 * hash;</span>
-<span class="nc" id="L64">        return hash;</span>
+<span class="nc" id="L79">        int hash = 7;</span>
+<span class="nc" id="L80">        hash = 89 * hash;</span>
+<span class="nc" id="L81">        return hash;</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (obj == null) {</span>
-<span class="nc" id="L70">            return false;</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (obj == null) {</span>
+<span class="nc" id="L87">            return false;</span>
         }
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (getClass() != obj.getClass()) {</span>
-<span class="nc" id="L73">            return false;</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L90">            return false;</span>
         }
-<span class="fc" id="L75">        return true;</span>
+<span class="fc" id="L92">        return true;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L80">        return String.format(&quot;none&quot;);</span>
+<span class="nc" id="L97">        return String.format(&quot;none&quot;);</span>
     }
 
 }

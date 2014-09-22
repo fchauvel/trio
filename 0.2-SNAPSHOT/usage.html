@@ -108,7 +108,7 @@
           <i class="icon-chevron-right"></i>
         Project Information</a>
                   </li>
-                                                                                                      
+                                                                                                                                                                              
       <li>
   
                           <a href="project-reports.html" title="Project Reports">
@@ -164,7 +164,16 @@
 </ul>
 <p>The following command illustrates how to run TRIO from the command line</p>
 <p>Trio is a java application, which should be run from the command line. The following example show its primary usage.</p>
-<p>Usage: trio [options] input.trio where &#x2018;options&#x2019; are:  -o, &#x2013;observe=TAG the tag of the components whose activity shall be observed  -c, &#x2013;control=TAG the tag of the components whose activity shall be controlled  -r, &#x2013;runs=INTEGER the number of sample for statistical evidence  -t, &#x2013;trace=FILE the file where the generated data shall be stored Example: </p>
+
+<div class="source">
+<pre>Usage: trio [options] input.trio
+where 'options' are:
+  -o, --observe=TAG  the tag of the components whose activity shall be observed
+  -c, --control=TAG  the tag of the components whose activity shall be controlled
+  -r, --runs=INTEGER the number of sample for statistical evidence
+  -t, --trace=FILE   the file where the generated data shall be stored
+</pre></div>
+<p>Example: </p>
 
 <div class="source">
 <pre>trio -o result.csv --run=10000 system.trio

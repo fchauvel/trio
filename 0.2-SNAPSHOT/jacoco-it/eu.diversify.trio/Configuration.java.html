@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Configuration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio</a> &gt; <span class="el_source">Configuration.java</span></div><h1>Configuration.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+/**
+ * Singleton instance which load the configuration trio
+ */
+public class Configuration {
+
+    private static final String TEST = &quot;/test.properties&quot;;
+    private static final String MAIN = &quot;/main.properties&quot;;
+
+<span class="fc" id="L51">    private static final Map&lt;String, Configuration&gt; instances = new HashMap&lt;String, Configuration&gt;();</span>
+
+    public static Configuration forTest() {
+<span class="fc" id="L54">        return getInstance(TEST);</span>
+    }
+
+    public static Configuration forProduction() {
+<span class="nc" id="L58">        return getInstance(MAIN);</span>
+    }
+
+    private static Configuration getInstance(String key) {
+<span class="fc" id="L62">        Configuration result = instances.get(key);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (result == null) {</span>
+<span class="fc" id="L64">            result = new Configuration(key);</span>
+<span class="fc" id="L65">            instances.put(key, result);</span>
+        }
+<span class="fc" id="L67">        return result;</span>
+    }
+
+    private final Properties properties;
+
+<span class="fc" id="L72">    private Configuration(String source) {</span>
+<span class="fc" id="L73">        properties = new Properties();</span>
+<span class="fc" id="L74">        InputStream input = null;</span>
+        try {
+<span class="fc" id="L76">            input = Configuration.class.getResourceAsStream(source);</span>
+<span class="fc" id="L77">            properties.load(input);</span>
+
+<span class="nc" id="L79">        } catch (IOException ex) {</span>
+<span class="nc" id="L80">            throw new RuntimeException(ex);</span>
+
+        } finally {
+<span class="pc bpc" id="L83" title="3 of 4 branches missed.">            if (input != null) {</span>
+                try {
+<span class="pc" id="L85">                    input.close();</span>
+
+<span class="nc" id="L87">                } catch (IOException ex) {</span>
+<span class="nc" id="L88">                    throw new RuntimeException(&quot;Unable to close the stream to configuration&quot;, ex);</span>
+                
+<span class="pc" id="L90">                }</span>
+            }
+        }
+<span class="fc" id="L93">    }</span>
+
+    private String get(String key) {
+<span class="nc" id="L96">        return properties.getProperty(key);</span>
+    }
+
+    public String trioName() {
+<span class="nc" id="L100">        return get(&quot;trio.name&quot;);</span>
+    }
+
+    public String versionNumber() {
+<span class="nc" id="L104">        return get(&quot;trio.version&quot;);</span>
+    }
+
+    public String version() {
+<span class="nc" id="L108">        return String.format(&quot;%s v%s&quot;, trioName(), versionNumber());</span>
+    }
+
+    public String description() {
+<span class="nc" id="L112">        return get(&quot;trio.description&quot;);</span>
+    }
+
+    public String copyrightOwner() {
+<span class="nc" id="L116">        return get(&quot;trio.copyright.owner&quot;);</span>
+    }
+
+    public String copyrightYears() {
+<span class="nc" id="L120">        return get(&quot;trio.copyright.years&quot;);</span>
+    }
+
+    public String copyright() {
+<span class="nc" id="L124">        return String.format(&quot;Copyright (C) %s - %s&quot;, copyrightYears(), copyrightOwner());</span>
+    }
+
+    public String license() {
+<span class="nc" id="L128">        return get(&quot;trio.license&quot;);</span>
+    }
+
+    public String archive() {
+<span class="fc" id="L132">        return properties.getProperty(&quot;dist.file&quot;);</span>
+    }
+
+    public String pathToArchive() {
+<span class="fc" id="L136">        return workingDirectory() + &quot;/&quot; + archive();</span>
+    }
+
+    public String workingDirectory() {
+<span class="fc" id="L140">        return properties.getProperty(&quot;test.working.directory&quot;);</span>
+    }
+
+    public String jarFile() {
+<span class="fc" id="L144">        return properties.getProperty(&quot;dist.jar.name&quot;);</span>
+    }
+
+    public String distributionHome() {
+<span class="fc" id="L148">        return properties.getProperty(&quot;dist.home&quot;);</span>
+    }
+
+    public String installationDirectory() {
+<span class="fc" id="L152">        return workingDirectory() + &quot;/&quot; + distributionHome();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

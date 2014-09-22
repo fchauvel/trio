@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Gaussian.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.util.random</a> &gt; <span class="el_source">Gaussian.java</span></div><h1>Gaussian.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+
+package eu.diversify.trio.util.random;
+
+/**
+ * The normal distribution
+ */
+<span class="nc bnc" id="L25" title="All 2 branches missed.">public class Gaussian extends Distribution {</span>
+
+    private final double mean;
+    private final double variance;
+    private final double min;
+    private final double max;
+
+    public Gaussian(double mean, double variance) {
+<span class="nc" id="L33">        this(mean, variance, mean - LIMIT * variance, mean + LIMIT * variance);</span>
+<span class="nc" id="L34">    }</span>
+    
+    public Gaussian(double mean, double variance, double min, double max) {
+<span class="nc" id="L37">        super();</span>
+        
+<span class="nc bnc" id="L39" title="All 4 branches missed.">        assert variance &gt; 0D: String.format(&quot;Variance should be positive!&quot;);</span>
+        
+<span class="nc" id="L41">        this.mean = mean;</span>
+<span class="nc" id="L42">        this.variance = variance;</span>
+<span class="nc" id="L43">        this.min = min;</span>
+<span class="nc" id="L44">        this.max = max;</span>
+<span class="nc" id="L45">    }</span>
+    private static final int LIMIT = 4;
+
+    @Override
+    public double sample() {
+<span class="nc" id="L50">        final double draw = mean + generate().nextGaussian() * variance;</span>
+<span class="nc" id="L51">        return secure(draw);</span>
+    }
+    
+    private double secure(double draw) {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (draw &lt; min) {</span>
+<span class="nc" id="L56">            return min;</span>
+        }
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (draw &gt; max) {</span>
+<span class="nc" id="L59">            return max;</span>
+        }
+<span class="nc" id="L61">        return draw;</span>
+    }
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
