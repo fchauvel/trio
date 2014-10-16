@@ -1,0 +1,93 @@
+#
+# The OpenStack services and their dependencies
+#
+
+system: 
+    'Openstack Services'
+
+    
+components:
+
+    # The openstack dashboard
+    - Horizon           requires    Swift_Proxy and Glance_API and Nova_API and Cinder_API and Neutron_Server and Keystone_API
+    
+    #
+    # The Object Store
+    #
+    
+    - Swift_Proxy       requires    Account and Container and Object
+    - Account           requires    Account_DB
+    - Container         requires    Container_DB
+    - Object            requires    Object_Store
+    - Account_DB
+    - Container_DB
+    - Object_Store
+
+    
+    #
+    # Glance: The Image Service
+    #
+    
+    - Glance_API        requires    Swift_Proxy and Glance_Registry and Glance_DB and Keystone_API
+    - Glance_Registry   requires    Glance_DB
+    - Glance_DB
+    
+    
+    #
+    # Nova: The Compute Service
+    #
+    
+    - Nova_API          requires    Glance_API and Nova_DB and Nova_Queue and Keystone_API
+    - Nova_Queue        requires    Nova_API and Nova_Compute and Nova_Conductor and Nova_Scheduler
+    - Nova_Compute      requires    Nova_Queue and Hypervisor and Glance_API and Neutron_Server
+    - Nova_Conductor    requires    Nova_DB and Nova_Queue
+    - Nova_Scheduler    requires    Nova_DB and Nova_Queue
+    - Nova_DB           
+    - Hypervisor
+    
+    
+    #
+    # Cinder: Block Storage
+    #
+    
+    - Cinder_API        requires    Cinder_Volume and Keystone_API
+    - Cinder_Volume     requires    Nova_Queue and Volume_Provider and Cinder_DB
+    - Cinder_DB
+    - Cinder_Scheduler  requires    Cinder_DB and Nova_Queue
+    - Volume_Provider
+    
+    
+    #
+    # Neutron: OpenStack Networking
+    #
+    
+    - Neutron_Server    requires    Keystone_API and Neutron_Queue
+    - Neutron_Queue     requires    Neutron_Agent and Neutron_Plugin
+    - Neutron_Agent     requires    Network_Provider and Neutron_DB and Neutron_Queue
+    - Neutron_Plugin    requires    Neutron_DB and Neutron_Queue and Keystone_API
+    - Neutron_DB
+    - Network_Provider  requires    Neutron_Agent
+    
+    
+    #
+    # Keystone: Openstack Identity Service
+    #
+    
+    - Keystone_API      requires    Token_Backend and Catalog_Backend and Policy_Backend and Identity_Backend
+    - Token_Backend
+    - Catalog_Backend
+    - Policy_Backend
+    - Identity_Backend
+    
+    
+tags:
+    - 'frontends'     on  Horizon, Swift_Proxy, Glance_API, Nova_API, Neutron_Server, Keystone_API
+    - 'backends'      on  Account, Container, Object, Account_DB, Container_DB, Object_Store, 
+                          Glance_Registry, Glance_DB, Nova_Compute, Nova_DB, Nova_Queue, Nova_Scheduler,
+                          Nova_Conductor, Hypervisor, Cinder_Volume, Cinder_DB, Cinder_Scheduler, 
+                          Volume_Provider, Neutron_Agent, Neutron_Queue, Network_Provider, Neutron_DB, 
+                          Neutron_Plugin, Token_Backend, Catalog_Backend, Policy_Backend, 
+                          Identity_Backend
+
+
+    

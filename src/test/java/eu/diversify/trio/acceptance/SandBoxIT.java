@@ -39,6 +39,7 @@ import eu.diversify.trio.core.random.Generator;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.util.random.Distribution;
+import java.io.IOException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,37 +89,9 @@ public class SandBoxIT {
     }
     
     @Test
-    public void testBoolean() {
-        boolean wouldClose = true;
-        boolean bigEnough = true;
-        int state = (wouldClose?1:0) << 1 | (bigEnough?1:0) << 2;
+    public void openstackShouldLoadJustFine() throws IOException {
+        Trio trio = new Trio();
         
-        state = (true?1:0) << 1 | (true?1:0);
-        System.out.println("Result " + state);
-        state = (true?1:0) << 1 | (false?1:0);
-        System.out.println("Result " + state);
-        state = (false?1:0) << 1 | (true?1:0);
-        System.out.println("Result " + state);
-        state = (false?1:0) << 1 | (false?1:0);
-        System.out.println("Result " + state);
-        
-        
-    }
-    
-    @Test
-    public void testBooleanMasking() {
-        int mask41 = 0x01;
-        int mask42 = 0x02;
-        int mask43 = 0x04;
-        int mask44 = 0x08;
-        
-        int state = 0x0F;
-        
-        System.out.println(state & mask41);
-        System.out.println(state & mask42);
-        System.out.println(state & mask43);
-        System.out.println(state & mask44);
-                
-        
+        trio.loadSystemFrom("src/test/resources/samples/openstack.trio");
     }
 }

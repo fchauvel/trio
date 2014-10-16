@@ -39,7 +39,7 @@ following example show its primary usage.
 
 Example: 
 
-    trio -o result.csv --run=10000 system.trio
+    trio -t result.csv --run=10000 system.trio
 
 Below is an example of output of successful invocation
 
