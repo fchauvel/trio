@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.core;
 
 import eu.diversify.trio.data.DataSet;
@@ -86,18 +70,19 @@ public class System implements SystemPart {
             this.indexByName.put(each.getName(), counter);
             counter++;
         }
-        this.tags = validateTags(tags);
+
+        this.tags = new HashMap<String, Tag>();
+        for(Tag eachTag: tags) {
+            this.tags.put(eachTag.getLabel(), eachTag);
+        }
     }
 
-    private Map<String, Tag> validateTags(Collection<Tag> tags) {
-        final Map<String, Tag> results = new HashMap<String, Tag>();
-        for (Tag eachTag: tags) {
-            for (String eachTarget: eachTag.getTargets()) {
-                validate(eachTarget);
-            }
-            results.put(eachTag.getLabel(), eachTag);
+    private String validate(String componentName) throws IllegalArgumentException {
+        if (!indexByName.containsKey(componentName)) {
+            final String error = String.format("Syntax error: Unknown component '%s' (Components are: %s)", componentName, indexByName.keySet());
+            throw new IllegalArgumentException(error);
         }
-        return results;
+        return componentName;
     }
 
     public String getName() {
@@ -111,16 +96,21 @@ public class System implements SystemPart {
         return this.components.size();
     }
 
+    /**
+     * @param name the name of the component whose index is needed
+     * @return the index of the given component, is it exists, or null otherwise
+     */
     public int indexOf(String name) {
         return indexByName.get(validate(name));
     }
 
-    private String validate(String componentName) throws IllegalArgumentException {
-        if (!indexByName.containsKey(componentName)) {
-            final String error = String.format("Unknown component '%s' (Components are: %s)", componentName, indexByName.keySet());
-            throw new IllegalArgumentException(error);
-        }
-        return componentName;
+    /**
+     * @param componentName the name of component of interest
+     * @return true if there exists a component with the given name, false
+     * otherwise.
+     */
+    public boolean hasComponentNamed(String componentName) {
+        return indexByName.containsKey(componentName);
     }
 
     public Collection<SystemPart> subParts() {
@@ -133,10 +123,10 @@ public class System implements SystemPart {
     public void begin(SystemVisitor visitor) {
         visitor.enter(this);
     }
-    
+
     public void end(SystemVisitor visitor) {
         visitor.exit(this);
-    }    
+    }
 
     public Set<String> taggedAs(String tag) {
         return tags.get(tag).getTargets();

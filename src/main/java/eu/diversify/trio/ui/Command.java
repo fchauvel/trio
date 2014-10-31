@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.ui;
 
 import eu.diversify.trio.Configuration;
@@ -40,7 +24,10 @@ import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Distribution;
 import eu.diversify.trio.analysis.Metric;
+import eu.diversify.trio.codecs.SyntaxError;
 import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.validation.Inconsistency;
+import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
@@ -181,6 +168,9 @@ public class Command {
             out.println();
 
             final System system = trio.loadSystemFrom(inputFile);
+            
+            trio.validate(system);
+            
             out.println("SYSTEM: " + system.getName());
             final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
             out.println("SCENARIO: " + this.format(scenario));
@@ -192,10 +182,25 @@ public class Command {
 
             out.println();
             out.println("That's all folks!");
-        
+            
+        } catch (FileNotFoundException ex) {
+            out.println("Error: Unable to open '" + inputFile + "'");
+            
         } catch (IOException ex) {
             throw new RuntimeException("Unable to write on the given output stream", ex);
 
+        } catch (InvalidSystemException ex) {
+            out.println("Invalid model:");
+            for(Inconsistency each: ex.getErrors()) {
+                out.println(" - " + each.getDescription());
+            }
+                    
+        } catch (SyntaxError ex) {
+            out.println("Invalid model:");
+            for(String eachError: ex.getErrors()) {
+                out.println(" - " + eachError);
+            }
+        
         } finally {
             if (out != null) {
                 out.close();

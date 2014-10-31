@@ -37,7 +37,6 @@ package eu.diversify.trio.unit.core;
 import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.System;
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultSystemVisitor;
 import eu.diversify.trio.core.SystemVisitor;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Require;
@@ -103,6 +102,14 @@ public class SystemTest extends TestCase {
 
         assertThat(system.getComponent(0), is(equalTo(new Component("A"))));
         assertThat(system.getComponent(1), is(equalTo(new Component("B", require("A")))));
+    }
+
+    @Test
+    public void shouldValidateComponentNames() {
+        final System system = new System(new Component("A"), new Component("B", require("A")));
+
+        assertThat("component 'A' should exist", system.hasComponentNamed("A"));
+        assertThat("component 'X' should not exists", !system.hasComponentNamed("X"));
     }
 
     @Test

@@ -15,26 +15,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
+import eu.diversify.trio.codecs.SyntaxError;
 import eu.diversify.trio.core.random.Generator;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
@@ -89,7 +74,7 @@ public class SandBoxIT {
     }
     
     @Test
-    public void openstackShouldLoadJustFine() throws IOException {
+    public void openstackShouldLoadJustFine() throws IOException, SyntaxError {
         Trio trio = new Trio();
         
         trio.loadSystemFrom("src/test/resources/samples/openstack.trio");

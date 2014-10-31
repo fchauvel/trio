@@ -1,0 +1,15 @@
+#
+# A sample example that contains a unknown keyword
+#
+
+system: 
+    'SensApp'
+
+unknownKeyword:  # <--- ERROR
+    - Admin         requires    Notifier and Registry and Storage
+    - Notifier
+    - Registry      requires    Storage
+    - Dispatcher    requires    Notifier and Registry and Storage
+    - Storage       requires    DB
+    - DB
+    

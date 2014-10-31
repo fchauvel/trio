@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.acceptance.driver;
 
 import junit.framework.TestCase;
@@ -93,6 +77,18 @@ public class TrioResponseTest extends TestCase {
                 + "blablabla blabla";
         final TrioResponse sut = new TrioResponse(new DummyRun(stdout));
         sut.assertRobustnessAbout(0.1234, 1e-6);
+    }
+
+    @Test
+    public void shouldDetectInvalidModels() {
+        final TrioResponse sut = new TrioResponse(new DummyRun(" + Invalid model: \"Unknown keyword 'foo'\""));
+        sut.assertInvalidSystemDetected();
+    }
+
+    @Test(expected = AssertionError.class)
+    public void shouldNotTakeOtherErrorsForInvalidModels() {
+        final TrioResponse sut = new TrioResponse(new DummyRun(" +  Error: \"Unknown keyword 'foo'\""));
+        sut.assertInvalidSystemDetected();
     }
 
 }

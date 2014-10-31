@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.diversify.trio.codecs;
 
 import eu.diversify.trio.core.Component;
@@ -40,7 +41,7 @@ public class Builder {
     public static Builder build() {
         return new Builder();
     }
-    
+
     public Requirement requirementFrom(String text) {
         TrioLexer lexer = new TrioLexer(new ANTLRInputStream(text));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -64,14 +65,19 @@ public class Builder {
         ParseTree tree = parser.system();
         return tree.accept(new SystemBuilder());
     }
-    
-    public System systemFrom(InputStream input) throws IOException {
+
+    public System systemFrom(InputStream input) throws IOException, SyntaxError {
+        SystemErrorListener listener = new SystemErrorListener();
         TrioLexer lexer = new TrioLexer(new ANTLRInputStream(input));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(listener);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TrioParser parser = new TrioParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(listener);
         ParseTree tree = parser.system();
+        listener.abortIfAnyError();
         return tree.accept(new SystemBuilder());
     }
-   
 
 }
