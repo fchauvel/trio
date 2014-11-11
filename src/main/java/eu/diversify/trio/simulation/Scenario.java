@@ -54,7 +54,7 @@ public abstract class Scenario {
     
 
     public final Topology instantiate(DataSet report) {
-        final Trace trace = new Trace(system.getComponentNames().size());
+        final Trace trace = new Trace(observation.resolve(system).size(), control.resolve(system).size());
         report.include(trace);
         return new Topology(system, observation, control, new Listener(trace));
     }

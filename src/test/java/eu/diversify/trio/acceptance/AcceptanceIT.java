@@ -56,24 +56,24 @@ public class AcceptanceIT extends TestCase {
 
         results.add(new Object[]{"UCC sensapp", "'*'", "'*'", "samples/sensapp.trio", 0.15});
         results.add(new Object[]{"UCC topo. no.1", "'*'", "'*'", "samples/sensapp_topo1.trio", 0.14});
-        results.add(new Object[]{"UCC topo. no.1 service/infra", "service", "infra", "samples/sensapp_topo1.trio", 0.01});
-        results.add(new Object[]{"UCC topo. no.1 service/platform", "service", "platform", "samples/sensapp_topo1.trio", 0.02});
+        results.add(new Object[]{"UCC topo. no.1 service/infra", "service", "infra", "samples/sensapp_topo1.trio", 0.2});
+        results.add(new Object[]{"UCC topo. no.1 service/platform", "service", "platform", "samples/sensapp_topo1.trio", 0.14});
         
         results.add(new Object[]{"UCC topo. no.2", "'*'", "'*'", "samples/sensapp_topo2.trio", 0.15});
-        results.add(new Object[]{"UCC topo. no.2 service/infra", "service", "infra", "samples/sensapp_topo2.trio", 0.01});
-        results.add(new Object[]{"UCC topo. no.2 service/platform", "service", "platform", "samples/sensapp_topo2.trio", 0.02});
+        results.add(new Object[]{"UCC topo. no.2 service/infra", "service", "infra", "samples/sensapp_topo2.trio", 0.2});
+        results.add(new Object[]{"UCC topo. no.2 service/platform", "service", "platform", "samples/sensapp_topo2.trio", 0.13});
         
         results.add(new Object[]{"UCC topo. no.3", "'*'", "'*'", "samples/sensapp_topo3.trio", 0.15});
-        results.add(new Object[]{"UCC topo. no.3 service/infra", "service", "infra", "samples/sensapp_topo3.trio", 0.01});
+        results.add(new Object[]{"UCC topo. no.3 service/infra", "service", "infra", "samples/sensapp_topo3.trio", 0.17});
         results.add(new Object[]{"UCC topo. no.3 service/platform", "service", "platform", "samples/sensapp_topo3.trio", 0.01});
         
         results.add(new Object[]{"UCC topo. no.4", "'*'", "'*'", "samples/sensapp_topo4.trio", 0.19});
-        results.add(new Object[]{"UCC topo. no.4 service/infra", "service", "infra", "samples/sensapp_topo4.trio", 0.02});
-        results.add(new Object[]{"UCC topo. no.4 service/platform", "service", "platform", "samples/sensapp_topo4.trio", 0.02});
+        results.add(new Object[]{"UCC topo. no.4 service/infra", "service", "infra", "samples/sensapp_topo4.trio", 0.32});
+        results.add(new Object[]{"UCC topo. no.4 service/platform", "service", "platform", "samples/sensapp_topo4.trio", 0.14});
       
         results.add(new Object[]{"UCC topo. no.5", "'*'", "'*'", "samples/sensapp_topo5.trio", 0.20});
-        results.add(new Object[]{"UCC topo. no.5 service/infra", "service", "infra", "samples/sensapp_topo5.trio", 0.01});
-        results.add(new Object[]{"UCC topo. no.5 service/platform", "service", "platform", "samples/sensapp_topo5.trio", 0.01});
+        results.add(new Object[]{"UCC topo. no.5 service/infra", "service", "infra", "samples/sensapp_topo5.trio", 0.3});
+        results.add(new Object[]{"UCC topo. no.5 service/platform", "service", "platform", "samples/sensapp_topo5.trio", 0.13});
               
         results.add(new Object[]{"UCC sensapp types", "'*'", "'*'", "samples/sensapp_types.trio", 0.26});
 
