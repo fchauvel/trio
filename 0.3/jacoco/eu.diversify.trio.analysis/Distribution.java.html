@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Distribution.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.analysis</a> &gt; <span class="el_source">Distribution.java</span></div><h1>Distribution.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+package eu.diversify.trio.analysis;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+public class Distribution {
+
+    private final String name;
+    private final Map&lt;String, List&lt;Double&gt;&gt; values;
+
+    public Distribution() {
+<span class="fc" id="L36">        this(&quot;anaonymous&quot;);</span>
+<span class="fc" id="L37">    }</span>
+
+<span class="fc" id="L39">    public Distribution(String name) {</span>
+<span class="fc" id="L40">        this.name = name;</span>
+<span class="fc" id="L41">        this.values = new HashMap&lt;String, List&lt;Double&gt;&gt;();</span>
+<span class="fc" id="L42">    }</span>
+    
+    public String getName() {
+<span class="nc" id="L45">        return name;</span>
+    }
+
+    public void clear() {
+<span class="fc" id="L49">        values.clear();</span>
+<span class="fc" id="L50">    }</span>
+
+    public double mean() {
+<span class="fc" id="L53">        return mean.of(values());</span>
+    }
+
+    public void record(String key, double value) {
+<span class="fc" id="L57">        List&lt;Double&gt; list = values.get(key);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (list == null) {</span>
+<span class="fc" id="L59">            list = new ArrayList&lt;Double&gt;();</span>
+<span class="fc" id="L60">            values.put(key, list);</span>
+        }
+<span class="fc" id="L62">        list.add(value);</span>
+<span class="fc" id="L63">    }</span>
+
+    public List&lt;Double&gt; valuesOf(String key) {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (!values.containsKey(key)) {</span>
+<span class="nc" id="L67">            final String error = String.format(&quot;Unknown key '%s'&quot;, key);</span>
+<span class="nc" id="L68">            throw new IllegalArgumentException(error);</span>
+        }
+<span class="fc" id="L70">        return values.get(key);</span>
+    }
+
+    public List&lt;Double&gt; values() {
+<span class="fc" id="L74">        final List&lt;Double&gt; results = new ArrayList&lt;Double&gt;();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (List&lt;Double&gt; eachValueList: values.values()) {</span>
+<span class="fc" id="L76">            results.addAll(eachValueList);</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">        return results;</span>
+    }
+
+    public double probabilityOf(String key) {
+<span class="fc" id="L82">        return ((double) valuesOf(key).size()) / values().size();</span>
+    }
+
+    public double expectedValueOf(String key, Function function) {
+<span class="nc" id="L86">        return probabilityOf(key) * function.of(valuesOf(key));</span>
+    }
+
+    public SortedMap&lt;String, Double&gt; ranking(Function function) {
+<span class="nc" id="L90">        final SortedMap&lt;String, Double&gt; results = new TreeMap&lt;String, Double&gt;();</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for (String eachKey: values.keySet()) {</span>
+<span class="nc" id="L92">            results.put(eachKey, function.of(valuesOf(eachKey)));</span>
+<span class="nc" id="L93">        }</span>
+<span class="nc" id="L94">        return results;</span>
+    }
+
+    public SortedMap&lt;String, Double&gt; byDecreasingExpectedValue(Function function) {
+<span class="fc" id="L98">        final Map&lt;String, Double&gt; base = new HashMap&lt;String, Double&gt;();</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        for (String eachKey: values.keySet()) {</span>
+<span class="nc" id="L100">            base.put(eachKey, expectedValueOf(eachKey, function));</span>
+<span class="nc" id="L101">        }</span>
+<span class="fc" id="L102">        final SortedMap&lt;String, Double&gt; results = new TreeMap&lt;String, Double&gt;(new Decreasing(base));</span>
+<span class="fc" id="L103">        results.putAll(base);</span>
+<span class="fc" id="L104">        return results;</span>
+    }
+    
+     public SortedMap&lt;String, Double&gt; byIncreasingExpectedValue(Function function) {
+<span class="nc" id="L108">        final Map&lt;String, Double&gt; base = new HashMap&lt;String, Double&gt;();</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        for (String eachKey: values.keySet()) {</span>
+<span class="nc" id="L110">            base.put(eachKey, expectedValueOf(eachKey, function));</span>
+<span class="nc" id="L111">        }</span>
+<span class="nc" id="L112">        final SortedMap&lt;String, Double&gt; results = new TreeMap&lt;String, Double&gt;(new Increasing(base));</span>
+<span class="nc" id="L113">        results.putAll(base);</span>
+<span class="nc" id="L114">        return results;</span>
+    }
+
+    private static class Decreasing implements Comparator&lt;String&gt;, Serializable {
+        
+        private static final long serialVersionUID = 1L;
+
+        Map&lt;String, Double&gt; base;
+
+<span class="fc" id="L123">        public Decreasing(Map&lt;String, Double&gt; base) {</span>
+<span class="fc" id="L124">            this.base = base;</span>
+<span class="fc" id="L125">        }</span>
+
+        // Note: this comparator imposes orderings that are inconsistent with equals.    
+        public int compare(String a, String b) {
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (base.get(a) &gt;= base.get(b)) {</span>
+<span class="nc" id="L130">                return -1;</span>
+            } else {
+<span class="nc" id="L132">                return 1;</span>
+            } // returning 0 would merge keys
+        }
+    }
+    
+    private static class Increasing implements Comparator&lt;String&gt;, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        Map&lt;String, Double&gt; base;
+
+<span class="nc" id="L142">        public Increasing(Map&lt;String, Double&gt; base) {</span>
+<span class="nc" id="L143">            this.base = base;</span>
+<span class="nc" id="L144">        }</span>
+
+        // Note: this comparator imposes orderings that are inconsistent with equals.    
+        public int compare(String a, String b) {
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if (base.get(a) &lt;= base.get(b)) {</span>
+<span class="nc" id="L149">                return -1;</span>
+            } else {
+<span class="nc" id="L151">                return 1;</span>
+            } // returning 0 would merge keys
+        }
+    }
+
+    public interface Function {
+
+        double of(List&lt;Double&gt; values);
+
+    }
+
+<span class="fc" id="L162">    public static final Function mean = new Mean();</span>
+
+<span class="fc" id="L164">    private static class Mean implements Function {</span>
+
+        public double of(List&lt;Double&gt; values) {
+<span class="fc" id="L167">            double sum = 0;</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            for (double eachValue: values) {</span>
+<span class="fc" id="L169">                sum += eachValue;</span>
+<span class="fc" id="L170">            }</span>
+<span class="fc" id="L171">            return sum / values.size();</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

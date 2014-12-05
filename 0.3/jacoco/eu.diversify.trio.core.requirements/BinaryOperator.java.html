@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BinaryOperator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core.requirements</a> &gt; <span class="el_source">BinaryOperator.java</span></div><h1>BinaryOperator.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+/*
+ */
+package eu.diversify.trio.core.requirements;
+
+import eu.diversify.trio.util.Require;
+import eu.diversify.trio.core.SystemPart;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ *
+ */
+public abstract class BinaryOperator extends Requirement {
+
+
+    private final LogicalOperator operator;
+    private final Requirement left;
+    private final Requirement right;
+
+<span class="fc" id="L39">    public BinaryOperator(LogicalOperator operator, Requirement left, Requirement right) {</span>
+<span class="fc" id="L40">        Require.notNull(operator, &quot;'null' given as operator!&quot;);</span>
+<span class="fc" id="L41">        this.operator = operator;</span>
+
+<span class="fc" id="L43">        Require.notNull(left, &quot;'null' given as left operand!&quot;);</span>
+<span class="fc" id="L44">        this.left = left;</span>
+
+<span class="fc" id="L46">        Require.notNull(right, &quot;'null' given as right operator&quot;);</span>
+<span class="fc" id="L47">        this.right = right;</span>
+<span class="fc" id="L48">    }</span>
+
+    public Requirement getLeft() {
+<span class="fc" id="L51">        return left;</span>
+    }
+
+    public Requirement getRight() {
+<span class="fc" id="L55">        return right;</span>
+    }
+
+    public final Collection&lt;SystemPart&gt; subParts() {
+<span class="fc" id="L59">        final List&lt;SystemPart&gt; parts = new ArrayList&lt;SystemPart&gt;(2);</span>
+<span class="fc" id="L60">        parts.add(left);</span>
+<span class="fc" id="L61">        parts.add(right);</span>
+<span class="fc" id="L62">        return parts;</span>
+    }
+
+<span class="fc" id="L65">    private int hash = 0;</span>
+
+    @Override
+    public final int hashCode() {
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (hash == 0) {</span>
+<span class="nc" id="L70">            hash = Objects.hash(operator, left, right);</span>
+        }
+<span class="nc" id="L72">        return hash;</span>
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (obj == null) {</span>
+<span class="nc" id="L78">            return false;</span>
+        }
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L81">            return false;</span>
+        }
+<span class="fc" id="L83">        final BinaryOperator other = (BinaryOperator) obj;</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (this.operator != other.operator) {</span>
+<span class="nc" id="L85">            return false;</span>
+        }
+<span class="pc bpc" id="L87" title="2 of 6 branches missed.">        if (this.left != other.left &amp;&amp; (this.left == null || !this.left.equals(other.left))) {</span>
+<span class="nc" id="L88">            return false;</span>
+        }
+<span class="pc bpc" id="L90" title="2 of 6 branches missed.">        if (this.right != other.right &amp;&amp; (this.right == null || !this.right.equals(other.right))) {</span>
+<span class="nc" id="L91">            return false;</span>
+        }
+<span class="fc" id="L93">        return true;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

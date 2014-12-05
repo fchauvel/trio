@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Generator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.core.random</a> &gt; <span class="el_source">Generator.java</span></div><h1>Generator.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.diversify.trio.core.random;
+
+import eu.diversify.trio.core.Component;
+import eu.diversify.trio.core.requirements.Requirement;
+import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Tag;
+import eu.diversify.trio.core.requirements.RequirementFactory;
+import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
+import eu.diversify.trio.core.requirements.random.Goal;
+import eu.diversify.trio.util.random.Distribution;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Generate randomised system description
+ */
+public class Generator {
+
+    private final RequirementFactory factory;
+    private final Goal goal;
+
+<span class="fc" id="L40">    public Generator() {</span>
+<span class="fc" id="L41">        this.factory = new CachedLiteralFactory(10000);</span>
+<span class="fc" id="L42">        this.goal = new Goal(10000, factory);</span>
+<span class="fc" id="L43">    }</span>
+
+    public System system(int componentCount, Distribution valence) {
+<span class="fc" id="L46">        goal.setVariableCount(componentCount);</span>
+<span class="fc" id="L47">        final Component[] components = new Component[componentCount];</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (int index = 0; index &lt; componentCount; index++) {</span>
+<span class="fc" id="L49">            final int dependencyCount = (int) valence.sample();</span>
+<span class="fc" id="L50">            components[index] = component(index, dependencyCount);</span>
+        }
+<span class="fc" id="L52">        final List&lt;Tag&gt; tags = new ArrayList&lt;Tag&gt;(1);</span>
+<span class="fc" id="L53">        return new System(&quot;randomly generated&quot;, Arrays.asList(components), tags);</span>
+    }
+
+    public Component component(int index, int dependencyCount) {
+<span class="fc" id="L57">        Requirement dependencies = goal.build(dependencyCount); </span>
+<span class="fc" id="L58">        return new Component(&quot;C&quot; + index, dependencies);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

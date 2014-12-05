@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Command.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.ui</a> &gt; <span class="el_source">Command.java</span></div><h1>Command.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+package eu.diversify.trio.ui;
+
+import eu.diversify.trio.Configuration;
+import eu.diversify.trio.simulation.RandomFailureSequence;
+import eu.diversify.trio.Trio;
+import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.Distribution;
+import eu.diversify.trio.analysis.Metric;
+import eu.diversify.trio.codecs.SyntaxError;
+import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.validation.Inconsistency;
+import eu.diversify.trio.core.validation.InvalidSystemException;
+import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.filter.All;
+import eu.diversify.trio.filter.Filter;
+import eu.diversify.trio.filter.TaggedAs;
+import eu.diversify.trio.simulation.Scenario;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * The options which can be passed to trio
+ */
+public class Command {
+
+    public static final String DEFAULT_CONTROL = &quot;*&quot;;
+    public static final String DEFAULT_OBSERVATION = &quot;*&quot;;
+    public static final String DEFAULT_OUTPUT_FILE = &quot;results.csv&quot;;
+    public static final int DEFAULT_RUN_COUNT = 1000;
+
+    public static Command from(String[] commandLine) {
+<span class="nc" id="L53">        return new Command(commandLine);</span>
+    }
+
+    public static Command from(String commandLine) {
+<span class="nc" id="L57">        return from(commandLine.split(&quot;\\s+&quot;));</span>
+    }
+
+    private String observation;
+    private String control;
+    private String inputFile;
+    private String outputFile;
+    private int runCount;
+
+<span class="nc" id="L66">    private Command(String[] commandLine) {</span>
+<span class="nc" id="L67">        final List&lt;String&gt; parameters = Arrays.asList(commandLine);</span>
+<span class="nc" id="L68">        outputFile = DEFAULT_OUTPUT_FILE;</span>
+<span class="nc" id="L69">        runCount = DEFAULT_RUN_COUNT;</span>
+<span class="nc" id="L70">        observation = DEFAULT_OBSERVATION;</span>
+<span class="nc" id="L71">        control = DEFAULT_CONTROL;</span>
+<span class="nc" id="L72">        extractOptions(parameters);</span>
+<span class="nc" id="L73">    }</span>
+
+    private void extractOptions(List&lt;String&gt; parameters) {
+<span class="nc" id="L76">        final Iterator&lt;String&gt; command = parameters.iterator();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        while (command.hasNext()) {</span>
+<span class="nc" id="L78">            final String parameter = command.next();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (parameter.matches(&quot;.*\\.trio&quot;)) {</span>
+<span class="nc" id="L80">                inputFile = parameter;</span>
+<span class="nc" id="L81">                break;</span>
+
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            } else if (parameter.startsWith(&quot;--&quot;)) {</span>
+<span class="nc" id="L84">                parseLongOptions(parameter);</span>
+
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            } else if (parameter.startsWith(&quot;-&quot;)) {</span>
+<span class="nc" id="L87">                parseShortOptions(command, parameter);</span>
+
+            } else {
+<span class="nc" id="L90">                final String error = String.format(&quot;Unknown argument '%s'. Expecting either a path to a TRIO file or an option.&quot;, parameter);</span>
+<span class="nc" id="L91">                throw new IllegalArgumentException(error);</span>
+            }
+<span class="nc" id="L93">        }</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (inputFile == null) {</span>
+<span class="nc" id="L95">            throw new IllegalArgumentException(&quot;Missing input TRIO file!&quot;);</span>
+        }
+<span class="nc" id="L97">    }</span>
+
+    private void parseShortOptions(final Iterator&lt;String&gt; command, final String eachParameter) throws IllegalArgumentException {
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (!command.hasNext()) {</span>
+<span class="nc" id="L101">            final String error = String.format(&quot;Missing value after '%s'&quot;, eachParameter);</span>
+<span class="nc" id="L102">            throw new IllegalArgumentException(error);</span>
+        }
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (eachParameter.equals(&quot;-o&quot;)) {</span>
+<span class="nc" id="L105">            observation = command.next();</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        } else if (eachParameter.equals(&quot;-c&quot;)) {</span>
+<span class="nc" id="L108">            control = command.next();</span>
+
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        } else if (eachParameter.equals(&quot;-t&quot;)) {</span>
+<span class="nc" id="L111">            outputFile = command.next();</span>
+
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        } else if (eachParameter.equals(&quot;-r&quot;)) {</span>
+<span class="nc" id="L114">            extractRunCountFrom(command.next());</span>
+
+        } else {
+<span class="nc" id="L117">            final String error = String.format(&quot;Unknown short option '%s'&quot;, eachParameter);</span>
+<span class="nc" id="L118">            throw new IllegalArgumentException(error);</span>
+        }
+<span class="nc" id="L120">    }</span>
+
+    private void parseLongOptions(final String eachParameter) throws IllegalArgumentException {
+<span class="nc" id="L123">        final String parts[] = eachParameter.split(&quot;=&quot;);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (parts[0].equals(&quot;--trace&quot;)) {</span>
+<span class="nc" id="L125">            outputFile = parts[1];</span>
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        } else if (parts[0].equals(&quot;--observe&quot;)) {</span>
+<span class="nc" id="L128">            observation = parts[1];</span>
+
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        } else if (parts[0].equals(&quot;--control&quot;)) {</span>
+<span class="nc" id="L131">            control = parts[1];</span>
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        } else if (parts[0].equals(&quot;--runs&quot;)) {</span>
+<span class="nc" id="L134">            extractRunCountFrom(parts[1]);</span>
+
+        } else {
+<span class="nc" id="L137">            final String error = String.format(&quot;Unknown long option '%s'! Expecting either '--runs' or '--output'&quot;, parts[0]);</span>
+<span class="nc" id="L138">            throw new IllegalArgumentException(error);</span>
+        }
+<span class="nc" id="L140">    }</span>
+
+    private void extractRunCountFrom(String text) throws IllegalArgumentException {
+        try {
+<span class="nc" id="L144">            runCount = Integer.parseInt(text);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (runCount &lt; 1) {</span>
+<span class="nc" id="L146">                final String error = String.format(&quot;Run count shall be at least 1! (found %d)&quot;, runCount);</span>
+<span class="nc" id="L147">                throw new IllegalArgumentException(error);</span>
+            }
+
+<span class="nc" id="L150">        } catch (NumberFormatException ex) {</span>
+<span class="nc" id="L151">            final String error = String.format(&quot;Invalid number of runs '%s&quot;, text);</span>
+<span class="nc" id="L152">            throw new IllegalArgumentException(error);</span>
+
+<span class="nc" id="L154">        }</span>
+<span class="nc" id="L155">    }</span>
+
+    public void execute(Trio trio, OutputStream output) throws IOException {
+<span class="nc" id="L158">        final Configuration config = Configuration.forProduction();</span>
+
+<span class="nc" id="L160">        PrintStream out = null;</span>
+
+        try {
+<span class="nc" id="L163">            out = new PrintStream(output, AUTO_FLUSH, UTF_8);</span>
+
+<span class="nc" id="L165">            out.println(config.version() + &quot; -- &quot; + config.description());</span>
+<span class="nc" id="L166">            out.println(config.copyright());</span>
+<span class="nc" id="L167">            out.println(&quot;Licensed under &quot; + config.license());</span>
+<span class="nc" id="L168">            out.println();</span>
+
+<span class="nc" id="L170">            final System system = trio.loadSystemFrom(inputFile);</span>
+            
+<span class="nc" id="L172">            trio.validate(system);</span>
+            
+<span class="nc" id="L174">            out.println(&quot;SYSTEM: &quot; + system.getName());</span>
+<span class="nc" id="L175">            final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());</span>
+<span class="nc" id="L176">            out.println(&quot;SCENARIO: &quot; + this.format(scenario));</span>
+
+<span class="nc" id="L178">            final DataSet data = trio.run(scenario, runCount);</span>
+<span class="nc" id="L179">            trio.saveDataAs(data, outputFile);</span>
+
+<span class="nc" id="L181">            report(trio.analyse(data), out);</span>
+
+<span class="nc" id="L183">            out.println();</span>
+<span class="nc" id="L184">            out.println(&quot;That's all folks!&quot;);</span>
+            
+<span class="nc" id="L186">        } catch (FileNotFoundException ex) {</span>
+<span class="nc" id="L187">            out.println(&quot;Error: Unable to open '&quot; + inputFile + &quot;'&quot;);</span>
+            
+<span class="nc" id="L189">        } catch (IOException ex) {</span>
+<span class="nc" id="L190">            throw new RuntimeException(&quot;Unable to write on the given output stream&quot;, ex);</span>
+
+<span class="nc" id="L192">        } catch (InvalidSystemException ex) {</span>
+<span class="nc" id="L193">            out.println(&quot;Invalid model:&quot;);</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">            for(Inconsistency each: ex.getErrors()) {</span>
+<span class="nc" id="L195">                out.println(&quot; - &quot; + each.getDescription());</span>
+<span class="nc" id="L196">            }</span>
+                    
+<span class="nc" id="L198">        } catch (SyntaxError ex) {</span>
+<span class="nc" id="L199">            out.println(&quot;Invalid model:&quot;);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            for(String eachError: ex.getErrors()) {</span>
+<span class="nc" id="L201">                out.println(&quot; - &quot; + eachError);</span>
+<span class="nc" id="L202">            }</span>
+        
+        } finally {
+<span class="nc bnc" id="L205" title="All 10 branches missed.">            if (out != null) {</span>
+<span class="nc" id="L206">                out.close();</span>
+            }
+        }
+<span class="nc" id="L209">    }</span>
+    private static final boolean AUTO_FLUSH = true;
+    private static final String UTF_8 = &quot;UTF-8&quot;;
+
+    private Filter observation() {
+<span class="nc" id="L214">        return parseTag(observation);</span>
+    }
+
+    private Filter control() {
+<span class="nc" id="L218">        return parseTag(control);</span>
+    }
+
+    private Filter parseTag(String tag) {
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (tag.contains(&quot;*&quot;)) {</span>
+<span class="nc" id="L223">            return All.getInstance();</span>
+        }
+<span class="nc" id="L225">        return new TaggedAs(tag);</span>
+    }
+
+    private void report(Analysis analyzer, PrintStream out) {
+<span class="nc" id="L229">        out.println(&quot;INDICATORS:&quot;);</span>
+<span class="nc" id="L230">        out.printf(&quot; + Robustness: %.4f%n&quot;, getRobustness(analyzer).distribution().mean());</span>
+<span class="nc" id="L231">        out.println(&quot; + Five most sensitive components:&quot;);</span>
+<span class="nc" id="L232">        int counter = 1;</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        for (Map.Entry&lt;String, Double&gt; entry: getLoss(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {</span>
+<span class="nc" id="L234">            out.printf(&quot;   %d: %.4e %s%n&quot;, counter++, entry.getValue(), entry.getKey().replaceAll(&quot;inactivate&quot;, &quot;&quot;));</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">            if (counter &gt; 5) {</span>
+<span class="nc" id="L236">                break;</span>
+            }
+<span class="nc" id="L238">        }</span>
+<span class="nc" id="L239">        reportHarmfulSequences(out, analyzer);</span>
+<span class="nc" id="L240">    }</span>
+
+    public void reportHarmfulSequences(PrintStream out, Analysis analyzer) {
+<span class="nc" id="L243">        out.println(&quot; + Five most harmful sequences:&quot;);</span>
+<span class="nc" id="L244">        int counter = 1;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        for (Map.Entry&lt;String, Double&gt; entry: getFragility(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {</span>
+<span class="nc" id="L246">            out.printf(&quot;   %d: %.4e %s%n&quot;, counter++, entry.getValue(), entry.getKey().replaceAll(&quot;inactivate&quot;, &quot;&quot;));</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            if (counter &gt; 5) {</span>
+<span class="nc" id="L248">                break;</span>
+            }
+<span class="nc" id="L250">        }</span>
+<span class="nc" id="L251">    }</span>
+
+    public static Metric getRobustness(Analysis analyzer) {
+<span class="nc" id="L254">        return analyzer.metric(&quot;norm. robustness&quot;);</span>
+    }
+
+    public static Metric getFragility(Analysis analyzer) {
+<span class="nc" id="L258">        return analyzer.metric(&quot;fragility&quot;);</span>
+    }
+
+    public static Metric getLoss(Analysis analyzer) {
+<span class="nc" id="L262">        return analyzer.metric(&quot;Loss&quot;);</span>
+    }
+
+    private String format(Scenario scenario) {
+<span class="nc" id="L266">        String observation = String.format(&quot;'%s' layer&quot;, scenario.getObservation().toString());</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if (observation.contains(&quot;*&quot;)) {</span>
+<span class="nc" id="L268">            observation = &quot;system&quot;;</span>
+        }
+<span class="nc" id="L270">        String control = String.format(&quot;'%s' layer&quot;, scenario.getControl().toString());</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        if (control.contains(&quot;*&quot;)) {</span>
+<span class="nc" id="L272">            control = &quot;system&quot;;</span>
+        }
+<span class="nc" id="L274">        return String.format(&quot;Robustness of the %s to failure in the %s&quot;, observation, control);</span>
+    }
+
+    public static String usage() {
+<span class="nc" id="L278">        final String EOL = java.lang.System.lineSeparator();</span>
+<span class="nc" id="L279">        return &quot;Usage: trio [options] input.trio&quot; + EOL</span>
+                + &quot;where 'options' are:&quot; + EOL
+                + &quot;  -o, --observe=TAG  the tag of the components whose activity shall be observed&quot; + EOL
+                + &quot;  -c, --control=TAG  the tag of the components whose activity shall be controlled&quot; + EOL
+                + &quot;  -r, --runs=INTEGER the number of sample for statistical evidence&quot; + EOL
+                + &quot;  -t, --trace=FILE   the file where the generated data shall be stored&quot; + EOL
+                + &quot;Example: trio -o result.csv --run=10000 system.trio&quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

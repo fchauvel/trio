@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TrioLexer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.builder</a> &gt; <span class="el_source">TrioLexer.java</span></div><h1>TrioLexer.java</h1><pre class="source lang-java linenums">// Generated from eu\diversify\trio\builder\Trio.g4 by ANTLR 4.3
+package eu.diversify.trio.builder;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.*;
+
+@SuppressWarnings({&quot;all&quot;, &quot;warnings&quot;, &quot;unchecked&quot;, &quot;unused&quot;, &quot;cast&quot;})
+public class TrioLexer extends Lexer {
+<span class="fc" id="L14">	static { RuntimeMetaData.checkVersion(&quot;4.3&quot;, RuntimeMetaData.VERSION); }</span>
+
+	protected static final DFA[] _decisionToDFA;
+<span class="fc" id="L17">	protected static final PredictionContextCache _sharedContextCache =</span>
+		new PredictionContextCache();
+	public static final int
+		T__11=1, T__10=2, T__9=3, T__8=4, T__7=5, T__6=6, T__5=7, T__4=8, T__3=9, 
+		T__2=10, T__1=11, T__0=12, DIGIT=13, INTEGER=14, LETTER=15, ID=16, STRING=17, 
+		WS=18, LINE_COMMENT=19;
+<span class="fc" id="L23">	public static String[] modeNames = {</span>
+		&quot;DEFAULT_MODE&quot;
+	};
+
+<span class="fc" id="L27">	public static final String[] tokenNames = {</span>
+		&quot;'\\u0000'&quot;, &quot;'\\u0001'&quot;, &quot;'\\u0002'&quot;, &quot;'\\u0003'&quot;, &quot;'\\u0004'&quot;, &quot;'\\u0005'&quot;, 
+		&quot;'\\u0006'&quot;, &quot;'\\u0007'&quot;, &quot;'\b'&quot;, &quot;'\t'&quot;, &quot;'\n'&quot;, &quot;'\\u000B'&quot;, &quot;'\f'&quot;, 
+		&quot;'\r'&quot;, &quot;'\\u000E'&quot;, &quot;'\\u000F'&quot;, &quot;'\\u0010'&quot;, &quot;'\\u0011'&quot;, &quot;'\\u0012'&quot;, 
+		&quot;'\\u0013'&quot;
+	};
+<span class="fc" id="L33">	public static final String[] ruleNames = {</span>
+		&quot;T__11&quot;, &quot;T__10&quot;, &quot;T__9&quot;, &quot;T__8&quot;, &quot;T__7&quot;, &quot;T__6&quot;, &quot;T__5&quot;, &quot;T__4&quot;, &quot;T__3&quot;, 
+		&quot;T__2&quot;, &quot;T__1&quot;, &quot;T__0&quot;, &quot;DIGIT&quot;, &quot;INTEGER&quot;, &quot;LETTER&quot;, &quot;ID&quot;, &quot;STRING&quot;, 
+		&quot;WS&quot;, &quot;LINE_COMMENT&quot;
+	};
+
+
+	public TrioLexer(CharStream input) {
+<span class="fc" id="L41">		super(input);</span>
+<span class="fc" id="L42">		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);</span>
+<span class="fc" id="L43">	}</span>
+
+	@Override
+<span class="nc" id="L46">	public String getGrammarFileName() { return &quot;Trio.g4&quot;; }</span>
+
+	@Override
+<span class="nc" id="L49">	public String[] getTokenNames() { return tokenNames; }</span>
+
+	@Override
+<span class="nc" id="L52">	public String[] getRuleNames() { return ruleNames; }</span>
+
+	@Override
+<span class="nc" id="L55">	public String getSerializedATN() { return _serializedATN; }</span>
+
+	@Override
+<span class="nc" id="L58">	public String[] getModeNames() { return modeNames; }</span>
+
+	@Override
+<span class="nc" id="L61">	public ATN getATN() { return _ATN; }</span>
+
+	public static final String _serializedATN =
+		&quot;\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2\25\u0086\b\1\4\2&quot;+
+		&quot;\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4&quot;+
+		&quot;\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22&quot;+
+		&quot;\t\22\4\23\t\23\4\24\t\24\3\2\3\2\3\2\3\3\3\3\3\4\3\4\3\4\3\4\3\5\3\5&quot;+
+		&quot;\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13&quot;+
+		&quot;\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3&quot;+
+		&quot;\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\17\6\17a\n\17\r\17\16\17&quot;+
+		&quot;b\3\20\3\20\3\21\3\21\3\21\6\21j\n\21\r\21\16\21k\3\22\3\22\7\22p\n\22&quot;+
+		&quot;\f\22\16\22s\13\22\3\22\3\22\3\23\6\23x\n\23\r\23\16\23y\3\23\3\23\3\24&quot;+
+		&quot;\3\24\7\24\u0080\n\24\f\24\16\24\u0083\13\24\3\24\3\24\2\2\25\3\3\5\4&quot;+
+		&quot;\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22&quot;+
+		&quot;#\23%\24\'\25\3\2\7\3\2\62;\6\2C\\aac|\u0082\u0101\4\2$$))\5\2\13\f\17&quot;+
+		&quot;\17\&quot;\&quot;\4\2\f\f\17\17\u008b\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3&quot;+
+		&quot;\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2&quot;+
+		&quot;\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37&quot;+
+		&quot;\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2\'\3\2\2\2\3)\3\2\2\2\5,\3&quot;+
+		&quot;\2\2\2\7.\3\2\2\2\t\62\3\2\2\2\13\64\3\2\2\2\r\66\3\2\2\2\179\3\2\2\2&quot;+
+		&quot;\21;\3\2\2\2\23=\3\2\2\2\25B\3\2\2\2\27M\3\2\2\2\31V\3\2\2\2\33]\3\2\2&quot;+
+		&quot;\2\35`\3\2\2\2\37d\3\2\2\2!f\3\2\2\2#m\3\2\2\2%w\3\2\2\2\'}\3\2\2\2)*&quot;+
+		&quot;\7q\2\2*+\7p\2\2+\4\3\2\2\2,-\7+\2\2-\6\3\2\2\2./\7c\2\2/\60\7p\2\2\60&quot;+
+		&quot;\61\7f\2\2\61\b\3\2\2\2\62\63\7.\2\2\63\n\3\2\2\2\64\65\7/\2\2\65\f\3&quot;+
+		&quot;\2\2\2\66\67\7q\2\2\678\7t\2\28\16\3\2\2\29:\7&lt;\2\2:\20\3\2\2\2;&lt;\7*\2&quot;+
+		&quot;\2&lt;\22\3\2\2\2=&gt;\7v\2\2&gt;?\7c\2\2?@\7i\2\2@A\7u\2\2A\24\3\2\2\2BC\7e\2&quot;+
+		&quot;\2CD\7q\2\2DE\7o\2\2EF\7r\2\2FG\7q\2\2GH\7p\2\2HI\7g\2\2IJ\7p\2\2JK\7&quot;+
+		&quot;v\2\2KL\7u\2\2L\26\3\2\2\2MN\7t\2\2NO\7g\2\2OP\7s\2\2PQ\7w\2\2QR\7k\2&quot;+
+		&quot;\2RS\7t\2\2ST\7g\2\2TU\7u\2\2U\30\3\2\2\2VW\7u\2\2WX\7{\2\2XY\7u\2\2Y&quot;+
+		&quot;Z\7v\2\2Z[\7g\2\2[\\\7o\2\2\\\32\3\2\2\2]^\t\2\2\2^\34\3\2\2\2_a\5\33&quot;+
+		&quot;\16\2`_\3\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2c\36\3\2\2\2de\t\3\2\2e &quot;+
+		&quot;\3\2\2\2fi\5\37\20\2gj\5\37\20\2hj\5\33\16\2ig\3\2\2\2ih\3\2\2\2jk\3\2&quot;+
+		&quot;\2\2ki\3\2\2\2kl\3\2\2\2l\&quot;\3\2\2\2mq\t\4\2\2np\n\4\2\2on\3\2\2\2ps\3&quot;+
+		&quot;\2\2\2qo\3\2\2\2qr\3\2\2\2rt\3\2\2\2sq\3\2\2\2tu\t\4\2\2u$\3\2\2\2vx\t&quot;+
+		&quot;\5\2\2wv\3\2\2\2xy\3\2\2\2yw\3\2\2\2yz\3\2\2\2z{\3\2\2\2{|\b\23\2\2|&amp;&quot;+
+		&quot;\3\2\2\2}\u0081\7%\2\2~\u0080\n\6\2\2\177~\3\2\2\2\u0080\u0083\3\2\2\2&quot;+
+		&quot;\u0081\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0084\3\2\2\2\u0083\u0081&quot;+
+		&quot;\3\2\2\2\u0084\u0085\b\24\3\2\u0085(\3\2\2\2\t\2bikqy\u0081\4\b\2\2\2&quot;+
+		&quot;\3\2&quot;;
+<span class="fc" id="L100">	public static final ATN _ATN =</span>
+		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+	static {
+<span class="fc" id="L103">		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		for (int i = 0; i &lt; _ATN.getNumberOfDecisions(); i++) {</span>
+<span class="fc" id="L105">			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);</span>
+		}
+<span class="fc" id="L107">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

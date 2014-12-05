@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SystemBuilder.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TRIO</a> &gt; <a href="index.source.html" class="el_package">eu.diversify.trio.codecs</a> &gt; <span class="el_source">SystemBuilder.java</span></div><h1>SystemBuilder.java</h1><pre class="source lang-java linenums">/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+
+package eu.diversify.trio.codecs;
+
+import eu.diversify.trio.core.Component;
+import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Tag;
+import eu.diversify.trio.builder.TrioBaseVisitor;
+import eu.diversify.trio.builder.TrioParser;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Traverse the AST a build a System object
+ */
+<span class="fc" id="L33">public class SystemBuilder extends TrioBaseVisitor&lt;System&gt; {</span>
+
+    @Override
+    public System visitSystem(TrioParser.SystemContext ctx) {
+<span class="fc" id="L37">        String name = &quot;Anonymous&quot;;</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (ctx.description() != null) {</span>
+<span class="fc" id="L39">            name = ctx.description().STRING().getText().replaceAll(&quot;[\&quot;']&quot;, &quot;&quot;);</span>
+        }
+<span class="fc" id="L41">        final List&lt;Component&gt; components = extractComponents(ctx.component());</span>
+<span class="fc" id="L42">        final List&lt;Tag&gt; tags = extractTags(ctx);</span>
+<span class="fc" id="L43">        return new System(name, components, tags);</span>
+    }
+    
+    private List&lt;Component&gt; extractComponents(List&lt;TrioParser.ComponentContext&gt; components) {
+<span class="fc" id="L47">        final ComponentBuilder componentBuilder = new ComponentBuilder();</span>
+<span class="fc" id="L48">        final List&lt;Component&gt; results = new ArrayList&lt;Component&gt;();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (TrioParser.ComponentContext eachComponent: components) {</span>
+<span class="fc" id="L50">            results.add(eachComponent.accept(componentBuilder));</span>
+<span class="fc" id="L51">        }</span>
+<span class="fc" id="L52">        return results;</span>
+    }
+
+    private List&lt;Tag&gt; extractTags(TrioParser.SystemContext ctx) {
+<span class="fc" id="L56">        final List&lt;Tag&gt; tags = new ArrayList&lt;Tag&gt;();</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (ctx.tags() != null) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            for (TrioParser.TagContext eachTag: ctx.tags().tag()) {</span>
+<span class="fc" id="L59">                tags.add(eachTag.accept(new TagBuilder()));</span>
+<span class="fc" id="L60">            }</span>
+        }
+<span class="fc" id="L62">        return tags;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

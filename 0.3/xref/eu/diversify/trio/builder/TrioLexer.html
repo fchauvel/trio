@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>TrioLexer xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/eu/diversify/trio/builder/TrioLexer.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">// Generated from eu\diversify\trio\builder\Trio.g4 by ANTLR 4.3</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <strong class="jxr_keyword">package</strong> eu.diversify.trio.builder;
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.Lexer;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.CharStream;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.Token;
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.TokenStream;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.*;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.atn.*;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.dfa.DFA;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> org.antlr.v4.runtime.misc.*;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  
+<a class="jxr_linenumber" name="12" href="#12">12</a>  @SuppressWarnings({<span class="jxr_string">"all"</span>, <span class="jxr_string">"warnings"</span>, <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"unused"</span>, <span class="jxr_string">"cast"</span>})
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../eu/diversify/trio/builder/TrioLexer.html">TrioLexer</a> <strong class="jxr_keyword">extends</strong> Lexer {
+<a class="jxr_linenumber" name="14" href="#14">14</a>  	<strong class="jxr_keyword">static</strong> { RuntimeMetaData.checkVersion(<span class="jxr_string">"4.3"</span>, RuntimeMetaData.VERSION); }
+<a class="jxr_linenumber" name="15" href="#15">15</a>  
+<a class="jxr_linenumber" name="16" href="#16">16</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> DFA[] _decisionToDFA;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> PredictionContextCache _sharedContextCache =
+<a class="jxr_linenumber" name="18" href="#18">18</a>  		<strong class="jxr_keyword">new</strong> PredictionContextCache();
+<a class="jxr_linenumber" name="19" href="#19">19</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>
+<a class="jxr_linenumber" name="20" href="#20">20</a>  		T__11=1, T__10=2, T__9=3, T__8=4, T__7=5, T__6=6, T__5=7, T__4=8, T__3=9, 
+<a class="jxr_linenumber" name="21" href="#21">21</a>  		T__2=10, T__1=11, T__0=12, DIGIT=13, INTEGER=14, LETTER=15, ID=16, STRING=17, 
+<a class="jxr_linenumber" name="22" href="#22">22</a>  		WS=18, LINE_COMMENT=19;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] modeNames = {
+<a class="jxr_linenumber" name="24" href="#24">24</a>  		<span class="jxr_string">"DEFAULT_MODE"</span>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  	};
+<a class="jxr_linenumber" name="26" href="#26">26</a>  
+<a class="jxr_linenumber" name="27" href="#27">27</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] tokenNames = {
+<a class="jxr_linenumber" name="28" href="#28">28</a>  		<span class="jxr_string">"'&#92;&#92;u0000'"</span>, <span class="jxr_string">"'&#92;&#92;u0001'"</span>, <span class="jxr_string">"'&#92;&#92;u0002'"</span>, <span class="jxr_string">"'&#92;&#92;u0003'"</span>, <span class="jxr_string">"'&#92;&#92;u0004'"</span>, <span class="jxr_string">"'&#92;&#92;u0005'"</span>, 
+<a class="jxr_linenumber" name="29" href="#29">29</a>  		<span class="jxr_string">"'&#92;&#92;u0006'"</span>, <span class="jxr_string">"'&#92;&#92;u0007'"</span>, <span class="jxr_string">"'\b'"</span>, <span class="jxr_string">"'\t'"</span>, <span class="jxr_string">"'\n'"</span>, <span class="jxr_string">"'&#92;&#92;u000B'"</span>, <span class="jxr_string">"'\f'"</span>, 
+<a class="jxr_linenumber" name="30" href="#30">30</a>  		<span class="jxr_string">"'\r'"</span>, <span class="jxr_string">"'&#92;&#92;u000E'"</span>, <span class="jxr_string">"'&#92;&#92;u000F'"</span>, <span class="jxr_string">"'&#92;&#92;u0010'"</span>, <span class="jxr_string">"'&#92;&#92;u0011'"</span>, <span class="jxr_string">"'&#92;&#92;u0012'"</span>, 
+<a class="jxr_linenumber" name="31" href="#31">31</a>  		<span class="jxr_string">"'&#92;&#92;u0013'"</span>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  	};
+<a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] ruleNames = {
+<a class="jxr_linenumber" name="34" href="#34">34</a>  		<span class="jxr_string">"T__11"</span>, <span class="jxr_string">"T__10"</span>, <span class="jxr_string">"T__9"</span>, <span class="jxr_string">"T__8"</span>, <span class="jxr_string">"T__7"</span>, <span class="jxr_string">"T__6"</span>, <span class="jxr_string">"T__5"</span>, <span class="jxr_string">"T__4"</span>, <span class="jxr_string">"T__3"</span>, 
+<a class="jxr_linenumber" name="35" href="#35">35</a>  		<span class="jxr_string">"T__2"</span>, <span class="jxr_string">"T__1"</span>, <span class="jxr_string">"T__0"</span>, <span class="jxr_string">"DIGIT"</span>, <span class="jxr_string">"INTEGER"</span>, <span class="jxr_string">"LETTER"</span>, <span class="jxr_string">"ID"</span>, <span class="jxr_string">"STRING"</span>, 
+<a class="jxr_linenumber" name="36" href="#36">36</a>  		<span class="jxr_string">"WS"</span>, <span class="jxr_string">"LINE_COMMENT"</span>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  	};
+<a class="jxr_linenumber" name="38" href="#38">38</a>  
+<a class="jxr_linenumber" name="39" href="#39">39</a>  
+<a class="jxr_linenumber" name="40" href="#40">40</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../eu/diversify/trio/builder/TrioLexer.html">TrioLexer</a>(CharStream input) {
+<a class="jxr_linenumber" name="41" href="#41">41</a>  		<strong class="jxr_keyword">super</strong>(input);
+<a class="jxr_linenumber" name="42" href="#42">42</a>  		_interp = <strong class="jxr_keyword">new</strong> LexerATNSimulator(<strong class="jxr_keyword">this</strong>,_ATN,_decisionToDFA,_sharedContextCache);
+<a class="jxr_linenumber" name="43" href="#43">43</a>  	}
+<a class="jxr_linenumber" name="44" href="#44">44</a>  
+<a class="jxr_linenumber" name="45" href="#45">45</a>  	@Override
+<a class="jxr_linenumber" name="46" href="#46">46</a>  	<strong class="jxr_keyword">public</strong> String getGrammarFileName() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"Trio.g4"</span>; }
+<a class="jxr_linenumber" name="47" href="#47">47</a>  
+<a class="jxr_linenumber" name="48" href="#48">48</a>  	@Override
+<a class="jxr_linenumber" name="49" href="#49">49</a>  	<strong class="jxr_keyword">public</strong> String[] getTokenNames() { <strong class="jxr_keyword">return</strong> tokenNames; }
+<a class="jxr_linenumber" name="50" href="#50">50</a>  
+<a class="jxr_linenumber" name="51" href="#51">51</a>  	@Override
+<a class="jxr_linenumber" name="52" href="#52">52</a>  	<strong class="jxr_keyword">public</strong> String[] getRuleNames() { <strong class="jxr_keyword">return</strong> ruleNames; }
+<a class="jxr_linenumber" name="53" href="#53">53</a>  
+<a class="jxr_linenumber" name="54" href="#54">54</a>  	@Override
+<a class="jxr_linenumber" name="55" href="#55">55</a>  	<strong class="jxr_keyword">public</strong> String getSerializedATN() { <strong class="jxr_keyword">return</strong> _serializedATN; }
+<a class="jxr_linenumber" name="56" href="#56">56</a>  
+<a class="jxr_linenumber" name="57" href="#57">57</a>  	@Override
+<a class="jxr_linenumber" name="58" href="#58">58</a>  	<strong class="jxr_keyword">public</strong> String[] getModeNames() { <strong class="jxr_keyword">return</strong> modeNames; }
+<a class="jxr_linenumber" name="59" href="#59">59</a>  
+<a class="jxr_linenumber" name="60" href="#60">60</a>  	@Override
+<a class="jxr_linenumber" name="61" href="#61">61</a>  	<strong class="jxr_keyword">public</strong> ATN getATN() { <strong class="jxr_keyword">return</strong> _ATN; }
+<a class="jxr_linenumber" name="62" href="#62">62</a>  
+<a class="jxr_linenumber" name="63" href="#63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String _serializedATN =
+<a class="jxr_linenumber" name="64" href="#64">64</a>  		<span class="jxr_string">"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2\25\u0086\b\1\4\2"</span>+
+<a class="jxr_linenumber" name="65" href="#65">65</a>  		<span class="jxr_string">"\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4"</span>+
+<a class="jxr_linenumber" name="66" href="#66">66</a>  		<span class="jxr_string">"\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22"</span>+
+<a class="jxr_linenumber" name="67" href="#67">67</a>  		<span class="jxr_string">"\t\22\4\23\t\23\4\24\t\24\3\2\3\2\3\2\3\3\3\3\3\4\3\4\3\4\3\4\3\5\3\5"</span>+
+<a class="jxr_linenumber" name="68" href="#68">68</a>  		<span class="jxr_string">"\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13"</span>+
+<a class="jxr_linenumber" name="69" href="#69">69</a>  		<span class="jxr_string">"\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3"</span>+
+<a class="jxr_linenumber" name="70" href="#70">70</a>  		<span class="jxr_string">"\f\3\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\16\3\16\3\17\6\17a\n\17\r\17\16\17"</span>+
+<a class="jxr_linenumber" name="71" href="#71">71</a>  		<span class="jxr_string">"b\3\20\3\20\3\21\3\21\3\21\6\21j\n\21\r\21\16\21k\3\22\3\22\7\22p\n\22"</span>+
+<a class="jxr_linenumber" name="72" href="#72">72</a>  		<span class="jxr_string">"\f\22\16\22s\13\22\3\22\3\22\3\23\6\23x\n\23\r\23\16\23y\3\23\3\23\3\24"</span>+
+<a class="jxr_linenumber" name="73" href="#73">73</a>  		<span class="jxr_string">"\3\24\7\24\u0080\n\24\f\24\16\24\u0083\13\24\3\24\3\24\2\2\25\3\3\5\4"</span>+
+<a class="jxr_linenumber" name="74" href="#74">74</a>  		<span class="jxr_string">"\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22"</span>+
+<a class="jxr_linenumber" name="75" href="#75">75</a>  		<span class="jxr_string">"#\23%\24\'\25\3\2\7\3\2\62;\6\2C&#92;&#92;aac|\u0082\u0101\4\2$$))\5\2\13\f\17"</span>+
+<a class="jxr_linenumber" name="76" href="#76">76</a>  		<span class="jxr_string">"\17\&quot;\&quot;\4\2\f\f\17\17\u008b\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3"</span>+
+<a class="jxr_linenumber" name="77" href="#77">77</a>  		<span class="jxr_string">"\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2"</span>+
+<a class="jxr_linenumber" name="78" href="#78">78</a>  		<span class="jxr_string">"\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37"</span>+
+<a class="jxr_linenumber" name="79" href="#79">79</a>  		<span class="jxr_string">"\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2\'\3\2\2\2\3)\3\2\2\2\5,\3"</span>+
+<a class="jxr_linenumber" name="80" href="#80">80</a>  		<span class="jxr_string">"\2\2\2\7.\3\2\2\2\t\62\3\2\2\2\13\64\3\2\2\2\r\66\3\2\2\2\179\3\2\2\2"</span>+
+<a class="jxr_linenumber" name="81" href="#81">81</a>  		<span class="jxr_string">"\21;\3\2\2\2\23=\3\2\2\2\25B\3\2\2\2\27M\3\2\2\2\31V\3\2\2\2\33]\3\2\2"</span>+
+<a class="jxr_linenumber" name="82" href="#82">82</a>  		<span class="jxr_string">"\2\35`\3\2\2\2\37d\3\2\2\2!f\3\2\2\2#m\3\2\2\2%w\3\2\2\2\'}\3\2\2\2)*"</span>+
+<a class="jxr_linenumber" name="83" href="#83">83</a>  		<span class="jxr_string">"\7q\2\2*+\7p\2\2+\4\3\2\2\2,-\7+\2\2-\6\3\2\2\2./\7c\2\2/\60\7p\2\2\60"</span>+
+<a class="jxr_linenumber" name="84" href="#84">84</a>  		<span class="jxr_string">"\61\7f\2\2\61\b\3\2\2\2\62\63\7.\2\2\63\n\3\2\2\2\64\65\7/\2\2\65\f\3"</span>+
+<a class="jxr_linenumber" name="85" href="#85">85</a>  		<span class="jxr_string">"\2\2\2\66\67\7q\2\2\678\7t\2\28\16\3\2\2\29:\7&lt;\2\2:\20\3\2\2\2;&lt;\7*\2"</span>+
+<a class="jxr_linenumber" name="86" href="#86">86</a>  		<span class="jxr_string">"\2&lt;\22\3\2\2\2=&gt;\7v\2\2&gt;?\7c\2\2?@\7i\2\2@A\7u\2\2A\24\3\2\2\2BC\7e\2"</span>+
+<a class="jxr_linenumber" name="87" href="#87">87</a>  		<span class="jxr_string">"\2CD\7q\2\2DE\7o\2\2EF\7r\2\2FG\7q\2\2GH\7p\2\2HI\7g\2\2IJ\7p\2\2JK\7"</span>+
+<a class="jxr_linenumber" name="88" href="#88">88</a>  		<span class="jxr_string">"v\2\2KL\7u\2\2L\26\3\2\2\2MN\7t\2\2NO\7g\2\2OP\7s\2\2PQ\7w\2\2QR\7k\2"</span>+
+<a class="jxr_linenumber" name="89" href="#89">89</a>  		<span class="jxr_string">"\2RS\7t\2\2ST\7g\2\2TU\7u\2\2U\30\3\2\2\2VW\7u\2\2WX\7{\2\2XY\7u\2\2Y"</span>+
+<a class="jxr_linenumber" name="90" href="#90">90</a>  		<span class="jxr_string">"Z\7v\2\2Z[\7g\2\2[&#92;&#92;\7o\2\2&#92;&#92;\32\3\2\2\2]^\t\2\2\2^\34\3\2\2\2_a\5\33"</span>+
+<a class="jxr_linenumber" name="91" href="#91">91</a>  		<span class="jxr_string">"\16\2`_\3\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2c\36\3\2\2\2de\t\3\2\2e "</span>+
+<a class="jxr_linenumber" name="92" href="#92">92</a>  		<span class="jxr_string">"\3\2\2\2fi\5\37\20\2gj\5\37\20\2hj\5\33\16\2ig\3\2\2\2ih\3\2\2\2jk\3\2"</span>+
+<a class="jxr_linenumber" name="93" href="#93">93</a>  		<span class="jxr_string">"\2\2ki\3\2\2\2kl\3\2\2\2l\&quot;\3\2\2\2mq\t\4\2\2np\n\4\2\2on\3\2\2\2ps\3"</span>+
+<a class="jxr_linenumber" name="94" href="#94">94</a>  		<span class="jxr_string">"\2\2\2qo\3\2\2\2qr\3\2\2\2rt\3\2\2\2sq\3\2\2\2tu\t\4\2\2u$\3\2\2\2vx\t"</span>+
+<a class="jxr_linenumber" name="95" href="#95">95</a>  		<span class="jxr_string">"\5\2\2wv\3\2\2\2xy\3\2\2\2yw\3\2\2\2yz\3\2\2\2z{\3\2\2\2{|\b\23\2\2|&amp;"</span>+
+<a class="jxr_linenumber" name="96" href="#96">96</a>  		<span class="jxr_string">"\3\2\2\2}\u0081\7%\2\2~\u0080\n\6\2\2\177~\3\2\2\2\u0080\u0083\3\2\2\2"</span>+
+<a class="jxr_linenumber" name="97" href="#97">97</a>  		<span class="jxr_string">"\u0081\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0084\3\2\2\2\u0083\u0081"</span>+
+<a class="jxr_linenumber" name="98" href="#98">98</a>  		<span class="jxr_string">"\3\2\2\2\u0084\u0085\b\24\3\2\u0085(\3\2\2\2\t\2bikqy\u0081\4\b\2\2\2"</span>+
+<a class="jxr_linenumber" name="99" href="#99">99</a>  		<span class="jxr_string">"\3\2"</span>;
+<a class="jxr_linenumber" name="100" href="#100">100</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ATN _ATN =
+<a class="jxr_linenumber" name="101" href="#101">101</a> 		<strong class="jxr_keyword">new</strong> ATNDeserializer().deserialize(_serializedATN.toCharArray());
+<a class="jxr_linenumber" name="102" href="#102">102</a> 	<strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="103" href="#103">103</a> 		_decisionToDFA = <strong class="jxr_keyword">new</strong> DFA[_ATN.getNumberOfDecisions()];
+<a class="jxr_linenumber" name="104" href="#104">104</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; _ATN.getNumberOfDecisions(); i++) {
+<a class="jxr_linenumber" name="105" href="#105">105</a> 			_decisionToDFA[i] = <strong class="jxr_keyword">new</strong> DFA(_ATN.getDecisionState(i), i);
+<a class="jxr_linenumber" name="106" href="#106">106</a> 		}
+<a class="jxr_linenumber" name="107" href="#107">107</a> 	}
+<a class="jxr_linenumber" name="108" href="#108">108</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
