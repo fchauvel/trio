@@ -1,0 +1,29 @@
+#
+# The SensApp services and their dependencies
+# SEAMS 2015 - Topology 1
+#
+
+system: 
+    'SensApp/SEAMS topology no. 1'
+
+components:
+    - Admin         requires    Notifier and Registry and Storage and (SC1 or SC2 or SC3)
+    - Notifier      requires    (SC1 or SC2 or SC3)
+    - Registry      requires    Storage and (SC1 or SC2 or SC3)
+    - Dispatcher    requires    Notifier and Registry and Storage and (SC1 or SC2 or SC3)
+    - Storage       requires    DB and (SC1 or SC2 or SC3)
+    - DB            requires    VM1 or VM2 or VM3
+    - SC1           requires    JRE1 or JRE2 or JRE3
+    - SC2           requires    JRE1 or JRE2 or JRE3
+    - SC3           requires    JRE1 or JRE2 or JRE3
+    - JRE1          requires    VM1 or VM2 or VM3
+    - JRE2          requires    VM1 or VM2 or VM3
+    - JRE3          requires    VM1 or VM2 or VM3
+    - VM1
+    - VM2
+    - VM3
+
+tags:
+    - 'environment'  on  DB, SC1, SC2, SC3, JRE1, JRE2, JRE3, VM1, VM2, VM3
+    - 'service'   on  Admin, Registry, Storage, Dispatcher, Notifier
+    
