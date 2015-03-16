@@ -7,7 +7,7 @@
     <version>0.4-SNAPSHOT</version>
     <url>http://fchauvel.github.com/trio</url>
   
-    <name>Trio</name>
+    <name>TRIO</name>
   
     <description>
         TRIO is a simple domain specific language (DSL) used to describe the topology
@@ -16,6 +16,7 @@
   
     <modules>
         <module>core</module>
+        <module>performance</module>
     </modules>
 
     <properties>
