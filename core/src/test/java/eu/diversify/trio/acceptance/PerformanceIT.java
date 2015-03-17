@@ -16,6 +16,7 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
@@ -85,7 +86,7 @@ public class PerformanceIT {
         final int SYSTEM_SIZE = 10000;
 
         final Generator generate = new Generator();
-        final Assembly system = generate.system(SYSTEM_SIZE, Distribution.uniform(0, SYSTEM_SIZE));
+        final Assembly system = generate.assembly(SYSTEM_SIZE, Distribution.uniform(0, SYSTEM_SIZE));
 
         final Scenario scenario = new RandomFailureSequence(system);
         long duration = durationOf(scenario);
@@ -111,7 +112,7 @@ public class PerformanceIT {
             final Distribution meanValenceDistribution = Distribution.uniform(0, size);
             final double mean = meanValenceDistribution.sample();
             final Distribution density = Distribution.normal(mean, mean / 4);
-            final Assembly system = generate.system(size, density);
+            final Assembly system = generate.assembly(size, density);
             final Scenario scenario = new RandomFailureSequence(system);
             double duration = durationOf(scenario);
 

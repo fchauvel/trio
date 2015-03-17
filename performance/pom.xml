@@ -20,8 +20,8 @@
     
     <dependencies>
         <dependency>
-            <groupId>eu.diversify</groupId>
-            <artifactId>trio.core</artifactId>
+            <groupId>eu.diversify.trio</groupId>
+            <artifactId>core</artifactId>
             <version>0.4-SNAPSHOT</version>
         </dependency>
     </dependencies>

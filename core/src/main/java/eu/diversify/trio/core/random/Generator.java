@@ -42,7 +42,7 @@ public class Generator {
         this.goal = new Goal(10000, factory);
     }
 
-    public Assembly system(int componentCount, Distribution valence) {
+    public Assembly assembly(int componentCount, Distribution valence) {
         goal.setVariableCount(componentCount);
         final Component[] components = new Component[componentCount];
         for (int index = 0; index < componentCount; index++) {

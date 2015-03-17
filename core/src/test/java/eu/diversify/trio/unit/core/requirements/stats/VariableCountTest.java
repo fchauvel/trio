@@ -51,7 +51,7 @@ public class VariableCountTest {
     }
     
     
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "{0}") 
     public static Collection<Object[]> examples() {
         final List<Object[]> examples = new ArrayList<Object[]>();
         

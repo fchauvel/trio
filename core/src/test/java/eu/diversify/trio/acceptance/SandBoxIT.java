@@ -46,7 +46,7 @@ public class SandBoxIT {
     @Test
     public void onOneLargeModel() {
         final Generator aRandom = new Generator();
-        final eu.diversify.trio.core.Assembly system = aRandom.system(5000, Distribution.uniform(0D, 5000D));
+        final eu.diversify.trio.core.Assembly system = aRandom.assembly(5000, Distribution.uniform(0D, 5000D));
         final Scenario scenario = new RandomFailureSequence(system);
         long duration = 0;
         final int RUN_COUNT = 10;

@@ -42,7 +42,7 @@ public class GeneratorTest {
         for (int index = 0; index < RUN_COUNT; index++) {
                   
             final long start = System.currentTimeMillis();
-            random.system(COMPONENT_COUNT, Distribution.uniform(0, COMPONENT_COUNT));
+            random.assembly(COMPONENT_COUNT, Distribution.uniform(0, COMPONENT_COUNT));
             final long end = System.currentTimeMillis();
 
             final long duration = end - start;
