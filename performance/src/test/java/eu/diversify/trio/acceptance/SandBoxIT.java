@@ -20,6 +20,7 @@ package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.codecs.SyntaxError;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.random.Generator;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
@@ -46,8 +47,8 @@ public class SandBoxIT {
     @Test
     public void onOneLargeModel() {
         final Generator aRandom = new Generator();
-        final eu.diversify.trio.core.Assembly system = aRandom.assembly(5000, Distribution.uniform(0D, 5000D));
-        final Scenario scenario = new RandomFailureSequence(system);
+        final Assembly assembly = aRandom.assembly(5000, Distribution.uniform(0D, 5000D));
+        final Scenario scenario = new RandomFailureSequence(assembly);
         long duration = 0;
         final int RUN_COUNT = 10;
         for (int i = 0; i < RUN_COUNT; i++) {

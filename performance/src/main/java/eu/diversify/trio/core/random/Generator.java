@@ -14,6 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ * 
  */
 package eu.diversify.trio.core.random;
 
@@ -30,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Generate randomised system description
+ * Generate randomized system description
  */
 public class Generator {
 
@@ -55,7 +56,7 @@ public class Generator {
 
     public Component component(int index, int dependencyCount) {
         Requirement dependencies = goal.build(dependencyCount); 
-        return new Component("C" + index, dependencies);
+        return new Component(("C" + index).intern(), dependencies);
     }
 
 }

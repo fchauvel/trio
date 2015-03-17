@@ -18,7 +18,7 @@ public class CsvRecorderTest {
             @Override
             public Map<String, Object> getProperties() {
                 Map<String, Object> results = new HashMap<>();
-                results.put("distance", 234.456);
+                results.put("size", 234.456);
                 return results;
             }
 
@@ -32,10 +32,14 @@ public class CsvRecorderTest {
 
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-        CsvRecorder recorder = new CsvRecorder(buffer);
+        CsvRecorder recorder = new CsvRecorder(buffer, ",");
         recorder.record(25, task, performance);
+        
+        final String expectedCsv 
+                = "run,size,duration" + System.lineSeparator() 
+                + "25,234.456,23" + System.lineSeparator();
 
-        assertThat(buffer.toString(), is(equalTo("25,234.456,23" + System.lineSeparator())));
+        assertThat(buffer.toString(), is(equalTo(expectedCsv)));
 
     }
 

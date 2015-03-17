@@ -17,7 +17,7 @@ public class Runner {
         final OutputStream outputFile = new FileOutputStream("scalability.csv");
         
         SimulationFactory factory = new SimulationFactory(1, 1000);
-        MicroBenchmark benchmark = new MicroBenchmark(500, 20, factory, new CsvRecorder(outputFile));
+        MicroBenchmark benchmark = new MicroBenchmark(250, 25, factory, new CsvRecorder(outputFile, ","));
         
         benchmark.run();
         
