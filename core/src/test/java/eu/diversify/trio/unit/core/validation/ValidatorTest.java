@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.Validator;
 
 import static eu.diversify.trio.core.Evaluation.*;
@@ -47,7 +47,7 @@ public class ValidatorTest {
                 + " - BB requires DD \n" // Error: DD is never defined 
                 + " - CC\n";
         
-        System system = build().systemFrom(inputText);
+        Assembly system = build().systemFrom(inputText);
         
         Validator validity = new Validator();
         evaluate(validity).on(system);
@@ -67,7 +67,7 @@ public class ValidatorTest {
                 + "tags:\n"
                 + " - 'mytag' on AA, DD\n"; // Error, DD is never defined
         
-        System system = build().systemFrom(inputText);
+        Assembly system = build().systemFrom(inputText);
         
         Validator validity = new Validator();
         evaluate(validity).on(system);
@@ -86,7 +86,7 @@ public class ValidatorTest {
                 + "tags:"
                 + " - 'mytag' on AA, BB";
         
-        System system = build().systemFrom(inputText);
+        Assembly system = build().systemFrom(inputText);
         
         Validator validity = new Validator();
         evaluate(validity).on(system);

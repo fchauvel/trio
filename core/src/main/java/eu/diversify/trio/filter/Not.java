@@ -18,7 +18,7 @@
 
 package eu.diversify.trio.filter;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ public class Not extends Filter {
     }
 
     @Override
-    public Set<String> resolve(System system) {
+    public Set<String> resolve(Assembly system) {
         final Set<String> results = new HashSet<String>();
         results.addAll(system.getComponentNames());
         results.removeAll(operand.resolve(system));

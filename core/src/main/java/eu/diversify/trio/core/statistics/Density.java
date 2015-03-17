@@ -18,7 +18,7 @@
 package eu.diversify.trio.core.statistics;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultSystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
 import eu.diversify.trio.core.requirements.stats.VariableCount;
 import eu.diversify.trio.core.Dispatcher;
 import eu.diversify.trio.util.Require;
@@ -46,7 +46,7 @@ public class Density extends Dispatcher {
         return calculator.getValue();
     }
 
-    private static class DensityCalculator extends DefaultSystemVisitor {
+    private static class DensityCalculator extends DefaultAssemblyVisitor {
 
         private final VariableCount variableCount;
         private int componentCount;

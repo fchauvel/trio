@@ -18,14 +18,14 @@
 
 package eu.diversify.trio.core.requirements.stats;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
 
 
 /**
  * Count the number of nodes in a requirements, including: Conjunction,
  * Negation, Disjunction, Require, and nothing.
  */
-public class NodeCount extends DefaultSystemVisitor {
+public class NodeCount extends DefaultAssemblyVisitor {
 
     private int count = 0;
 

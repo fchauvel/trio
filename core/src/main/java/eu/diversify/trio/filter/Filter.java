@@ -17,7 +17,7 @@
  */
 package eu.diversify.trio.filter;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import java.util.Set;
 
 /**
@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public abstract class Filter {
 
-    public abstract Set<String> resolve(System system);
+    public abstract Set<String> resolve(Assembly system);
 
     /**
      * Logical conjunction of filters

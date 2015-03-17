@@ -34,7 +34,7 @@
  */
 package eu.diversify.trio.unit.filters;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.*;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
@@ -57,7 +57,7 @@ public class FiltersTest extends TestCase {
     @Test
     public void filtersShouldBeEffective() {
 
-        System system = systemWithABC(defaultTags());
+        Assembly system = systemWithABC(defaultTags());
 
         Filter filter = new TaggedAs("X").or(new TaggedAs("Y").and(new TaggedAs("Z").not()));
         Set<String> result = filter.resolve(system);
@@ -67,7 +67,7 @@ public class FiltersTest extends TestCase {
 
     @Test
     public void allShouldSelectAllComponents() {
-        System system = systemWithABC(defaultTags());
+        Assembly system = systemWithABC(defaultTags());
 
         Filter filter = All.getInstance();
         Set<String> result = filter.resolve(system);
@@ -118,12 +118,12 @@ public class FiltersTest extends TestCase {
         return tags;
     }
 
-    protected System systemWithABC(List<Tag> tags) {
+    protected Assembly systemWithABC(List<Tag> tags) {
         List<Component> components = new ArrayList<Component>();
         components.add(new Component("A"));
         components.add(new Component("B"));
         components.add(new Component("C"));
-        System system = new System("test", components, tags);
+        Assembly system = new Assembly("test", components, tags);
         return system;
     }
 

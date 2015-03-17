@@ -21,7 +21,7 @@ package eu.diversify.trio.unit.codecs;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
@@ -101,12 +101,12 @@ public class BuilderTest extends TestCase {
                 + "      AA requires BB"
                 + "      BB ";
 
-        final System expected = new System(
+        final Assembly expected = new Assembly(
                 new Component("AA", require("BB")),
                 new Component("BB")
         );
 
-        final System system = build().systemFrom(text);
+        final Assembly system = build().systemFrom(text);
 
         assertThat(system, is(equalTo(expected)));
     }
@@ -127,9 +127,9 @@ public class BuilderTest extends TestCase {
         final List<Tag> tags = new ArrayList<Tag>();
         tags.add(new Tag("t1", "AA", "BB"));
         
-        final System expected = new System(components, tags);
+        final Assembly expected = new Assembly(components, tags);
 
-        final System system = build().systemFrom(text);
+        final Assembly system = build().systemFrom(text);
 
         assertThat(system, is(equalTo(expected)));
     }
@@ -151,9 +151,9 @@ public class BuilderTest extends TestCase {
         final List<Tag> tags = new ArrayList<Tag>();
         tags.add(new Tag("t1", "AA", "BB"));
         
-        final System expected = new System("A Sample System", components, tags);
+        final Assembly expected = new Assembly("A Sample System", components, tags);
 
-        final System system = build().systemFrom(text);
+        final Assembly system = build().systemFrom(text);
 
         assertThat(system, is(equalTo(expected)));
     }

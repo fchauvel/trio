@@ -18,8 +18,8 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.util.Require;
-import eu.diversify.trio.core.SystemPart;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.AssemblyPart;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.simulation.Topology;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,17 +38,17 @@ public final class Negation extends Requirement {
         this.operand = operand;
     }
 
-    public Collection<SystemPart> subParts() {
-        final List<SystemPart> parts = new ArrayList<SystemPart>(1);
+    public Collection<AssemblyPart> subParts() {
+        final List<AssemblyPart> parts = new ArrayList<AssemblyPart>(1);
         parts.add(operand);
         return parts;
     }
 
-    public void begin(SystemVisitor visitor) {
+    public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }
 
-    public void end(SystemVisitor visitor) {
+    public void end(AssemblyVisitor visitor) {
         visitor.exit(this);
     }
 

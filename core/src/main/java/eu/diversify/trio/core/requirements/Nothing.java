@@ -34,8 +34,8 @@
  */
 package eu.diversify.trio.core.requirements;
 
-import eu.diversify.trio.core.SystemPart;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.AssemblyPart;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.simulation.Topology;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,16 +58,16 @@ public class Nothing extends Requirement {
         return instance;
     }
 
-    public void begin(SystemVisitor visitor) {
+    public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }
 
-    public void end(SystemVisitor visitor) {
+    public void end(AssemblyVisitor visitor) {
         visitor.exit(this);
     }
 
-    public final Collection<SystemPart> subParts() {
-        return new ArrayList<SystemPart>(0);
+    public final Collection<AssemblyPart> subParts() {
+        return new ArrayList<AssemblyPart>(0);
     }
 
     public boolean isSatisfiedBy(Topology population) {

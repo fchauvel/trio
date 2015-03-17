@@ -26,27 +26,27 @@ import java.util.*;
  */
 public class Evaluation {
 
-    public static Evaluation evaluate(SystemVisitor visitor) {
+    public static Evaluation evaluate(AssemblyVisitor visitor) {
         return new Evaluation(visitor);
     }
 
-    public static Evaluation evaluate(SystemVisitor... visitors) {
+    public static Evaluation evaluate(AssemblyVisitor... visitors) {
         return new Evaluation(new Dispatcher(visitors));
     }
 
-    private final SystemVisitor listener;
+    private final AssemblyVisitor listener;
     private final Deque<Memento> stack;
 
-    public Evaluation(SystemVisitor listener) {
+    public Evaluation(AssemblyVisitor listener) {
         this.stack = new LinkedList<Memento>();
         this.listener = listener;
     }
 
-    public void on(SystemPart singleRoot) {
+    public void on(AssemblyPart singleRoot) {
         on(Collections.singleton(singleRoot));
     }
 
-    public void on(Collection<SystemPart> roots) {
+    public void on(Collection<AssemblyPart> roots) {
         this.stack.clear();
         this.stack.push(new Memento(roots));
         run();
@@ -62,16 +62,16 @@ public class Evaluation {
         return !stack.isEmpty();
     }
 
-    public SystemPart next() {
+    public AssemblyPart next() {
         Require.isTrue(hasNext(), "There is no next element");
 
-        final SystemPart next = currentPart().next();
+        final AssemblyPart next = currentPart().next();
         push(next);
         backtrack();
         return next;
     }
 
-    private void push(final SystemPart next) {
+    private void push(final AssemblyPart next) {
         final Memento memento = new Memento(next);
         stack.push(memento);
         if (listener != null) {
@@ -100,18 +100,18 @@ public class Evaluation {
 
     private static class Memento {
 
-        private final SystemPart parent;
-        private final Iterator<SystemPart> children;
+        private final AssemblyPart parent;
+        private final Iterator<AssemblyPart> children;
 
-        public Memento(Collection<SystemPart> children) {
+        public Memento(Collection<AssemblyPart> children) {
             this(null, children.iterator());
         }
 
-        public Memento(SystemPart parent) {
+        public Memento(AssemblyPart parent) {
             this(parent, parent.subParts().iterator());
         }
 
-        public Memento(SystemPart parent, Iterator<SystemPart> iterator) {
+        public Memento(AssemblyPart parent, Iterator<AssemblyPart> iterator) {
             assert iterator != null: "A 'null' iterator shall not be pushed on the stack!";
 
             this.parent = parent;
@@ -122,11 +122,11 @@ public class Evaluation {
             return this.children.hasNext();
         }
 
-        public SystemPart next() {
+        public AssemblyPart next() {
             return this.children.next();
         }
 
-        public void end(SystemVisitor visitor) {
+        public void end(AssemblyVisitor visitor) {
             if (parent != null) {
                 parent.end(visitor);
             }

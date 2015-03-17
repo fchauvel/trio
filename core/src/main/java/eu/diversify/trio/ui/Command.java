@@ -25,7 +25,7 @@ import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Distribution;
 import eu.diversify.trio.analysis.Metric;
 import eu.diversify.trio.codecs.SyntaxError;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.Inconsistency;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.data.DataSet;
@@ -167,7 +167,7 @@ public class Command {
             out.println("Licensed under " + config.license());
             out.println();
 
-            final System system = trio.loadSystemFrom(inputFile);
+            final Assembly system = trio.loadSystemFrom(inputFile);
             
             trio.validate(system);
             

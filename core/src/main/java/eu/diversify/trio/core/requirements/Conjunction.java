@@ -34,7 +34,7 @@
  */
 package eu.diversify.trio.core.requirements;
 
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.simulation.Topology;
 
 /**
@@ -46,11 +46,11 @@ public final class Conjunction extends BinaryOperator {
         super(LogicalOperator.AND, left, right);
     }
 
-    public void begin(SystemVisitor visitor) {
+    public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }
 
-    public void end(SystemVisitor visitor) {
+    public void end(AssemblyVisitor visitor) {
         visitor.exit(this);
     }
 

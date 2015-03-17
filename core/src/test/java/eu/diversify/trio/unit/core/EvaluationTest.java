@@ -21,7 +21,7 @@ import eu.diversify.trio.core.Component;
 
 import static eu.diversify.trio.core.Evaluation.*;
 
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.requirements.Conjunction;
 import eu.diversify.trio.core.requirements.Disjunction;
 import eu.diversify.trio.core.requirements.Negation;
@@ -53,7 +53,7 @@ public class EvaluationTest {
     @Test
     public void shouldTraverseRequire() {
         final Require data = RequirementSamples.require();
-        final SystemVisitor function = context.mock(SystemVisitor.class);
+        final AssemblyVisitor function = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -71,7 +71,7 @@ public class EvaluationTest {
     public void shouldTraverseNothing() {
 
         final Nothing data = RequirementSamples.nothing();
-        final SystemVisitor function = context.mock(SystemVisitor.class);
+        final AssemblyVisitor function = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -88,7 +88,7 @@ public class EvaluationTest {
     @Test
     public void shouldTraverseConjunction() {
         final Conjunction data = RequirementSamples.conjunction();
-        final SystemVisitor function = context.mock(SystemVisitor.class);
+        final AssemblyVisitor function = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -108,7 +108,7 @@ public class EvaluationTest {
     @Test
     public void shouldTraverseDisjunction() {
        final Disjunction data = RequirementSamples.disjunction();
-        final SystemVisitor function = context.mock(SystemVisitor.class);
+        final AssemblyVisitor function = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -128,7 +128,7 @@ public class EvaluationTest {
     @Test
     public void shouldTraverseNegation() {
        final Negation data = RequirementSamples.negation();
-        final SystemVisitor function = context.mock(SystemVisitor.class);
+        final AssemblyVisitor function = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -149,7 +149,7 @@ public class EvaluationTest {
     public void shouldTraverseComponent() {
 
         final Component data = new Component("A");
-        final SystemVisitor function = context.mock(SystemVisitor.class);
+        final AssemblyVisitor function = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

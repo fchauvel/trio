@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * A 'tag' used to classify the components of the system
  */
-public class Tag implements SystemPart {
+public class Tag implements AssemblyPart {
 
     private final String label;
     private final Set<String> targets;
@@ -41,16 +41,16 @@ public class Tag implements SystemPart {
         this.targets = new HashSet<String>(targets);
     }
 
-    public Collection<SystemPart> subParts() {
-        final List<SystemPart> subparts = new ArrayList<SystemPart>(0);
+    public Collection<AssemblyPart> subParts() {
+        final List<AssemblyPart> subparts = new ArrayList<AssemblyPart>(0);
         return subparts;
     }
 
-    public void begin(SystemVisitor visitor) {
+    public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }
 
-    public void end(SystemVisitor visitor) {
+    public void end(AssemblyVisitor visitor) {
         visitor.exit(this);
     }
 

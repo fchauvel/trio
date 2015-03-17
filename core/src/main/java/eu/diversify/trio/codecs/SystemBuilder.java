@@ -20,7 +20,7 @@
 package eu.diversify.trio.codecs;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.builder.TrioBaseVisitor;
 import eu.diversify.trio.builder.TrioParser;
@@ -30,17 +30,17 @@ import java.util.List;
 /**
  * Traverse the AST a build a System object
  */
-public class SystemBuilder extends TrioBaseVisitor<System> {
+public class SystemBuilder extends TrioBaseVisitor<Assembly> {
 
     @Override
-    public System visitSystem(TrioParser.SystemContext ctx) {
+    public Assembly visitSystem(TrioParser.SystemContext ctx) {
         String name = "Anonymous";
         if (ctx.description() != null) {
             name = ctx.description().STRING().getText().replaceAll("[\"']", "");
         }
         final List<Component> components = extractComponents(ctx.component());
         final List<Tag> tags = extractTags(ctx);
-        return new System(name, components, tags);
+        return new Assembly(name, components, tags);
     }
     
     private List<Component> extractComponents(List<TrioParser.ComponentContext> components) {

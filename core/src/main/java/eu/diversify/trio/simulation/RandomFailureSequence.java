@@ -18,7 +18,7 @@
 
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.filter.Filter;
 import eu.diversify.trio.simulation.actions.Inactivate;
@@ -32,11 +32,11 @@ import java.util.Random;
  */
 public class RandomFailureSequence extends Scenario {
 
-    public RandomFailureSequence(System system) {
+    public RandomFailureSequence(Assembly system) {
         super(system);
     }
 
-    public RandomFailureSequence(System system, Filter observation, Filter control) {
+    public RandomFailureSequence(Assembly system, Filter observation, Filter control) {
         super(system, observation, control);
     }
 

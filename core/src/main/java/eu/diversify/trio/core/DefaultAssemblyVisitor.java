@@ -22,19 +22,19 @@ import eu.diversify.trio.core.requirements.*;
 /**
  * Ability to traverse a system, following the containment relationships.
  */
-public abstract class DefaultSystemVisitor implements SystemVisitor {
+public abstract class DefaultAssemblyVisitor implements AssemblyVisitor {
 
     protected void defaultVisit() {
         // Nothing done, by default
     }
 
     @Override
-    public void enter(System system) {
+    public void enter(Assembly system) {
         defaultVisit();
     }
 
     @Override
-    public void exit(System system) {
+    public void exit(Assembly system) {
         defaultVisit();
     }
 

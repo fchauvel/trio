@@ -25,7 +25,7 @@ import eu.diversify.trio.analysis.Robustness;
 import static eu.diversify.trio.codecs.Builder.*;
 
 import org.junit.Test;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.core.validation.Validator;
 import eu.diversify.trio.data.DataSet;
@@ -64,7 +64,7 @@ public class RobustnessTest {
 
     @Test
     public void testExample() throws InvalidSystemException {
-        final System example = build().systemFrom(systemText);
+        final Assembly example = build().systemFrom(systemText);
 
         final Validator validity = new Validator();
         evaluate(validity).on(example);

@@ -43,7 +43,7 @@ import eu.diversify.trio.analysis.Probability;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.codecs.SyntaxError;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.core.validation.Validator;
 import eu.diversify.trio.data.CSVFormatter;
@@ -62,7 +62,7 @@ import static eu.diversify.trio.core.Evaluation.evaluate;
  */
 public class Trio {
 
-    public System loadSystemFrom(String path) throws FileNotFoundException, IOException, SyntaxError {
+    public Assembly loadSystemFrom(String path) throws FileNotFoundException, IOException, SyntaxError {
 
         FileInputStream fileInputStream = null;
         try {
@@ -91,7 +91,7 @@ public class Trio {
      * @throws InvalidSystemException if there are some inconsistencies in the
      * model
      */
-    public void validate(System system) throws InvalidSystemException {
+    public void validate(Assembly system) throws InvalidSystemException {
         Validator validity = new Validator();
         evaluate(validity).on(system);
         validity.check();

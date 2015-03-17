@@ -20,7 +20,7 @@ package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.codecs.SyntaxError;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.random.Generator;
 import eu.diversify.trio.core.statistics.Statistics;
 import eu.diversify.trio.filter.TaggedAs;
@@ -55,7 +55,7 @@ public class PerformanceIT {
     @Test
     public void responseTimeOfFixedSequence() throws IOException, FileNotFoundException, SyntaxError {
 
-        System system = trio.loadSystemFrom("src/test/resources/samples/sensapp_topo4.trio");
+        Assembly system = trio.loadSystemFrom("src/test/resources/samples/sensapp_topo4.trio");
         FixedFailureSequence scenario = new FixedFailureSequence(system, new TaggedAs("service"), new TaggedAs("platform"),
                                                                  inactivate("JRE1"),
                                                                  inactivate("DB2"),
@@ -71,7 +71,7 @@ public class PerformanceIT {
     @Test
     public void responseTimeOfRandomSequence() throws IOException, FileNotFoundException, SyntaxError {
 
-        System system = trio.loadSystemFrom("src/test/resources/samples/sensapp_topo4.trio");
+        Assembly system = trio.loadSystemFrom("src/test/resources/samples/sensapp_topo4.trio");
         RandomFailureSequence scenario = new RandomFailureSequence(system, new TaggedAs("service"), new TaggedAs("platform"));
 
         final double ONE_MS = 1D;
@@ -85,7 +85,7 @@ public class PerformanceIT {
         final int SYSTEM_SIZE = 10000;
 
         final Generator generate = new Generator();
-        final System system = generate.system(SYSTEM_SIZE, Distribution.uniform(0, SYSTEM_SIZE));
+        final Assembly system = generate.system(SYSTEM_SIZE, Distribution.uniform(0, SYSTEM_SIZE));
 
         final Scenario scenario = new RandomFailureSequence(system);
         long duration = durationOf(scenario);
@@ -111,7 +111,7 @@ public class PerformanceIT {
             final Distribution meanValenceDistribution = Distribution.uniform(0, size);
             final double mean = meanValenceDistribution.sample();
             final Distribution density = Distribution.normal(mean, mean / 4);
-            final System system = generate.system(size, density);
+            final Assembly system = generate.system(size, density);
             final Scenario scenario = new RandomFailureSequence(system);
             double duration = durationOf(scenario);
 

@@ -24,7 +24,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.builder.TrioLexer;
 import eu.diversify.trio.builder.TrioParser;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class Builder {
         return tree.accept(new ComponentBuilder());
     }
 
-    public System systemFrom(String text) {
+    public Assembly systemFrom(String text) {
         TrioLexer lexer = new TrioLexer(new ANTLRInputStream(text));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TrioParser parser = new TrioParser(tokens);
@@ -66,7 +66,7 @@ public class Builder {
         return tree.accept(new SystemBuilder());
     }
 
-    public System systemFrom(InputStream input) throws IOException, SyntaxError {
+    public Assembly systemFrom(InputStream input) throws IOException, SyntaxError {
         SystemErrorListener listener = new SystemErrorListener();
         TrioLexer lexer = new TrioLexer(new ANTLRInputStream(input));
         lexer.removeErrorListeners();

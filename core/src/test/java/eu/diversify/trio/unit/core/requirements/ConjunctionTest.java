@@ -19,8 +19,8 @@
  */
 package eu.diversify.trio.unit.core.requirements;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.requirements.Conjunction;
 import eu.diversify.trio.core.requirements.Require;
 import org.jmock.Expectations;
@@ -42,7 +42,7 @@ public class ConjunctionTest {
 
         final Conjunction conjunction = RequirementSamples.conjunction();
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -62,7 +62,7 @@ public class ConjunctionTest {
 
         final Conjunction conjunction = RequirementSamples.conjunction();
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

@@ -34,14 +34,14 @@
  */
 package eu.diversify.trio.core.requirements;
 
-import eu.diversify.trio.core.SystemPart;
+import eu.diversify.trio.core.AssemblyPart;
 import eu.diversify.trio.simulation.Topology;
 
 /**
  * Logical expression representing the components whose activity (or inactivity)
  * is required.
  */
-public abstract class Requirement implements SystemPart {
+public abstract class Requirement implements AssemblyPart {
 
     public final Requirement and(Requirement right) {
         return new Conjunction(this, right);

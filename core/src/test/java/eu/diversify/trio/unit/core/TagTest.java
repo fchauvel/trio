@@ -19,8 +19,8 @@
 package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultSystemVisitor;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.Tag;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +79,7 @@ public class TagTest extends TestCase {
 
         final Tag tag = new Tag("foo", "on x");
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -98,7 +98,7 @@ public class TagTest extends TestCase {
 
         final Tag tag = new Tag("foo", "on x");
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

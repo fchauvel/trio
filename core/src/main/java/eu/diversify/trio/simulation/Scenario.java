@@ -19,7 +19,7 @@
  */
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.data.Trace;
 import eu.diversify.trio.filter.All;
@@ -30,11 +30,11 @@ import eu.diversify.trio.filter.Filter;
  */
 public abstract class Scenario {
 
-    private final System system;
+    private final Assembly system;
     private final Filter observation;
     private final Filter control;
 
-    public Scenario(System system) {
+    public Scenario(Assembly system) {
         this(system, All.getInstance(), All.getInstance());
     }
 
@@ -46,7 +46,7 @@ public abstract class Scenario {
         return control;
     }
 
-    public Scenario(System system, Filter observation, Filter control) {
+    public Scenario(Assembly system, Filter observation, Filter control) {
         this.system = system;
         this.observation = observation;
         this.control = control;

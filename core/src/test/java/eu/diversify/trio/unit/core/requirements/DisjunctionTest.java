@@ -19,8 +19,8 @@
 
 package eu.diversify.trio.unit.core.requirements;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.requirements.Conjunction;
 import eu.diversify.trio.core.requirements.Disjunction;
 import eu.diversify.trio.core.requirements.Require;
@@ -43,7 +43,7 @@ public class DisjunctionTest {
 
         final Disjunction disjunction = RequirementSamples.disjunction();
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -63,7 +63,7 @@ public class DisjunctionTest {
  
         final Disjunction disjunction =  RequirementSamples.disjunction();  
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

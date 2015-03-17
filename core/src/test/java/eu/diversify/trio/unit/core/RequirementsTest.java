@@ -18,7 +18,7 @@
 package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.requirements.Nothing;
@@ -38,7 +38,7 @@ import static org.hamcrest.Matchers.*;
 public class RequirementsTest extends TestCase {
 
     private Topology sampleTopologyWithAAndB() {
-        final System system = new System(new Component("A"), new Component("B"));
+        final Assembly system = new Assembly(new Component("A"), new Component("B"));
         return system.instantiate();
     }
 

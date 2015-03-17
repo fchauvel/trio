@@ -17,14 +17,14 @@
  */
 package eu.diversify.trio.core.requirements.stats;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
 import eu.diversify.trio.core.requirements.*;
 import java.util.Arrays;
 
 /**
  * Count logical operators in a given requirement
  */
-public class OperatorDistribution extends DefaultSystemVisitor {
+public class OperatorDistribution extends DefaultAssemblyVisitor {
 
     private final int[] counts;
 

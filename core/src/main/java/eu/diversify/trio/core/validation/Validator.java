@@ -19,8 +19,8 @@
 package eu.diversify.trio.core.validation;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultSystemVisitor;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Require;
 import java.util.ArrayList;
@@ -31,10 +31,10 @@ import java.util.List;
  * Traverse the model, and check that component referred in dependencies and by
  * tags are properly defined in the model.
  */
-public class Validator extends DefaultSystemVisitor {
+public class Validator extends DefaultAssemblyVisitor {
 
     private final List<Inconsistency> errors;
-    private System currentSystem;
+    private Assembly currentSystem;
     private Component currentComponent;
     
     public Validator() {
@@ -68,7 +68,7 @@ public class Validator extends DefaultSystemVisitor {
     }
 
     @Override
-    public void enter(System system) {
+    public void enter(Assembly system) {
         this.currentSystem = system;
     }
 

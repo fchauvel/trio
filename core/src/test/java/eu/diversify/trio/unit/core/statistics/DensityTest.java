@@ -18,7 +18,7 @@
 package eu.diversify.trio.unit.core.statistics;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.statistics.Density;
 import java.util.*;
 import org.junit.Test;
@@ -38,11 +38,11 @@ import static org.hamcrest.Matchers.*;
 public class DensityTest {
 
     private final String testName;
-    private final System system;
+    private final Assembly system;
     private final Density density;
     private final double expectedDensity;
 
-    public DensityTest(String testName, System system, double expectedDensity) {
+    public DensityTest(String testName, Assembly system, double expectedDensity) {
         this.testName = testName;
         this.system = system;
         this.density = new Density();
@@ -55,7 +55,7 @@ public class DensityTest {
 
         examples.add(new Object[]{
             "Maximum",
-            new System(
+            new Assembly(
             new Component("A", require("A").and(require("B"))),
             new Component("B", require("B").and(require("A")))
             ),
@@ -63,7 +63,7 @@ public class DensityTest {
 
         examples.add(new Object[]{
             "Minimum",
-            new System(
+            new Assembly(
             new Component("A", nothing()),
             new Component("B", nothing())
             ),
@@ -71,7 +71,7 @@ public class DensityTest {
         
         examples.add(new Object[]{
             "Middle range value",
-            new System(
+            new Assembly(
             new Component("A", require("B")),
             new Component("B", nothing())
             ),

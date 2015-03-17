@@ -30,128 +30,128 @@ import java.util.List;
  * Dispatch visit events (i.e., enter, exit) to other visitors, to factor out
  * the cost of traversing large models.
  */
-public class Dispatcher extends DefaultSystemVisitor {
+public class Dispatcher extends DefaultAssemblyVisitor {
 
-    private final List<SystemVisitor> listeners;
+    private final List<AssemblyVisitor> listeners;
 
-    public Dispatcher(SystemVisitor... listeners) {
+    public Dispatcher(AssemblyVisitor... listeners) {
         this(Arrays.asList(listeners));
     }
 
-    public Dispatcher(List<SystemVisitor> listeners) {
+    public Dispatcher(List<AssemblyVisitor> listeners) {
         eu.diversify.trio.util.Require.notNull(listeners, "Invalid 'null' value provided as listeners!");
         eu.diversify.trio.util.Require.notEmpty(listeners, "Invalid empty list [] provided as listeners!");
-        this.listeners = new ArrayList<SystemVisitor>(listeners);
+        this.listeners = new ArrayList<AssemblyVisitor>(listeners);
     }
 
     @Override
     public final void enter(Nothing nothing) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(nothing);
         }
     }
 
     @Override
     public final void exit(Nothing nothing) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(nothing);
         }
     }
 
     @Override
     public final void enter(Require require) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(require);
         }
     }
 
     @Override
     public final void exit(Require require) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(require);
         }
     }
 
     @Override
     public final void enter(Conjunction conjunction) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(conjunction);
         }
     }
 
     @Override
     public final void exit(Conjunction conjunction) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(conjunction);
         }
     }
 
     @Override
     public final void enter(Disjunction disjunction) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(disjunction);
         }
     }
 
     @Override
     public final void exit(Disjunction disjunction) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(disjunction);
         }
     }
 
     @Override
     public final void enter(Negation negation) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(negation);
         }
     }
 
     @Override
     public final void exit(Negation negation) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(negation);
         }
     }
 
     @Override
     public final void enter(Component component) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(component);
         }
     }
 
     @Override
     public final void exit(Component component) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(component);
         }
     }
 
     @Override
     public final void enter(Tag tag) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(tag);
         }
     }
 
     @Override
     public final void exit(Tag tag) {
-        for (SystemVisitor each: listeners) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(tag);
         }
     }
     
      @Override
-    public final void enter(System system) {
-        for (SystemVisitor each: listeners) {
+    public final void enter(Assembly system) {
+        for (AssemblyVisitor each: listeners) {
             each.enter(system);
         }
     }
 
     @Override
-    public final void exit(System system) {
-        for (SystemVisitor each: listeners) {
+    public final void exit(Assembly system) {
+        for (AssemblyVisitor each: listeners) {
             each.exit(system);
         }
     }

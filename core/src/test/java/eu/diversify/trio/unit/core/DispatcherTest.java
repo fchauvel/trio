@@ -19,7 +19,7 @@ package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.Dispatcher;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Conjunction;
 import eu.diversify.trio.core.requirements.Disjunction;
@@ -41,13 +41,13 @@ import org.junit.runners.JUnit4;
 public class DispatcherTest {
 
     private final Mockery context = new JUnit4Mockery();
-    private final SystemVisitor listenerB;
-    private final SystemVisitor listenerA;
+    private final AssemblyVisitor listenerB;
+    private final AssemblyVisitor listenerA;
     private final Dispatcher dispatch;
 
     public DispatcherTest() {
-        this.listenerA = context.mock(SystemVisitor.class, "listener A");
-        this.listenerB = context.mock(SystemVisitor.class, "listener B");
+        this.listenerA = context.mock(AssemblyVisitor.class, "listener A");
+        this.listenerB = context.mock(AssemblyVisitor.class, "listener B");
         this.dispatch = new Dispatcher(listenerA, listenerB);
     }
 
@@ -277,7 +277,7 @@ public class DispatcherTest {
     
     @Test
     public void enterSystemShouldBeProperlyDispatched() {
-        final eu.diversify.trio.core.System data = new eu.diversify.trio.core.System(new Component("A"));
+        final eu.diversify.trio.core.Assembly data = new eu.diversify.trio.core.Assembly(new Component("A"));
 
         context.checking(new Expectations() {
             {
@@ -293,7 +293,7 @@ public class DispatcherTest {
 
     @Test
     public void exitSystemShouldBeProperlyDispatched() {
-        final eu.diversify.trio.core.System data = new eu.diversify.trio.core.System(new Component("A"));
+        final eu.diversify.trio.core.Assembly data = new eu.diversify.trio.core.Assembly(new Component("A"));
 
         context.checking(new Expectations() {
             {

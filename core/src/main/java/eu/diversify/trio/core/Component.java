@@ -46,7 +46,7 @@ import java.util.List;
  * A component is an entity of the system, whose status might be active or
  * inactive depending on others component's status.
  */
-public class Component implements SystemPart {
+public class Component implements AssemblyPart {
 
     private final String name;
     private final Requirement requirement;
@@ -63,17 +63,17 @@ public class Component implements SystemPart {
         this.requirement = requirement;
     }
 
-    public Collection<SystemPart> subParts() {
-        final List<SystemPart> subparts = new ArrayList<SystemPart>(1);
+    public Collection<AssemblyPart> subParts() {
+        final List<AssemblyPart> subparts = new ArrayList<AssemblyPart>(1);
         subparts.add(requirement);
         return subparts;
     }
 
-    public void begin(SystemVisitor visitor) {
+    public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }
 
-    public void end(SystemVisitor visitor) {
+    public void end(AssemblyVisitor visitor) {
         visitor.exit(this);
     }
 

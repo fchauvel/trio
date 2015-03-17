@@ -20,7 +20,7 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.util.Require;
-import eu.diversify.trio.core.SystemPart;
+import eu.diversify.trio.core.AssemblyPart;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -55,8 +55,8 @@ public abstract class BinaryOperator extends Requirement {
         return right;
     }
 
-    public final Collection<SystemPart> subParts() {
-        final List<SystemPart> parts = new ArrayList<SystemPart>(2);
+    public final Collection<AssemblyPart> subParts() {
+        final List<AssemblyPart> parts = new ArrayList<AssemblyPart>(2);
         parts.add(left);
         parts.add(right);
         return parts;

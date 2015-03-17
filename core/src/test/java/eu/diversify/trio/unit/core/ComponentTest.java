@@ -35,8 +35,8 @@
 package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultSystemVisitor;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.requirements.Require;
 
@@ -88,7 +88,7 @@ public class ComponentTest extends TestCase {
 
         final Component component = new Component("A");
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -107,7 +107,7 @@ public class ComponentTest extends TestCase {
 
         final Component component = new Component("A");
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

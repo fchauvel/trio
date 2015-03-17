@@ -34,7 +34,7 @@
  */
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.filter.All;
 import eu.diversify.trio.filter.Filter;
 import java.util.ArrayList;
@@ -51,21 +51,21 @@ public class Topology {
     public static final boolean ACTIVE = true;
     public static final boolean INACTIVE = !ACTIVE;
 
-    private final System system;
+    private final Assembly system;
     private final BitSet isActive;
     private final BitSet isObserved;
     private final BitSet isControlled;
     private final List<Listener> listeners;
 
-    public Topology(System system) {
+    public Topology(Assembly system) {
         this(system, All.getInstance(), All.getInstance(), new Listener[]{});
     }
 
-    public Topology(System system, Filter observation, Filter control) {
+    public Topology(Assembly system, Filter observation, Filter control) {
         this(system, observation, control, new Listener[]{});
     }
 
-    public Topology(System system, Filter observation, Filter control, Listener... listeners) {
+    public Topology(Assembly system, Filter observation, Filter control, Listener... listeners) {
         this.system = system;
         this.isActive = new BitSet(system.size());
         this.isActive.set(0, system.size(), true);

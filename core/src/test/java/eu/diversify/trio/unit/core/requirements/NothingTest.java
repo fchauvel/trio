@@ -19,8 +19,8 @@
 
 package eu.diversify.trio.unit.core.requirements;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.requirements.Conjunction;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
@@ -44,7 +44,7 @@ public class NothingTest {
 
         final Nothing nothing = Nothing.getInstance();
         
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -64,7 +64,7 @@ public class NothingTest {
 
         final Nothing nothing = Nothing.getInstance();
         
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

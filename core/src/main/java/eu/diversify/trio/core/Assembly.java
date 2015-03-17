@@ -36,7 +36,7 @@ import java.util.Set;
  * Represent the specification of a system under study. A collection component,
  * uniquely identified by their name.
  */
-public class System implements SystemPart {
+public class Assembly implements AssemblyPart {
 
     public static final String DEFAULT_NAME = "Anonymous";
 
@@ -45,19 +45,19 @@ public class System implements SystemPart {
     private final Map<String, Integer> indexByName;
     private final Map<String, Tag> tags;
 
-    public System(Component... components) {
+    public Assembly(Component... components) {
         this(DEFAULT_NAME, Arrays.asList(components), new ArrayList<Tag>());
     }
 
-    public System(Collection<Component> components) {
+    public Assembly(Collection<Component> components) {
         this(DEFAULT_NAME, components, new ArrayList<Tag>());
     }
 
-    public System(Collection<Component> components, Collection<Tag> tags) {
+    public Assembly(Collection<Component> components, Collection<Tag> tags) {
         this(DEFAULT_NAME, components, tags);
     }
 
-    public System(String name, Collection<Component> components, Collection<Tag> tags) {
+    public Assembly(String name, Collection<Component> components, Collection<Tag> tags) {
         Require.notNull(name, "Invalid value 'null', given as system name!");
         this.name = name;
 
@@ -113,18 +113,18 @@ public class System implements SystemPart {
         return indexByName.containsKey(componentName);
     }
 
-    public Collection<SystemPart> subParts() {
-        final List<SystemPart> subparts = new ArrayList<SystemPart>(components.size() + tags.size());
+    public Collection<AssemblyPart> subParts() {
+        final List<AssemblyPart> subparts = new ArrayList<AssemblyPart>(components.size() + tags.size());
         subparts.addAll(components);
         subparts.addAll(tags.values());
         return subparts;
     }
 
-    public void begin(SystemVisitor visitor) {
+    public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }
 
-    public void end(SystemVisitor visitor) {
+    public void end(AssemblyVisitor visitor) {
         visitor.exit(this);
     }
 
@@ -149,7 +149,7 @@ public class System implements SystemPart {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final System other = (System) obj;
+        final Assembly other = (Assembly) obj;
         return other.name.equals(name) && other.components.equals(components) && other.tags.equals(tags);
     }
 

@@ -35,9 +35,9 @@
 package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.SystemVisitor;
+import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Require;
 
@@ -66,13 +66,13 @@ public class SystemTest extends TestCase {
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectNullListOfComponents() {
         Collection<Component> components = null;
-        new System(components);
+        new Assembly(components);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectEmptyListOfComponent() {
         Collection<Component> components = new ArrayList<Component>();
-        new System(components);
+        new Assembly(components);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SystemTest extends TestCase {
         final List<Component> components = new ArrayList<Component>();
         components.add(new Component("A"));
         final List<Tag> tags = new ArrayList<Tag>();
-        final System system = new System(name, components, tags);
+        final Assembly system = new Assembly(name, components, tags);
 
         assertThat(system.getName(), is(equalTo(name)));
     }
@@ -91,14 +91,14 @@ public class SystemTest extends TestCase {
         final List<Component> components = new ArrayList<Component>();
         components.add(new Component("A"));
         final List<Tag> tags = new ArrayList<Tag>();
-        final System system = new System(components, tags);
+        final Assembly system = new Assembly(components, tags);
 
-        assertThat(system.getName(), is(equalTo(System.DEFAULT_NAME)));
+        assertThat(system.getName(), is(equalTo(Assembly.DEFAULT_NAME)));
     }
 
     @Test
     public void shouldGivenAccessToTheComponentByIndex() {
-        final System system = new System(new Component("A"), new Component("B", require("A")));
+        final Assembly system = new Assembly(new Component("A"), new Component("B", require("A")));
 
         assertThat(system.getComponent(0), is(equalTo(new Component("A"))));
         assertThat(system.getComponent(1), is(equalTo(new Component("B", require("A")))));
@@ -106,7 +106,7 @@ public class SystemTest extends TestCase {
 
     @Test
     public void shouldValidateComponentNames() {
-        final System system = new System(new Component("A"), new Component("B", require("A")));
+        final Assembly system = new Assembly(new Component("A"), new Component("B", require("A")));
 
         assertThat("component 'A' should exist", system.hasComponentNamed("A"));
         assertThat("component 'X' should not exists", !system.hasComponentNamed("X"));
@@ -114,14 +114,14 @@ public class SystemTest extends TestCase {
 
     @Test
     public void shouldProvideTheNumberOfComponentItContains() {
-        final System system = new System(new Component("A"), new Component("B", require("A")));
+        final Assembly system = new Assembly(new Component("A"), new Component("B", require("A")));
 
         assertThat(system.size(), is(equalTo(2)));
     }
 
     @Test
     public void shouldProvideTheIndexOfAComponentWithAGivenNmae() {
-        final System system = new System(new Component("A"), new Component("B", require("A")));
+        final Assembly system = new Assembly(new Component("A"), new Component("B", require("A")));
 
         assertThat(system.indexOf("A"), is(equalTo(0)));
         assertThat(system.indexOf("B"), is(equalTo(1)));
@@ -129,7 +129,7 @@ public class SystemTest extends TestCase {
 
     @Test
     public void shouldInstantiateNewTopology() {
-        final System system = new System(
+        final Assembly system = new Assembly(
                 new Component("Foo", new Require("Bar")),
                 new Component("Bar")
         );
@@ -144,9 +144,9 @@ public class SystemTest extends TestCase {
     public void beginShouldTriggerEnterOnTheVisitor() {
         final Mockery context = new JUnit4Mockery();
 
-        final System system = new System(new Component("A"));
+        final Assembly system = new Assembly(new Component("A"));
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {
@@ -163,9 +163,9 @@ public class SystemTest extends TestCase {
     public void endShouldTriggerExitOnTheVisitor() {
         final Mockery context = new JUnit4Mockery();
 
-        final System system = new System(new Component("A"));
+        final Assembly system = new Assembly(new Component("A"));
 
-        final SystemVisitor visitor = context.mock(SystemVisitor.class);
+        final AssemblyVisitor visitor = context.mock(AssemblyVisitor.class);
 
         context.checking(new Expectations() {
             {

@@ -18,7 +18,7 @@
 
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.filter.Filter;
 import java.util.Arrays;
@@ -31,12 +31,12 @@ public class FixedFailureSequence extends Scenario {
 
     private final List<Action> actions;
 
-    public FixedFailureSequence(System system, Action... actions) {
+    public FixedFailureSequence(Assembly system, Action... actions) {
         super(system);
         this.actions = Arrays.asList(actions);
     }
 
-    public FixedFailureSequence(System system, Filter observation, Filter control, Action... actions) {
+    public FixedFailureSequence(Assembly system, Filter observation, Filter control, Action... actions) {
         super(system, observation, control);
         this.actions = Arrays.asList(actions);
     }

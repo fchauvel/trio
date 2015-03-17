@@ -20,7 +20,7 @@
 
 package eu.diversify.trio.filter;
 
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import java.util.Set;
 
 /**
@@ -35,7 +35,7 @@ public class TaggedAs extends Filter {
     }
     
     @Override
-    public Set<String> resolve(System system) {
+    public Set<String> resolve(Assembly system) {
         return system.taggedAs(tag);
     }
 

@@ -19,7 +19,7 @@ package eu.diversify.trio.core.random;
 
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.core.System;
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.RequirementFactory;
 import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
@@ -42,7 +42,7 @@ public class Generator {
         this.goal = new Goal(10000, factory);
     }
 
-    public System system(int componentCount, Distribution valence) {
+    public Assembly system(int componentCount, Distribution valence) {
         goal.setVariableCount(componentCount);
         final Component[] components = new Component[componentCount];
         for (int index = 0; index < componentCount; index++) {
@@ -50,7 +50,7 @@ public class Generator {
             components[index] = component(index, dependencyCount);
         }
         final List<Tag> tags = new ArrayList<Tag>(1);
-        return new System("randomly generated", Arrays.asList(components), tags);
+        return new Assembly("randomly generated", Arrays.asList(components), tags);
     }
 
     public Component component(int index, int dependencyCount) {

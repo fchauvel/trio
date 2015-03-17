@@ -263,9 +263,9 @@ public class CommandTest extends TestCase {
         }
 
         @Override
-        public eu.diversify.trio.core.System loadSystemFrom(String path) throws FileNotFoundException, IOException {
+        public eu.diversify.trio.core.Assembly loadSystemFrom(String path) throws FileNotFoundException, IOException {
             this.inputFile = path;
-            return new eu.diversify.trio.core.System(new Component("A")); 
+            return new eu.diversify.trio.core.Assembly(new Component("A")); 
         }
 
     }

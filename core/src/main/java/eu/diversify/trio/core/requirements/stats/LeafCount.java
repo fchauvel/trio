@@ -17,14 +17,14 @@
  */
 package eu.diversify.trio.core.requirements.stats;
 
-import eu.diversify.trio.core.DefaultSystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
 
 /**
  * Count the number of leaves in an expression tree
  */
-public class LeafCount extends DefaultSystemVisitor {
+public class LeafCount extends DefaultAssemblyVisitor {
 
     private int counter;
 

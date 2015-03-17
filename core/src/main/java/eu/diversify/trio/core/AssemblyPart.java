@@ -15,48 +15,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
-
 package eu.diversify.trio.core;
 
-import eu.diversify.trio.core.requirements.*;
+import java.util.Collection;
 
 /**
- * Ability to traverse a system
+ * Common interface of every sub part of the system
  */
-public interface SystemVisitor {
+public interface AssemblyPart {
 
-    void enter(System system);
+    /**
+     * @return a collection containing the sub parts of this part
+     */
+    Collection<AssemblyPart> subParts();
 
-    void enter(Component component);
+    void begin(AssemblyVisitor visitor);
 
-    void enter(Tag tag);
+    void end(AssemblyVisitor visitor);
 
-    void enter(Conjunction conjunction);
-
-    void enter(Disjunction disjunction);
-
-    void enter(Negation negation);
-
-    void enter(Require require);
-
-    void enter(Nothing nothing);
-
-    void exit(System system);
-
-    void exit(Component component);
-
-    void exit(Tag tag);
-
-    void exit(Conjunction conjunction);
-
-    void exit(Disjunction disjunction);
-
-    void exit(Negation negation);
-
-    void exit(Require require);
-
-    void exit(Nothing nothing);
-    
 }

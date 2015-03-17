@@ -18,7 +18,7 @@
 package eu.diversify.trio.core.requirements.stats;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultSystemVisitor;
+import eu.diversify.trio.core.DefaultAssemblyVisitor;
 import eu.diversify.trio.core.requirements.Require;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +27,7 @@ import java.util.Set;
  * Count the variable used in a requirement. Variables occurring multiple times
  * are counted only once.
  */
-public class VariableCount extends DefaultSystemVisitor {
+public class VariableCount extends DefaultAssemblyVisitor {
 
     private final Set<String> variableNames;
 
