@@ -15,13 +15,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.diversify.trio.core.requirements;
 
-import eu.diversify.trio.util.Require;
 import eu.diversify.trio.core.AssemblyPart;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -31,35 +47,48 @@ import java.util.Objects;
  */
 public abstract class BinaryOperator extends Requirement {
 
-
     private final LogicalOperator operator;
-    private final Requirement left;
-    private final Requirement right;
+    private final List<Requirement> operands;
 
-    public BinaryOperator(LogicalOperator operator, Requirement left, Requirement right) {
-        Require.notNull(operator, "'null' given as operator!");
+    public BinaryOperator(LogicalOperator operator, Requirement... operands) {
+        validateOperator(operator);
+        validateOperands(operands);
+
         this.operator = operator;
+        this.operands = Arrays.asList(operands);
+    }
 
-        Require.notNull(left, "'null' given as left operand!");
-        this.left = left;
+    private void validateOperands(Requirement[] operands) throws IllegalArgumentException {
+        if (operands.length < 2) {
+            throw new IllegalArgumentException("Invalid number of operands (expected at least 2, but found " + operands.length + ")");
+        }
+        for (Requirement anyOperand : operands) {
+            if (anyOperand == null) {
+                throw new IllegalArgumentException("Invalid operand (found 'null')");
+            }
+        }
+    }
 
-        Require.notNull(right, "'null' given as right operator");
-        this.right = right;
+    private void validateOperator(LogicalOperator operator) throws IllegalArgumentException {
+        if (operator == null) {
+            throw new IllegalArgumentException("Invalid operator ('null' found)");
+        }
+    }
+
+    public List<Requirement> getOperands() {
+        return this.operands;
     }
 
     public Requirement getLeft() {
-        return left;
+        return this.operands.get(0);
     }
 
     public Requirement getRight() {
-        return right;
+        return this.operands.get(1);
     }
 
     public final Collection<AssemblyPart> subParts() {
-        final List<AssemblyPart> parts = new ArrayList<AssemblyPart>(2);
-        parts.add(left);
-        parts.add(right);
-        return parts;
+        return new ArrayList<AssemblyPart>(operands);
     }
 
     private int hash = 0;
@@ -67,7 +96,7 @@ public abstract class BinaryOperator extends Requirement {
     @Override
     public final int hashCode() {
         if (hash == 0) {
-            hash = Objects.hash(operator, left, right);
+            hash = Objects.hash(operator, operands.toArray());
         }
         return hash;
     }
@@ -84,10 +113,7 @@ public abstract class BinaryOperator extends Requirement {
         if (this.operator != other.operator) {
             return false;
         }
-        if (this.left != other.left && (this.left == null || !this.left.equals(other.left))) {
-            return false;
-        }
-        if (this.right != other.right && (this.right == null || !this.right.equals(other.right))) {
+        if (!operands.equals(other.operands)) {
             return false;
         }
         return true;

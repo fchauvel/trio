@@ -99,5 +99,6 @@ public class StateTest {
 
         assertThat(state.relevantCommands(), hasItem(State.ADD_NOT));
     }
-
-}
+    
+    
+ }

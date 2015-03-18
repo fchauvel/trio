@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+
 package eu.diversify.trio.core.requirements.random;
 
 import java.util.Arrays;
@@ -61,8 +60,8 @@ public final class State {
     };
 
     private final int desiredSize;
-    private int localSize;
-    private int minimumGlobalSize;
+    private int currentSize;
+    private int minimumFinalSize;
 
     private int currentState;
     private boolean allowNegation;
@@ -71,10 +70,10 @@ public final class State {
         this(desiredSize, 0, 1);
     }
 
-    public State(int desiredSize, int localSize, int minimumGlobalSize) {
+    public State(int desiredSize, int currentSize, int minimumFinalSize) {
         this.desiredSize = desiredSize;
-        this.localSize = localSize;
-        this.minimumGlobalSize = minimumGlobalSize;
+        this.currentSize = currentSize;
+        this.minimumFinalSize = minimumFinalSize;
         this.allowNegation = true;
         this.currentState = compactState();
 
@@ -92,11 +91,11 @@ public final class State {
     }
 
     private boolean wouldCloseTheTree() {
-        return minimumGlobalSize - localSize == 1;
+        return minimumFinalSize - currentSize == 1;
     }
 
     private boolean isBigEnough() {
-        return desiredSize == minimumGlobalSize;
+        return desiredSize == minimumFinalSize;
     }
 
     public void addNegation() {
@@ -106,18 +105,18 @@ public final class State {
 
     public void addLeaf() {
         allowNegation = true;
-        localSize++;
+        currentSize++;
         currentState = compactState();
     }
 
     public void addBranch() {
         allowNegation = true;
-        minimumGlobalSize++;
+        minimumFinalSize++;
         currentState = compactState();
     }
 
     @Override
     public String toString() {
-        return "[S=" + localSize + " ; M=" + minimumGlobalSize + "]";
+        return "[S=" + currentSize + " ; M=" + minimumFinalSize + "]";
     }
 }

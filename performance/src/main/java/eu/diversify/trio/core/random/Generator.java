@@ -39,9 +39,10 @@ public class Generator {
     private final Goal goal;
 
     public Generator() {
-        this.factory = new CachedLiteralFactory(10000);
-        this.goal = new Goal(10000, factory);
+        this.factory = new CachedLiteralFactory(DEFAULT_LITERAL_COUNT);
+        this.goal = new Goal(DEFAULT_LITERAL_COUNT, factory);
     }
+    private static final int DEFAULT_LITERAL_COUNT = 10000;
 
     public Assembly assembly(int componentCount, Distribution valence) {
         goal.setVariableCount(componentCount);
