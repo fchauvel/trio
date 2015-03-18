@@ -30,12 +30,12 @@ public abstract class RequirementFactory {
         return new Require(componentName);
     }
 
-    public Requirement createConjunction(Requirement left, Requirement right) {
-        return new Conjunction(left, right);
+    public Requirement createConjunction(Requirement... operands) {
+        return new Conjunction(operands);
     }
 
-    public Requirement createDisjunction(Requirement left, Requirement right) {
-        return new Disjunction(left, right);
+    public Requirement createDisjunction(Requirement... operands) {
+        return new Disjunction(operands);
     }
 
     public Requirement createNegation(Requirement operand) {

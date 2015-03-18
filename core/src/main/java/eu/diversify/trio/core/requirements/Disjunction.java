@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.AssemblyVisitor;
@@ -25,8 +26,8 @@ import eu.diversify.trio.simulation.Topology;
  */
 public final class Disjunction extends BinaryOperator {
 
-    public Disjunction(Requirement left, Requirement right) {
-        super(LogicalOperator.OR, left, right);
+    public Disjunction(Requirement... operands) {
+        super(LogicalOperator.OR, operands);
     }
 
     public void begin(AssemblyVisitor visitor) {
@@ -38,7 +39,12 @@ public final class Disjunction extends BinaryOperator {
     }
 
     public boolean isSatisfiedBy(Topology topology) {
-        return getLeft().isSatisfiedBy(topology) || getRight().isSatisfiedBy(topology);
+        for (Requirement anyOperand : getOperands()) {
+            if (anyOperand.isSatisfiedBy(topology)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String formatted;
@@ -46,9 +52,21 @@ public final class Disjunction extends BinaryOperator {
     @Override
     public String toString() {
         if (formatted == null) {
-            formatted = String.format("(%s or %s)", getLeft().toString(), getRight().toString());
+            StringBuilder buffer = new StringBuilder();
+            buffer.append('(');
+            for (int index = 0; index < getOperands().size(); index++) {
+                final Requirement eachOperand = getOperands().get(index);
+                buffer.append(eachOperand.toString());
+                if (index < getOperands().size() - 1) {
+                    buffer.append(OR_TEXT);
+                }
+            }
+            buffer.append(')');
+            formatted = buffer.toString();
         }
         return formatted;
     }
+    
+    private static final String OR_TEXT = " or ";
 
 }
