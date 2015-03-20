@@ -33,8 +33,8 @@ public class GeneratorTest {
 
     @Test
     public void durationForLargeSystems() {
-        final int RUN_COUNT = 1; // Should 100
-        final int COMPONENT_COUNT = 10000; // Should be 1000
+        final int RUN_COUNT = 100; // Should 100
+        final int COMPONENT_COUNT = 1000; // Should be 1000
 
         final Generator random = new Generator();
 

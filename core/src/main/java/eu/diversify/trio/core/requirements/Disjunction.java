@@ -20,6 +20,7 @@ package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.simulation.Topology;
+import java.util.List;
 
 /**
  * Logical disjunction between requirements
@@ -30,6 +31,10 @@ public final class Disjunction extends BinaryOperator {
         super(LogicalOperator.OR, operands);
     }
 
+    public Disjunction(List<Requirement> operands) {
+        super(LogicalOperator.OR, operands);
+    }
+    
     public void begin(AssemblyVisitor visitor) {
         visitor.enter(this);
     }

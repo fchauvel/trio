@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+
 package eu.diversify.trio.core.random;
 
 import eu.diversify.trio.core.requirements.*;
@@ -91,7 +90,7 @@ public abstract class RequirementGenerator {
                 break;
             case 3:
                 result = aDisjunction();
-                break;
+                break; 
             case 4:
                 result = aNegation();
                 break;

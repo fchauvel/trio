@@ -23,41 +23,45 @@ import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.RequirementFactory;
+import eu.diversify.trio.core.requirements.random.BuildRandomizer;
 import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
-import eu.diversify.trio.core.requirements.random.Goal;
+import eu.diversify.trio.core.requirements.random.FixedSizeBuilder;
 import eu.diversify.trio.util.random.Distribution;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Generate randomized system description
  */
 public class Generator {
 
+    public static final int DEFAULT_LITERAL_COUNT = 10000;
+
     private final RequirementFactory factory;
-    private final Goal goal;
+    private final Random random;
 
     public Generator() {
+        random = new Random();
         this.factory = new CachedLiteralFactory(DEFAULT_LITERAL_COUNT);
-        this.goal = new Goal(DEFAULT_LITERAL_COUNT, factory);
     }
-    private static final int DEFAULT_LITERAL_COUNT = 10000;
 
     public Assembly assembly(int componentCount, Distribution valence) {
-        goal.setVariableCount(componentCount);
         final Component[] components = new Component[componentCount];
         for (int index = 0; index < componentCount; index++) {
-            final int dependencyCount = (int) valence.sample();
-            components[index] = component(index, dependencyCount);
+            final int dependencyCount = componentCount;
+            components[index] = component(index, componentCount, dependencyCount);
         }
         final List<Tag> tags = new ArrayList<Tag>(1);
         return new Assembly("randomly generated", Arrays.asList(components), tags);
     }
 
-    public Component component(int index, int dependencyCount) {
-        Requirement dependencies = goal.build(dependencyCount); 
+    public Component component(int index, int capacity, int size) {
+        BuildRandomizer builder = new BuildRandomizer(new FixedSizeBuilder(factory, size), random, capacity);
+        Requirement dependencies = builder.build(); 
         return new Component(("C" + index).intern(), dependencies);
     }
+    
 
 }

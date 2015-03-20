@@ -34,17 +34,25 @@ public abstract class BinaryOperator extends Requirement {
     private final LogicalOperator operator;
     private final List<Requirement> operands;
 
+    
+    
     public BinaryOperator(LogicalOperator operator, Requirement... operands) {
+        this(operator, Arrays.asList(operands));
+    }
+    
+    public BinaryOperator(LogicalOperator operator, List<Requirement> operands) {
         validateOperator(operator);
         validateOperands(operands);
 
         this.operator = operator;
-        this.operands = Arrays.asList(operands);
+        this.operands = new ArrayList<Requirement>(operands);    
+         
     }
+    
 
-    private void validateOperands(Requirement[] operands) throws IllegalArgumentException {
-        if (operands.length < 2) {
-            throw new IllegalArgumentException("Invalid number of operands (expected at least 2, but found " + operands.length + ")");
+    private void validateOperands(List<Requirement> operands) throws IllegalArgumentException {
+        if (operands.size() < 2) {
+            throw new IllegalArgumentException("Invalid number of operands (expected at least 2, but found " + operands.size() + ")");
         }
         for (Requirement anyOperand : operands) {
             if (anyOperand == null) {

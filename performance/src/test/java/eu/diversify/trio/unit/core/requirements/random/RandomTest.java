@@ -2,36 +2,38 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
 /*
  */
 package eu.diversify.trio.unit.core.requirements.random;
 
-import eu.diversify.trio.core.requirements.CachedFactory;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
-import eu.diversify.trio.core.requirements.random.Goal;
 import eu.diversify.trio.core.requirements.stats.LeafCount;
-import eu.diversify.trio.core.requirements.stats.NodeCount;
 import java.util.Random;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static eu.diversify.trio.core.Evaluation.evaluate;
+import eu.diversify.trio.core.requirements.random.BuildRandomizer;
+import eu.diversify.trio.core.requirements.random.Builder;
+import eu.diversify.trio.core.requirements.random.Command;
+import eu.diversify.trio.core.requirements.random.FixedSizeBuilder;
+import java.util.LinkedList;
+import java.util.List;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
@@ -44,31 +46,42 @@ public class RandomTest {
     @Test
     //@Ignore
     public void resultShouldHaveTheCorrectSize() {
+        final int CAPACITY = 25;
         final int SIZE = 10000;
 
-        final Requirement requirement = new Goal(65, new CachedFactory()).build(SIZE);
+        //final LoggedRandomizer randomRequirement = prepareLoggedBuilder(CAPACITY, SIZE);
+        final BuildRandomizer randomRequirement = prepareBuilder(CAPACITY, SIZE);
+        
+        final Requirement requirement = randomRequirement.build();
         final LeafCount leafCount = new LeafCount();
 
-        evaluate(leafCount).on(requirement); 
+        evaluate(leafCount).on(requirement);
 
+        //assertThat(randomRequirement.summary(), leafCount.get(), is(equalTo(SIZE)));
         assertThat(leafCount.get(), is(equalTo(SIZE)));
+    }
+
+    public static BuildRandomizer prepareBuilder(int capacity, int size) {
+        return new BuildRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), capacity);
+    }
+    
+    public static LoggedRandomizer prepareLoggedBuilder(int capacity, int size) {
+        return new LoggedRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), capacity);
     }
 
     @Test
     public void testAccumulation() {
         final int RUN_COUNT = 10000;
-        final int SIZE_LIMIT = 100;
-        final int VARIABLE_CAPACITY = 10000;
+        final int SIZE = 100;
+        final int CAPACITY = 10000;
 
-        final Goal goal = new Goal(VARIABLE_CAPACITY, new CachedLiteralFactory(10000));
+        final BuildRandomizer randomRequirement = prepareBuilder(CAPACITY, SIZE);
 
-        final CachedFactory factory = new CachedFactory();
         final Requirement[] results = new Requirement[RUN_COUNT];
 
         long start = System.currentTimeMillis();
         for (int runIndex = 0; runIndex < RUN_COUNT; runIndex++) {
-            int size = new Random().nextInt(SIZE_LIMIT);
-            results[runIndex] = goal.build(size);
+            results[runIndex] = randomRequirement.build();
         }
         long end = System.currentTimeMillis();
 
@@ -79,25 +92,47 @@ public class RandomTest {
     //@Ignore
     public void testSpeed() {
         final int RUN_COUNT = 10000;
-        final int REQUIREMENT_SIZE = 10;
-        final int VARIABLE_CAPACITY = 10;
+        final int SIZE = 5000;
+        final int CAPACITY = 10000;
 
-        long duration = 0;
-        final Goal goal = new Goal(VARIABLE_CAPACITY);
+        final BuildRandomizer randomRequirement = prepareBuilder(CAPACITY, SIZE);
+
+        long totalDuration = 0;
         for (int i = 0; i < RUN_COUNT; i++) {
-            duration += onRandomRequirement(goal, REQUIREMENT_SIZE);
+            long start = System.currentTimeMillis();
+            randomRequirement.build();
+            long end = System.currentTimeMillis();
+            totalDuration += end - start;
         }
-        double average = ((double) duration) / RUN_COUNT;
+        double average = ((double) totalDuration) / RUN_COUNT;
 
-        System.out.println("Random requirement [S=" + REQUIREMENT_SIZE + ", V=" + VARIABLE_CAPACITY + "] built in " + average + " ms");
-        //assertThat("Generation of random requirement is too long", average, is(lessThan(100D)));
+        System.out.println("Random requirement [S=" + SIZE + ", V=" + CAPACITY + "] built in " + average + " ms");
+   
+
     }
+    
+    
+    private static class LoggedRandomizer extends BuildRandomizer {
 
-    private long onRandomRequirement(Goal goal, int size) {
-        long start = System.currentTimeMillis();
-        goal.build(size);
-        long end = System.currentTimeMillis();
-        return end - start;
+        private final List<Command> history;
+
+        public LoggedRandomizer(Builder builder, Random random, int componentCount) {
+            super(builder, random, componentCount);
+            history = new LinkedList<>();
+        }
+        
+       
+        @Override
+        protected void execute(Command command) {
+            super.execute(command); 
+            history.add(command);
+        }
+        
+        public String summary() {
+            return history.toString();
+        }
+        
+        
     }
 
 }

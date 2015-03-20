@@ -47,7 +47,7 @@ public class SandBoxIT {
     @Test
     public void onOneLargeModel() {
         final Generator aRandom = new Generator();
-        final Assembly assembly = aRandom.assembly(5000, Distribution.uniform(0D, 5000D));
+        final Assembly assembly = aRandom.assembly(5000, Distribution.uniform(0D, 10000D));
         final Scenario scenario = new RandomFailureSequence(assembly);
         long duration = 0;
         final int RUN_COUNT = 10;
@@ -74,10 +74,10 @@ public class SandBoxIT {
         return total * (1D / runCount);
     }
     
-    @Test
-    public void openstackShouldLoadJustFine() throws IOException, SyntaxError {
-        Trio trio = new Trio();
-        
-        trio.loadSystemFrom("src/test/resources/samples/openstack.trio");
-    }
+//    @Test
+//    public void openstackShouldLoadJustFine() throws IOException, SyntaxError {
+//        Trio trio = new Trio();
+//        
+//        trio.loadSystemFrom("src/test/resources/samples/openstack.trio");
+//    }
 }
