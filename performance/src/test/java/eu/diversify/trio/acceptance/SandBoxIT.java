@@ -2,20 +2,19 @@
  *
  * This file is part of TRIO.
  *
- * TRIO is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * TRIO is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
@@ -26,6 +25,8 @@ import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.util.random.Distribution;
 import java.io.IOException;
+import java.util.BitSet;
+import java.util.Random;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ import org.junit.runners.JUnit4;
  * A single test to play with
  */
 @RunWith(JUnit4.class)
-@Ignore
+//@Ignore
 public class SandBoxIT {
 
     private final Trio trio;
@@ -73,7 +74,27 @@ public class SandBoxIT {
         }
         return total * (1D / runCount);
     }
-    
+
+    @Test
+    public void testAdgacencyMatrixGenerationSpeed() {
+        final int SIZE = 10000;
+        final int LENGTH = SIZE * SIZE;
+        Random random = new Random();
+        final int RUN_COUNT = 100;
+
+        long totalDuration = 0;
+        for (int run = 0; run < RUN_COUNT; run++) {
+            final long start = System.currentTimeMillis();
+            final BitSet adjacency = new BitSet(LENGTH);
+            for (int i = 0; i < LENGTH; i++) {
+                adjacency.set(i, random.nextBoolean());
+            }
+            final long end = System.currentTimeMillis();
+            totalDuration += (end - start);
+        }
+        System.out.println("Duration [S=" + SIZE + "]: " + totalDuration / RUN_COUNT);
+
+    }
 //    @Test
 //    public void openstackShouldLoadJustFine() throws IOException, SyntaxError {
 //        Trio trio = new Trio();

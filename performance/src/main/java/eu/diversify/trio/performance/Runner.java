@@ -16,12 +16,16 @@ public class Runner {
     public static void main(String[] args) throws FileNotFoundException, IOException { 
         final OutputStream outputFile = new FileOutputStream("scalability.csv");
         
-        SimulationFactory factory = new SimulationFactory(1, 1000);
-        MicroBenchmark benchmark = new MicroBenchmark(250, 25, factory, new CsvRecorder(outputFile, ","));
+        SimulationFactory factory = new SimulationFactory(MIN_SIZE, MAX_SIZE);
+        MicroBenchmark benchmark = new MicroBenchmark(SAMPLE_COUNT, WARM_UP_SAMPLES, factory, new CsvRecorder(outputFile, ","));
         
         benchmark.run();
         
         outputFile.close();
     }
+    public static final int MAX_SIZE = 1000;
+    public static final int MIN_SIZE = 10;
+    public static final int WARM_UP_SAMPLES = 25;
+    public static final int SAMPLE_COUNT = 200;
     
 }

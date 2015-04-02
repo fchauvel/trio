@@ -22,6 +22,7 @@ import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Tag;
+import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.RequirementFactory;
 import eu.diversify.trio.core.requirements.random.BuildRandomizer;
 import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
@@ -56,8 +57,24 @@ public class Generator {
         final List<Tag> tags = new ArrayList<Tag>(1);
         return new Assembly("randomly generated", Arrays.asList(components), tags);
     }
+    
+    public Assembly assembly(int componentCount, double edgeProbability) {
+        final Component[] components = new Component[componentCount];
+        for (int index = 0; index < componentCount; index++) {
+            int total = 0;
+            for(int i=0 ; i<componentCount ; i++) {
+                total += (random.nextDouble() <= edgeProbability) ? 1 : 0;
+            }                
+            components[index] = component(index, componentCount, total);
+        }
+        final List<Tag> tags = new ArrayList<Tag>(1);
+        return new Assembly("randomly generated", Arrays.asList(components), tags);
+    }
 
     public Component component(int index, int capacity, int size) {
+        if (size == 0) {
+            return new Component(("C" + index).intern(), Nothing.getInstance());
+        }
         BuildRandomizer builder = new BuildRandomizer(new FixedSizeBuilder(factory, size), random, capacity);
         Requirement dependencies = builder.build(); 
         return new Component(("C" + index).intern(), dependencies);

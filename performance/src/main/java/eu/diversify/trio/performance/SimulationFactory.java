@@ -2,7 +2,10 @@ package eu.diversify.trio.performance;
 
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.core.Assembly;
+import eu.diversify.trio.core.Evaluation;
+import static eu.diversify.trio.core.Evaluation.evaluate;
 import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
@@ -41,10 +44,12 @@ public class SimulationFactory implements TaskFactory {
     @Override
     public Task prepareNewTask() {
         int size = minAssemblySize + random.nextInt(maxAssemblySize - minAssemblySize);
-        final Distribution meanValenceDistribution = Distribution.uniform(0, size);
-        final double mean = meanValenceDistribution.sample();
-        final Distribution density = Distribution.normal(mean, mean / 4);
-        final Assembly assembly = generate.assembly(size, density);
+        final double margin = 0.1;
+        double edgeProbability = margin + (1. - 2 * margin) * random.nextDouble();
+//        final Distribution meanValenceDistribution = Distribution.uniform(0, size);
+//        final double mean = meanValenceDistribution.sample();
+        //final Distribution density = Distribution.normal(size / 2 + 1, size / 6 + 1);
+        final Assembly assembly = generate.assembly(size, edgeProbability);
         return new SimulationTask(trio, assembly);
     }
 
@@ -63,6 +68,9 @@ public class SimulationFactory implements TaskFactory {
 
             properties = new HashMap<>();
             properties.put("size", system.size());
+            Density density = new Density();
+            evaluate(density).on(system);
+            properties.put("density", density.getValue());
         }
 
         @Override

@@ -18,8 +18,14 @@
 
 package eu.diversify.trio.unit.core.random;
 
+import eu.diversify.trio.core.Assembly;
+import static eu.diversify.trio.core.Evaluation.evaluate;
 import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.util.random.Distribution;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +62,22 @@ public class GeneratorTest {
         double averageInSeconds = ((double) totalDuration) / RUN_COUNT / 1000 ;
         System.out.println();
         System.out.println("Average duration: " + averageInSeconds + " s.");
+    }
+    
+    
+    @Test
+    public void shouldControlTheDensity() {
+        final int ASSEMBLY_SIZE = 1000;
+        final double DENSITY = 0.5;
+        final double TOLERANCE = 1e-1;
+
+        final Generator random = new Generator();
+        Assembly assembly = random.assembly(ASSEMBLY_SIZE, Distribution.normal(ASSEMBLY_SIZE/2, ASSEMBLY_SIZE/6));
+        
+        Density density = new Density();
+        evaluate(density).on(assembly);
+        
+        assertThat(density.getValue(), is(closeTo(DENSITY, TOLERANCE)));
     }
 
 }
