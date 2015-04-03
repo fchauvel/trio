@@ -1,4 +1,3 @@
-
 package eu.diversify.trio.performance;
 
 import eu.diversify.trio.performance.util.CsvRecorder;
@@ -13,19 +12,35 @@ import java.io.OutputStream;
  */
 public class Runner {
 
-    public static void main(String[] args) throws FileNotFoundException, IOException { 
-        final OutputStream outputFile = new FileOutputStream("scalability.csv");
-        
-        SimulationFactory factory = new SimulationFactory(MIN_SIZE, MAX_SIZE);
-        MicroBenchmark benchmark = new MicroBenchmark(SAMPLE_COUNT, WARM_UP_SAMPLES, factory, new CsvRecorder(outputFile, ","));
-        
-        benchmark.run();
-        
-        outputFile.close();
+    private final Options options;
+
+    public Runner(Options options) {
+        this.options = options;
     }
-    public static final int MAX_SIZE = 1000;
-    public static final int MIN_SIZE = 10;
-    public static final int WARM_UP_SAMPLES = 25;
-    public static final int SAMPLE_COUNT = 200;
-    
+
+    public void run() throws FileNotFoundException, IOException {
+        System.out.println("TRIO - Topology Robustness Indicator");
+        System.out.println("Copyright (C) 2015 - SINTEF ICT");
+
+        final Setup setup = options.getSetup();
+        System.out.println(setup.summary());
+
+        try {
+            final OutputStream outputFile = new FileOutputStream(options.getOutputFile());
+            final MicroBenchmark benchmark = setup.prepareBenchmark();
+            benchmark.run(new CsvRecorder(outputFile));
+            outputFile.close();
+            System.out.println("Done. (Results saved in '" + setup.getOuputFileName() + "')");
+
+        } catch (FileNotFoundException error) {
+
+        }
+    }
+
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        Runner runner = new Runner(Options.readFrom(args));
+        runner.run();
+    }
+
+
 }

@@ -9,18 +9,16 @@ public class MicroBenchmark {
     private final int warmupCount;
     private final int sampleCount;
     private final TaskFactory factory;
-    private final Recorder output;
 
-    public MicroBenchmark(int sampleCount, int warmUpCount, TaskFactory factory, Recorder output) {
+    public MicroBenchmark(int sampleCount, int warmUpCount, TaskFactory factory) {
         warmupCount = warmUpCount;
         this.sampleCount = sampleCount;
         this.factory = factory;
-        this.output = output;
     }
     
-    public void run() {
+    public void run(Recorder output) {
         warmUp();
-        benchmark();
+        benchmark(output);
     }
 
     private void warmUp() {
@@ -30,7 +28,7 @@ public class MicroBenchmark {
         }
     }
     
-    private void benchmark() {
+    private void benchmark(Recorder output) {
         for (int index = 0; index < sampleCount; index++) {
             Task task = factory.prepareNewTask();
             Performance performance = monitorExecutionOf(task);

@@ -37,8 +37,8 @@ public class MicroBenchmarkTest {
             }
         });
         
-        MicroBenchmark benchmark = new MicroBenchmark(SAMPLE_COUNT, WARMUP_COUNT, tasks, trace);
-        benchmark.run();
+        MicroBenchmark benchmark = new MicroBenchmark(SAMPLE_COUNT, WARMUP_COUNT, tasks);
+        benchmark.run(trace);
         
         context.assertIsSatisfied();
     }

@@ -26,6 +26,7 @@ import eu.diversify.trio.util.random.Distribution;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
+import org.junit.Ignore;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +67,7 @@ public class GeneratorTest {
     
     
     @Test
+    @Ignore
     public void shouldControlTheDensity() {
         final int ASSEMBLY_SIZE = 1000;
         final double DENSITY = 0.5;
