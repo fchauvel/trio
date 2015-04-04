@@ -45,17 +45,37 @@ public class RandomTest {
 
     @Test
     //@Ignore
+    public void shouldBuildRequirementsWithTwoVariables() {
+        final int SIZE = 2;
+        final int CAPACITY = 25;
+
+        Requirement requirement = buildRequirement(CAPACITY, SIZE);
+
+        LeafCount leafCount = leafCount(requirement);
+        assertThat(leafCount.get(), is(equalTo(SIZE)));
+    }
+
+    private LeafCount leafCount(Requirement requirement) {
+        final LeafCount leafCount = new LeafCount();
+        evaluate(leafCount).on(requirement);
+        return leafCount;
+    }
+
+    private Requirement buildRequirement(final int CAPACITY, final int SIZE) {
+        //final LoggedRandomizer randomRequirement = prepareLoggedBuilder(CAPACITY, SIZE);
+        final BuildRandomizer randomRequirement = prepareLoggedBuilder(CAPACITY, SIZE);
+        final Requirement requirement = randomRequirement.build();
+        return requirement;
+    }
+
+    @Test
+    //@Ignore
     public void resultShouldHaveTheCorrectSize() {
         final int CAPACITY = 25;
         final int SIZE = 10000;
 
-        //final LoggedRandomizer randomRequirement = prepareLoggedBuilder(CAPACITY, SIZE);
-        final BuildRandomizer randomRequirement = prepareBuilder(CAPACITY, SIZE);
-        
-        final Requirement requirement = randomRequirement.build();
-        final LeafCount leafCount = new LeafCount();
-
-        evaluate(leafCount).on(requirement);
+        Requirement requirement = buildRequirement(CAPACITY, SIZE);
+        LeafCount leafCount = leafCount(requirement);
 
         //assertThat(randomRequirement.summary(), leafCount.get(), is(equalTo(SIZE)));
         assertThat(leafCount.get(), is(equalTo(SIZE)));
@@ -64,7 +84,7 @@ public class RandomTest {
     public static BuildRandomizer prepareBuilder(int capacity, int size) {
         return new BuildRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), capacity);
     }
-    
+
     public static LoggedRandomizer prepareLoggedBuilder(int capacity, int size) {
         return new LoggedRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), capacity);
     }
@@ -107,11 +127,9 @@ public class RandomTest {
         double average = ((double) totalDuration) / RUN_COUNT;
 
         System.out.println("Random requirement [S=" + SIZE + ", V=" + CAPACITY + "] built in " + average + " ms");
-   
 
     }
-    
-    
+
     private static class LoggedRandomizer extends BuildRandomizer {
 
         private final List<Command> history;
@@ -120,19 +138,17 @@ public class RandomTest {
             super(builder, random, componentCount);
             history = new LinkedList<>();
         }
-        
-       
+
         @Override
         protected void execute(Command command) {
-            super.execute(command); 
+            super.execute(command);
             history.add(command);
         }
-        
+
         public String summary() {
             return history.toString();
         }
-        
-        
+
     }
 
 }

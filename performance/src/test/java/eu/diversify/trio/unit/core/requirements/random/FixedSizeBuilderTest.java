@@ -20,6 +20,15 @@ import static org.hamcrest.Matchers.hasItems;
 public class FixedSizeBuilderTest {
 
     @Test
+    public void shouldAllowBuildingBinaryExpression() {
+        final int capacity = 2;
+        FixedSizeBuilder builder = prepareBuilder(capacity);
+
+        assertThat(builder.getAllowedCommands(), hasItem(OPEN_CONJUNCTION));
+        assertThat(builder.getAllowedCommands(), hasItem(OPEN_DISJUNCTION));
+    }
+
+    @Test
     public void shouldPreventTooSmallRequirements() {
         final int capacity = 10;
         FixedSizeBuilder builder = prepareBuilder(capacity);

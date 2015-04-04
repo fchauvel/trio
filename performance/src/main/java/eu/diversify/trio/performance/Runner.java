@@ -36,12 +36,6 @@ public class Runner {
         closeOutput(outputFile);
     }
 
-    private void runBenchmark(final Setup setup, final OutputStream outputFile) {
-        final MicroBenchmark benchmark = setup.prepareBenchmark();
-        benchmark.run(new CsvRecorder(outputFile));
-        System.out.println("OK. Results saved in '" + setup.getOuputFileName() + "'");
-    }
-
     private void showHeader() {
         System.out.println("TRIO - Topology Robustness Indicator");
         System.out.println("Copyright (C) 2015 - SINTEF ICT");
@@ -82,6 +76,13 @@ public class Runner {
         }
         return outputFile;
     }
+
+    private void runBenchmark(final Setup setup, final OutputStream outputFile) {
+        final MicroBenchmark benchmark = setup.prepareBenchmark();
+        benchmark.run(new CsvRecorder(outputFile));
+        System.out.println("OK. Results saved in '" + options.getOutputFile() + "'");
+    }
+
 
     private void closeOutput(final OutputStream outputFile) throws IllegalArgumentException {
         try {

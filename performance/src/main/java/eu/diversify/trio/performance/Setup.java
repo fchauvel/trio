@@ -25,6 +25,10 @@ public class Setup {
             this.key = key;
             this.defaultValue = defaultValue;
         }
+        
+        public String getKey() {
+            return key;
+        }
 
         public String get(Properties values) {
             return values.getProperty(key);

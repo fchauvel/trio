@@ -1,6 +1,9 @@
 package eu.diversity.trio.unit.performance;
 
 import eu.diversify.trio.performance.Setup;
+import eu.diversify.trio.performance.Setup.Entry;
+import java.util.Map;
+import java.util.Properties;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -15,6 +18,28 @@ public class SetupTest {
 
     public SetupTest() {
         setup = new Setup();
+    }
+
+    @Test
+    public void shouldReadMaximumAssmblySizeFromProperties() {
+        final int SIZE = 45673;
+
+        Properties properties = new Properties();
+        Entry.MAX_ASSEMBLY_SIZE.set(properties, String.valueOf(SIZE));
+        Setup setup = new Setup(properties);
+
+        assertThat(setup.getMaximumAssemblySize(), is(equalTo(SIZE)));
+    }
+
+    @Test
+    public void shouldReadMinimumAssmblySizeFromProperties() {
+        final int SIZE = 234;
+
+        Properties properties = new Properties();
+        Entry.MIN_ASSEMBLY_SIZE.set(properties, String.valueOf(SIZE));
+        Setup setup = new Setup(properties);
+
+        assertThat(setup.getMinimumAssemblySize(), is(equalTo(SIZE)));
     }
 
     @Test
@@ -46,7 +71,6 @@ public class SetupTest {
         setup.setMinimumEdgeProbability(0.6);
     }
 
-    
     @Test(expected = IllegalArgumentException.class)
     public void shouldRejectMaximumProbabilityBelowMinimumProbability() {
         setup.setMinimumEdgeProbability(0.5);

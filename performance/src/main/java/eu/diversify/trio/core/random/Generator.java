@@ -32,18 +32,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Generate randomized system description
  */
 public class Generator {
 
+    public static final String DEFAULT_ASSEMBLY_NAME = "randomly generated";
     public static final int DEFAULT_LITERAL_COUNT = 10000;
+
+    private final Logger logger;
 
     private final RequirementFactory factory;
     private final Random random;
 
     public Generator() {
+        logger = Logger.getLogger(Generator.class.getName());
         random = new Random();
         this.factory = new CachedLiteralFactory(DEFAULT_LITERAL_COUNT);
     }
@@ -55,27 +61,36 @@ public class Generator {
             components[index] = component(index, componentCount, dependencyCount);
         }
         final List<Tag> tags = new ArrayList<Tag>(1);
-        return new Assembly("randomly generated", Arrays.asList(components), tags);
+        return new Assembly(DEFAULT_ASSEMBLY_NAME, Arrays.asList(components), tags);
     }
     
+    
     public Assembly assembly(int componentCount, double edgeProbability) {
+        logger.log(
+                Level.FINER, 
+                "Building assembly with {0} components and {1} % edges", 
+                new Object[]{componentCount, Math.round(edgeProbability * 100)}
+        );
+        
         final Component[] components = new Component[componentCount];
         for (int index = 0; index < componentCount; index++) {
-            int total = 0;
+            int dependencyCount = 0;
             for(int i=0 ; i<componentCount ; i++) {
-                total += (random.nextDouble() <= edgeProbability) ? 1 : 0;
+                dependencyCount += (random.nextDouble() <= edgeProbability) ? 1 : 0;
             }                
-            components[index] = component(index, componentCount, total);
+            components[index] = component(index, componentCount, dependencyCount);
         }
         final List<Tag> tags = new ArrayList<Tag>(1);
-        return new Assembly("randomly generated", Arrays.asList(components), tags);
+        return new Assembly(DEFAULT_ASSEMBLY_NAME, Arrays.asList(components), tags);
     }
 
-    public Component component(int index, int capacity, int size) {
-        if (size == 0) {
+    public Component component(int index, int capacity, int dependencyCount) {
+        if (dependencyCount == 0) {
             return new Component(("C" + index).intern(), Nothing.getInstance());
         }
-        BuildRandomizer builder = new BuildRandomizer(new FixedSizeBuilder(factory, size), random, capacity);
+        
+        logger.log(Level.FINEST, "New requirement with {0} variables chosen from {1}", new Object[]{dependencyCount, capacity});
+        BuildRandomizer builder = new BuildRandomizer(new FixedSizeBuilder(factory, dependencyCount), random, capacity);
         Requirement dependencies = builder.build(); 
         return new Component(("C" + index).intern(), dependencies);
     }

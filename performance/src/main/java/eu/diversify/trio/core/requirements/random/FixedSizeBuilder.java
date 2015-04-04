@@ -117,7 +117,7 @@ public class FixedSizeBuilder extends Builder {
 
     @Override
     public List<Command> getAllowedCommands() {
-        assert minimumFinalSize >= currentSize : "Illegal expansion (MFS = " + minimumFinalSize + " ; CS = " + currentSize + ")";
+        assert minimumFinalSize >= currentSize : "Illegal expansion! " ;
 
         List<Command> commands = super.getAllowedCommands();
 
@@ -143,12 +143,17 @@ public class FixedSizeBuilder extends Builder {
             commands.remove(CLOSE);
         }
 
+        assert !(isTooSmall() && commands.isEmpty()): "No action can be triggered anymore! " +  summary();
         return commands;
-
+    }
+    
+    private String summary() {
+        return String.format("[TFS = %d ; MFS = %d ; CS = %d]", desiredSize, minimumFinalSize, currentSize);
     }
 
     public boolean hasRoomForANewBranch() {
-        return desiredSize - minimumFinalSize >= 2;
+        int costOfNewBranch = (getLocalBranchCount() < 2) ? 1 : 2;
+        return desiredSize - minimumFinalSize >= costOfNewBranch;
     }
 
     public boolean isFilled() {

@@ -12,6 +12,8 @@ import eu.diversify.trio.simulation.Scenario;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Generate simulation of random models
@@ -28,7 +30,7 @@ public class SimulationFactory implements TaskFactory {
     }
     
     public SimulationFactory(Setup setup) {
-        this.setup = new Setup();
+        this.setup = setup;
         this.random = new Random();
         this.generate = new Generator();
         this.trio = new Trio();
@@ -36,12 +38,9 @@ public class SimulationFactory implements TaskFactory {
 
     @Override
     public Task prepareNewTask() {
+        Logger.getAnonymousLogger().log(Level.FINEST, "MAX SIZE = {0}", setup.getMaximumAssemblySize());
         int size = setup.getMinimumAssemblySize() + random.nextInt(setup.getMaximumAssemblySize() - setup.getMinimumAssemblySize());
-        final double margin = 0.2;
-        double edgeProbability = margin + (1. - 2 * margin) * random.nextDouble();
-//        final Distribution meanValenceDistribution = Distribution.uniform(0, size);
-//        final double mean = meanValenceDistribution.sample();
-        //final Distribution density = Distribution.normal(size / 2 + 1, size / 6 + 1);
+        double edgeProbability = setup.getMinimumEdgeProbability() + (setup.getMaximumEdgeProbability() - setup.getMinimumEdgeProbability()) * random.nextDouble();
         final Assembly assembly = generate.assembly(size, edgeProbability);
         return new SimulationTask(trio, assembly);
     }
@@ -55,14 +54,15 @@ public class SimulationFactory implements TaskFactory {
         private final Scenario scenario;
         private final Map<String, Object> properties;
 
-        public SimulationTask(Trio trio, Assembly system) {
-            this.scenario = new RandomFailureSequence(system);
+        public SimulationTask(Trio trio, Assembly assembly) {
+            this.scenario = new RandomFailureSequence(assembly);
             this.trio = trio;
 
             properties = new HashMap<>();
-            properties.put("size", system.size());
+            properties.put("size", assembly.size());
+            
             Density density = new Density();
-            evaluate(density).on(system);
+            evaluate(density).on(assembly);
             properties.put("density", density.getValue());
         }
 
