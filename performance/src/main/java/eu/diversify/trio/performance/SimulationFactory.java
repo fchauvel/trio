@@ -2,7 +2,6 @@ package eu.diversify.trio.performance;
 
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.Evaluation;
 import static eu.diversify.trio.core.Evaluation.evaluate;
 import eu.diversify.trio.core.random.Generator;
 import eu.diversify.trio.core.statistics.Density;
@@ -10,7 +9,6 @@ import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
-import eu.diversify.trio.util.random.Distribution;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -20,22 +18,17 @@ import java.util.Random;
  */
 public class SimulationFactory implements TaskFactory {
 
-    private static final int DEFAULT_MAX_ASSEMBLY_SIZE = 500;
-    private static final int DEFAULT_MIN_ASSEMBLY_SIZE = 10;
-
-    private final int minAssemblySize;
-    private final int maxAssemblySize;
+    private final Setup setup;
     private final Random random;
     private final Generator generate;
     private final Trio trio;
 
     public SimulationFactory() {
-        this(DEFAULT_MIN_ASSEMBLY_SIZE, DEFAULT_MAX_ASSEMBLY_SIZE);
+        this(new Setup());
     }
-
-    public SimulationFactory(int minAssemblySize, int maxAssemblySize) {
-        this.minAssemblySize = minAssemblySize;
-        this.maxAssemblySize = maxAssemblySize;
+    
+    public SimulationFactory(Setup setup) {
+        this.setup = new Setup();
         this.random = new Random();
         this.generate = new Generator();
         this.trio = new Trio();
@@ -43,8 +36,8 @@ public class SimulationFactory implements TaskFactory {
 
     @Override
     public Task prepareNewTask() {
-        int size = minAssemblySize + random.nextInt(maxAssemblySize - minAssemblySize);
-        final double margin = 0.1;
+        int size = setup.getMinimumAssemblySize() + random.nextInt(setup.getMaximumAssemblySize() - setup.getMinimumAssemblySize());
+        final double margin = 0.2;
         double edgeProbability = margin + (1. - 2 * margin) * random.nextDouble();
 //        final Distribution meanValenceDistribution = Distribution.uniform(0, size);
 //        final double mean = meanValenceDistribution.sample();

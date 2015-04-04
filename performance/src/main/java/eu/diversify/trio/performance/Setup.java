@@ -76,7 +76,7 @@ public class Setup {
     }
 
     private SimulationFactory makeFactory() {
-        return new SimulationFactory(getMinimumAssemblySize(), getMaximumAssemblySize());
+        return new SimulationFactory(this);
     }
 
     public String summary() {

@@ -67,14 +67,13 @@ public class GeneratorTest {
     
     
     @Test
-    @Ignore
     public void shouldControlTheDensity() {
         final int ASSEMBLY_SIZE = 1000;
-        final double DENSITY = 0.5;
-        final double TOLERANCE = 1e-1;
+        final double DENSITY = 0.1;
+        final double TOLERANCE = 1.5e-1;
 
         final Generator random = new Generator();
-        Assembly assembly = random.assembly(ASSEMBLY_SIZE, Distribution.normal(ASSEMBLY_SIZE/2, ASSEMBLY_SIZE/6));
+        Assembly assembly = random.assembly(ASSEMBLY_SIZE, DENSITY);
         
         Density density = new Density();
         evaluate(density).on(assembly);

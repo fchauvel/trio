@@ -7,13 +7,23 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 
 /**
- *
+ * Specification of the Options reader class
  */
 public class OptionsTest {
 
     @Test
     public void shouldDetectSetupFile() {
         String[] args = new String[]{"-setup", "my_setup.properties"};
+
+        Options options = Options.readFrom(args);
+
+        assertThat(options.getSetupFile(), is(equalTo(args[1])));
+        assertThat(options.getOutputFile(), is(equalTo(Options.DEFAULT_OUTPUT_FILE)));
+    }
+
+    @Test
+    public void shouldDetectSetupFileWhenShortNotationIsUsed() {
+        String[] args = new String[]{"-s", "my_setup.properties"};
 
         Options options = Options.readFrom(args);
 
@@ -31,6 +41,16 @@ public class OptionsTest {
     @Test
     public void shouldDetectOutputFile() {
         String[] args = new String[]{"-output", "results.csv"};
+
+        Options options = Options.readFrom(args);
+
+        assertThat(options.getOutputFile(), is(equalTo(args[1])));
+        assertThat(options.getSetupFile(), is(equalTo(Options.DEFAULT_SETUP_FILE)));
+    }
+
+    @Test
+    public void shouldDetectOutputFileWhenShortNotationIsUsed() {
+        String[] args = new String[]{"-o", "results.csv"};
 
         Options options = Options.readFrom(args);
 
