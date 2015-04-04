@@ -14,7 +14,9 @@ public class Setup {
         MAX_ASSEMBLY_SIZE("maximum.assembly.size", "1000"),
         SAMPLE_COUNT("sample.count", "250"),
         WARM_UP_SAMPLE_COUNT("warmup.sample.count", "25"),
-        OUTPUT_FILE_NAME("output.file.name", "scalability.csv");
+        OUTPUT_FILE_NAME("output.file.name", "scalability.csv"),
+        MIN_EDGE_PROBABILITY("minimum.edge.probability", "0.1"),
+        MAX_EDGE_PROBABILITY("maximum.edge.probability", "0.9");
 
         private final String key;
         private final String defaultValue;
@@ -27,7 +29,7 @@ public class Setup {
         public String get(Properties values) {
             return values.getProperty(key);
         }
-        
+
         public boolean isDefinedIn(Properties values) {
             return values.containsKey(key);
         }
@@ -80,7 +82,13 @@ public class Setup {
     }
 
     public String summary() {
-        return String.format("%d simulation(s) (assembly sizes within [%d, %d])", getSampleCount(), getMinimumAssemblySize(), getMaximumAssemblySize());
+        return String.format("Running %d simulation(s) with: %n - assembly sizes within [%d, %d] %n - assembly edge densities in [%.1f, %.1f]", 
+                getSampleCount(), 
+                getMinimumAssemblySize(), 
+                getMaximumAssemblySize(),
+                getMinimumEdgeProbability(),
+                getMaximumEdgeProbability()
+        );
     }
 
     /**
@@ -185,6 +193,60 @@ public class Setup {
     public final void setSampleCount(int sampleCount) {
         validateCount(sampleCount, "sample count");
         Entry.SAMPLE_COUNT.set(properties, sampleCount);
+    }
+
+    /**
+     * @return the maximum probability to create an edge in the model
+     */
+    public double getMaximumEdgeProbability() {
+        return Double.parseDouble(Entry.MAX_EDGE_PROBABILITY.get(properties));
+    }
+
+    /**
+     * Set the maximum probability to create a dependency between two components
+     *
+     * @param probability
+     */
+    public void setMaximumEdgeProbability(double probability) {
+        validateProbability(probability);
+        validateProbabilityOrdering(getMinimumEdgeProbability(), probability);
+        Entry.MAX_EDGE_PROBABILITY.set(properties, probability);
+    }
+
+    private void validateProbability(double probability) throws IllegalArgumentException {
+        if (probability < 0D) {
+            final String message = String.format("Invalid probability value %.2f (value should be positive)", probability);
+            throw new IllegalArgumentException(message);
+        }
+        if (probability > 1D) {
+            final String message = String.format("Invalid probability value %.2f (value should be within [0, 1])", probability);
+            throw new IllegalArgumentException(message);
+        }
+    }
+    
+    private void validateProbabilityOrdering(double min, double max) {
+        if (min > max) {
+            final String message = String.format("Invalid probability range [%.2f, %.2f] (min must be below max)", min, max);
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * @return the minimum probability to create an edge in the model
+     */
+    public double getMinimumEdgeProbability() {
+        return Double.parseDouble(Entry.MIN_EDGE_PROBABILITY.get(properties));
+    }
+
+    /**
+     * Set the maximum probability to create a dependency between two components
+     *
+     * @param probability the desired minimum probability to create a dependency
+     */
+    public void setMinimumEdgeProbability(double probability) {
+        validateProbability(probability);
+        validateProbabilityOrdering(probability, getMaximumEdgeProbability());
+        Entry.MIN_EDGE_PROBABILITY.set(properties, probability);
     }
 
     private void validateCount(int sampleCount, String property) throws IllegalArgumentException {

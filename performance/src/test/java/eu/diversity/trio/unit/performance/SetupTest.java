@@ -18,6 +18,65 @@ public class SetupTest {
     }
 
     @Test
+    public void shouldStoreMaximumEdgeProbability() {
+        final double PROBABILITY = 0.5D;
+
+        setup.setMaximumEdgeProbability(PROBABILITY);
+
+        assertThat(setup.getMaximumEdgeProbability(), is(equalTo(PROBABILITY)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectNegativeProbability() {
+        final double PROBABILITY = -0.5D;
+
+        setup.setMaximumEdgeProbability(PROBABILITY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectProbabilityAboveOne() {
+        final double PROBABILITY = 1.5D;
+
+        setup.setMaximumEdgeProbability(PROBABILITY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectMinimumProbabilityAboveMaximumProbability() {
+        setup.setMaximumEdgeProbability(0.5);
+        setup.setMinimumEdgeProbability(0.6);
+    }
+
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectMaximumProbabilityBelowMinimumProbability() {
+        setup.setMinimumEdgeProbability(0.5);
+        setup.setMaximumEdgeProbability(0.3);
+    }
+
+    @Test
+    public void shouldStoreMinimumEdgeProbability() {
+        final double PROBABILITY = 0.5D;
+
+        setup.setMinimumEdgeProbability(PROBABILITY);
+
+        assertThat(setup.getMinimumEdgeProbability(), is(equalTo(PROBABILITY)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectNegativeMinimumEdgeProbability() {
+        final double PROBABILITY = -0.5D;
+
+        setup.setMinimumEdgeProbability(PROBABILITY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectMinimumEdgeProbabilityAboveOne() {
+        final double PROBABILITY = 1.5D;
+
+        setup.setMinimumEdgeProbability(PROBABILITY);
+    }
+
+    @Test
     public void shouldStoreSampleCount() {
         final int SAMPLE_COUNT = 1000;
 
