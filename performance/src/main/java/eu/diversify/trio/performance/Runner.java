@@ -45,6 +45,7 @@ public class Runner {
     private Setup loadSetupFile() {
         Setup result;
         try {
+            System.out.println("Reading configuration in '" + options.getSetupFile() + "'");
             result = options.getSetup();
 
         } catch (IOException ex) {
@@ -58,6 +59,7 @@ public class Runner {
             result = new Setup(); // The default setup
         }
 
+        System.out.println("");
         System.out.println(result.summary());
         return result;
     }
@@ -80,7 +82,9 @@ public class Runner {
     private void runBenchmark(final Setup setup, final OutputStream outputFile) {
         final MicroBenchmark benchmark = setup.prepareBenchmark();
         benchmark.run(new CsvRecorder(outputFile));
-        System.out.println("OK. Results saved in '" + options.getOutputFile() + "'");
+        System.out.println("");
+        System.out.println("OK");
+        System.out.println("Results written in '" + options.getOutputFile() + "'");
     }
 
 

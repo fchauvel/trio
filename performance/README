@@ -20,10 +20,14 @@ text is shown below.
     TRIO - Topology Robustness Indicator
     Copyright (C) 2015 - SINTEF ICT
 
+    Reading configuration in 'setup.properties'
+
     Running 250 simulation(s) with:
      - assembly sizes within [10, 1000]
      - assembly edge densities in [0,2, 0,8]
-    OK. Results saved in 'scalability.csv'
+
+    OK
+    Results written in 'scalability.csv'
 
 By default, all the data produced by the benchmark can be found in the CSV file 
 named "scalability.csv".
