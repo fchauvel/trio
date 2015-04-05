@@ -14,7 +14,6 @@ public class Setup {
         MAX_ASSEMBLY_SIZE("maximum.assembly.size", "1000"),
         SAMPLE_COUNT("sample.count", "250"),
         WARM_UP_SAMPLE_COUNT("warmup.sample.count", "25"),
-        OUTPUT_FILE_NAME("output.file.name", "scalability.csv"),
         MIN_EDGE_PROBABILITY("minimum.edge.probability", "0.1"),
         MAX_EDGE_PROBABILITY("maximum.edge.probability", "0.9");
 
@@ -25,13 +24,16 @@ public class Setup {
             this.key = key;
             this.defaultValue = defaultValue;
         }
-        
+
         public String getKey() {
             return key;
         }
 
         public String get(Properties values) {
-            return values.getProperty(key);
+            if (isDefinedIn(values)) {
+                return values.getProperty(key);
+            }
+            return defaultValue;
         }
 
         public boolean isDefinedIn(Properties values) {
@@ -57,21 +59,32 @@ public class Setup {
     }
 
     public Setup(Properties values) {
-        this();
-        for (Entry eachEntry : Entry.values()) {
-            if (eachEntry.isDefinedIn(values)) {
-                eachEntry.set(properties, eachEntry.get(values));
-            }
-        }
+        this(
+                Integer.parseInt(Entry.SAMPLE_COUNT.get(values)),
+                Integer.parseInt(Entry.MIN_ASSEMBLY_SIZE.get(values)),
+                Integer.parseInt(Entry.MAX_ASSEMBLY_SIZE.get(values)),
+                Integer.parseInt(Entry.WARM_UP_SAMPLE_COUNT.get(values)),
+                Double.parseDouble(Entry.MIN_EDGE_PROBABILITY.get(values)),
+                Double.parseDouble(Entry.MAX_EDGE_PROBABILITY.get(values))
+        );
     }
 
-    public Setup(int sampleCount, int minimumAssemblySize, int maximumAssemblySize, int warmupSampleCount, String outputFileName) {
-        this();
+    public Setup(int sampleCount, int minimumAssemblySize, int maximumAssemblySize, int warmupSampleCount, double minimumEdgeProbability, double maximumEdgeProbability) {
+        this.properties = new Properties();
         setSampleCount(sampleCount);
-        setMinimumAssemblySize(minimumAssemblySize);
-        setMaximumAssemblySize(maximumAssemblySize);
         setWarmupSampleCount(warmupSampleCount);
-        setOuputFileName(outputFileName);
+
+        validateCount(minimumAssemblySize, "minimum assembly size");
+        validateCount(maximumAssemblySize, "maximum assembly size");
+        validateAssemblySize(minimumAssemblySize, maximumAssemblySize);
+        Entry.MIN_ASSEMBLY_SIZE.set(properties, minimumAssemblySize);
+        Entry.MAX_ASSEMBLY_SIZE.set(properties, maximumAssemblySize);
+
+        validateProbability(minimumEdgeProbability);
+        validateProbability(maximumEdgeProbability);
+        validateProbabilityOrdering(minimumEdgeProbability, maximumEdgeProbability);
+        Entry.MIN_EDGE_PROBABILITY.set(properties, minimumEdgeProbability);
+        Entry.MAX_EDGE_PROBABILITY.set(properties, maximumEdgeProbability);
     }
 
     /**
@@ -86,37 +99,13 @@ public class Setup {
     }
 
     public String summary() {
-        return String.format("Running %d simulation(s) with: %n - assembly sizes within [%d, %d] %n - assembly edge densities in [%.1f, %.1f]", 
-                getSampleCount(), 
-                getMinimumAssemblySize(), 
+        return String.format("Running %d simulation(s) with: %n - assembly sizes within [%d, %d] %n - assembly edge densities in [%.1f, %.1f]",
+                getSampleCount(),
+                getMinimumAssemblySize(),
                 getMaximumAssemblySize(),
                 getMinimumEdgeProbability(),
                 getMaximumEdgeProbability()
         );
-    }
-
-    /**
-     * Get the value of ouputFileName
-     *
-     * @return the value of ouputFileName
-     */
-    public String getOuputFileName() {
-        return Entry.OUTPUT_FILE_NAME.get(properties);
-    }
-
-    /**
-     * Set the value of ouputFileName
-     *
-     * @param outputFileName new value of ouputFileName
-     */
-    public final void setOuputFileName(String outputFileName) {
-        if (outputFileName == null) {
-            throw new IllegalArgumentException("Invalid output file name (found 'null')");
-        }
-        if (outputFileName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid output file name (found '')");
-        }
-        Entry.OUTPUT_FILE_NAME.set(properties, outputFileName);
     }
 
     /**
@@ -154,10 +143,15 @@ public class Setup {
      */
     public final void setMaximumAssemblySize(int maximumAssemblySize) {
         validateCount(maximumAssemblySize, "maximum assembly size");
-        if (maximumAssemblySize < getMinimumAssemblySize()) {
-            throw new IllegalArgumentException("Invalid 'maximum assembly size' (should be above 'minimum assembly size'," + getMinimumAssemblySize() + ")");
-        }
+        validateAssemblySize(getMinimumAssemblySize(), maximumAssemblySize);
         Entry.MAX_ASSEMBLY_SIZE.set(properties, maximumAssemblySize);
+    }
+
+    private void validateAssemblySize(int min, int max) {
+        if (max < min) {
+            final String message = String.format("Invalid assembly size range (The maximum '%d' must be above the minimum '%d')", max, min);
+            throw new IllegalArgumentException(message);
+        }
     }
 
     /**
@@ -176,9 +170,7 @@ public class Setup {
      */
     public final void setMinimumAssemblySize(int minimumAssemblySize) {
         validateCount(minimumAssemblySize, "minimum assembly size");
-        if (minimumAssemblySize > getMaximumAssemblySize()) {
-            throw new IllegalArgumentException("Invalid 'minimum assembly size' (should be greated than 'maximum assembly size'," + getMaximumAssemblySize() + ")");
-        }
+        validateAssemblySize(minimumAssemblySize, getMaximumAssemblySize());
         Entry.MIN_ASSEMBLY_SIZE.set(properties, minimumAssemblySize);
     }
 
@@ -227,7 +219,7 @@ public class Setup {
             throw new IllegalArgumentException(message);
         }
     }
-    
+
     private void validateProbabilityOrdering(double min, double max) {
         if (min > max) {
             final String message = String.format("Invalid probability range [%.2f, %.2f] (min must be below max)", min, max);
@@ -247,7 +239,7 @@ public class Setup {
      *
      * @param probability the desired minimum probability to create a dependency
      */
-    public void setMinimumEdgeProbability(double probability) {
+    public final void setMinimumEdgeProbability(double probability) {
         validateProbability(probability);
         validateProbabilityOrdering(probability, getMaximumEdgeProbability());
         Entry.MIN_EDGE_PROBABILITY.set(properties, probability);

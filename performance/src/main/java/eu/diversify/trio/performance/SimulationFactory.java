@@ -1,10 +1,14 @@
 package eu.diversify.trio.performance;
 
 import eu.diversify.trio.Trio;
+import eu.diversify.trio.analysis.Analysis;
+import eu.diversify.trio.analysis.RelativeRobustness;
+import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.Assembly;
 import static eu.diversify.trio.core.Evaluation.evaluate;
 import eu.diversify.trio.core.random.Generator;
 import eu.diversify.trio.core.statistics.Density;
+import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
@@ -28,7 +32,7 @@ public class SimulationFactory implements TaskFactory {
     public SimulationFactory() {
         this(new Setup());
     }
-    
+
     public SimulationFactory(Setup setup) {
         this.setup = setup;
         this.random = new Random();
@@ -53,26 +57,32 @@ public class SimulationFactory implements TaskFactory {
         private final Trio trio;
         private final Scenario scenario;
         private final Map<String, Object> properties;
+        private DataSet result;
 
         public SimulationTask(Trio trio, Assembly assembly) {
             this.scenario = new RandomFailureSequence(assembly);
             this.trio = trio;
 
-            properties = new HashMap<>();
-            properties.put("size", assembly.size());
-            
+            this.properties = new HashMap<>();
+            this.properties.put("size", assembly.size());
+
             Density density = new Density();
             evaluate(density).on(assembly);
-            properties.put("density", density.getValue());
+            this.properties.put("density", density.getValue());
         }
 
         @Override
         public void execute() {
-            trio.run(scenario);
+            result = trio.run(scenario);
         }
 
         @Override
         public Map<String, Object> getProperties() {
+            if (result != null) {
+                Analysis analysis = trio.analyse(result);
+                double robustness = analysis.metric(RelativeRobustness.NAME).distribution().mean();
+                this.properties.put("robustness", robustness);
+            }
             return this.properties;
         }
 

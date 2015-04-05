@@ -37,9 +37,9 @@ public class MicroBenchmark {
     }
 
     private Performance monitorExecutionOf(Task task) {
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         task.execute();
-        long end = System.currentTimeMillis();
+        long end = System.nanoTime();
         long duration = end - start;
         return new Performance(duration);
     }

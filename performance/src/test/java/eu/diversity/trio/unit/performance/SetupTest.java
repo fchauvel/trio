@@ -2,7 +2,6 @@ package eu.diversity.trio.unit.performance;
 
 import eu.diversify.trio.performance.Setup;
 import eu.diversify.trio.performance.Setup.Entry;
-import java.util.Map;
 import java.util.Properties;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -186,29 +185,6 @@ public class SetupTest {
     public void shouldRejectMaximumAssemblySizeBelowMinimumAssemblySize() {
         setup.setMinimumAssemblySize(2);
         setup.setMaximumAssemblySize(1);
-    }
-
-    @Test
-    public void shouldStoreOutputFileName() {
-        final String path = "my_file.csv";
-
-        setup.setOuputFileName(path);
-
-        assertThat(setup.getOuputFileName(), is(equalTo(path)));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldRejectNullOutputFile() {
-        final String path = null;
-
-        setup.setOuputFileName(path);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldRejectEmptyOutputFileName() {
-        final String path = null;
-
-        setup.setOuputFileName(path);
     }
 
 }
