@@ -66,16 +66,16 @@ public class GeneratorTest {
     @Test
     public void shouldControlDensityOnOnSmallAssemblies() {
         final int ASSEMBLY_SIZE = 10;
-        final double DENSITY = 0.1;
+        final double EDGE_PROBABILITY = 0.1;
         final double TOLERANCE = 1.5e-1;
 
         final Generator random = new Generator();
-        Assembly assembly = random.assembly(ASSEMBLY_SIZE, DENSITY);
+        Assembly assembly = random.assembly(ASSEMBLY_SIZE, EDGE_PROBABILITY);
 
         Density density = new Density();
         evaluate(density).on(assembly);
 
-        assertThat(density.getValue(), is(closeTo(DENSITY, TOLERANCE)));
+        assertThat(density.getValue(), is(closeTo(EDGE_PROBABILITY, TOLERANCE)));
     }
 
     @Test

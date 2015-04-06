@@ -26,7 +26,7 @@ show(summary(data));
  
 pdf("raw_data.pdf", width=8, height=6);
 
-plot(data);
+plot(data[,-1]);
 
 dev.off();
 
@@ -35,27 +35,30 @@ dev.off();
 #
 attach(data);
 
-model <- lm(sqrt(duration/1000) ~ size + density); 
+toMS <- function(d){ return (d/10e6); }
+
+model <- lm(sqrt(toMS(duration)) ~ size + density); 
 show(summary(model)); 
 
 pdf("regression.pdf", width=8, height=6);
  
-plot(duration/1000 ~ size, 
+plot(toMS(duration) ~ size, 
      col="blue", 
      pch=4,
      cex=0.8,
      las=1, 
-     ylab="Duration (�s)", 
+     ylab="Duration (ms)", 
      xlab="Model size (# components)");
 
 points(predict(model)^2 ~ size, 
-       pch=20, 
-       col="red");
+       pch=21, 
+       col="red",
+       cex=0.8);
 
 legend("topleft", 
-       legend=c("sampled durations", "predictions from model"),
+       legend=c("sampled durations", expression(paste("Predictions using ", sqrt(duration) == B[2] %.% size + B[1] %.% density + B[0] + epsilon))),
        col=c("blue", "red"), 
-       pch=c(4, 19),
+       pch=c(4, 21),
        bty="n");
 
 dev.off();  

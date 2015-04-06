@@ -1,6 +1,7 @@
 package eu.diversify.trio.core.requirements.random;
 
 import eu.diversify.trio.core.requirements.Requirement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ public class BuildRandomizer {
     private final Builder builder;
     private final Random random;
     private final int componentCount;
+    private final List<Integer> components;
 
     public BuildRandomizer(Builder builder, Random random, int componentCount) {
         if (builder == null) {
@@ -20,12 +22,16 @@ public class BuildRandomizer {
         this.builder = builder;
         this.random = random;
         this.componentCount = componentCount;
+        this.components = new ArrayList<>(componentCount);
+        for (int index = 0; index < componentCount; index++) {
+            components.add(index);
+        }
     }
 
     public Requirement build() {
         while (!builder.isResultReady()) {
             List<Command> candidates = builder.getAllowedCommands();
-            Command command = pickFrom(candidates);
+            Command command = chooseAny(candidates);
             execute(command);
         }
         return builder.getResult();
@@ -46,19 +52,34 @@ public class BuildRandomizer {
                 builder.addNot();
                 break;
             case ADD_REQUIRE:
-                int index = random.nextInt(componentCount);
+                int index = pickAny(components);
                 builder.addRequire(index);
                 break;
         }
     }
 
-    private Command pickFrom(List<Command> candidates) {
-        assert !candidates.isEmpty() : "Cannot pick from an empty collection";
-        
+    private <T> T chooseAny(List<T> candidates) {
+        assert !candidates.isEmpty() : "Cannot choose from an empty collection";
+
         if (candidates.size() == 1) {
             return candidates.get(0);
         }
         return candidates.get(random.nextInt(candidates.size()));
+    }
+
+    private <T> T pickAny(List<T> candidates) {
+        assert !candidates.isEmpty() : "Cannot pick from an empty collection";
+
+        if (candidates.size() == 1) {
+            T result = candidates.get(0);
+            candidates.remove(0);
+            return result;
+        }
+        
+        final int index = random.nextInt(candidates.size());
+        T result = candidates.get(index);
+        candidates.remove(index);
+        return result;
     }
 
 }

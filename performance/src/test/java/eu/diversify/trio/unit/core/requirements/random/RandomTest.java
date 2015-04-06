@@ -71,7 +71,7 @@ public class RandomTest {
     @Test
     //@Ignore
     public void resultShouldHaveTheCorrectSize() {
-        final int CAPACITY = 25;
+        final int CAPACITY = 10000;
         final int SIZE = 10000;
 
         Requirement requirement = buildRequirement(CAPACITY, SIZE);
