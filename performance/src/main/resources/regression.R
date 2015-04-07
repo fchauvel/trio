@@ -26,7 +26,29 @@ show(summary(data));
  
 pdf("raw_data.pdf", width=8, height=6);
 
-plot(data[,-1]);
+panel.hist <- function(x, ...)
+{
+  usr <- par("usr"); on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  h <- hist(x, plot = FALSE)
+  breaks <- h$breaks; nB <- length(breaks)
+  y <- h$counts; y <- y/max(y)
+  rect(breaks[-nB], 0, breaks[-1], y, col = "cyan", ...)
+}
+
+panel.cor <- function(x, y, ...) {
+  horizontal <- (par("usr")[1] + par("usr")[2]) / 2;
+  vertical <- (par("usr")[3] + par("usr")[4]) / 2;
+  text(horizontal, vertical, substitute(rho == V, list(V = format(cor(x,y), digits=3))), cex=2)
+}
+
+pairs(
+  data[,-1],
+  diag.panel = panel.hist,
+  upper.panel = panel.cor,
+  pch=4,
+  cex=0.8
+);
 
 dev.off();
 
