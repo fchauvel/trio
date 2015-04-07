@@ -3,10 +3,10 @@ package eu.diversify.trio.performance;
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.RelativeRobustness;
-import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.Assembly;
 import static eu.diversify.trio.core.Evaluation.evaluate;
 import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.core.statistics.AverageNodeDegree;
 import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.performance.util.Task;
@@ -64,11 +64,25 @@ public class SimulationFactory implements TaskFactory {
             this.trio = trio;
 
             this.properties = new HashMap<>();
-            this.properties.put("size", assembly.size());
+            measureSize(assembly);
+            measureDensity(assembly);
+            measureAverageNodeDegree(assembly);
+        }
 
+        private void measureAverageNodeDegree(Assembly assembly) {
+            AverageNodeDegree averageNodeDegree = new AverageNodeDegree();
+            evaluate(averageNodeDegree).on(assembly);
+            this.properties.put("average node degree", averageNodeDegree.getValue());
+        }
+
+        private void measureDensity(Assembly assembly) {
             Density density = new Density();
             evaluate(density).on(assembly);
             this.properties.put("density", density.getValue());
+        }
+
+        private void measureSize(Assembly assembly) {
+            this.properties.put("size", assembly.size());
         }
 
         @Override
