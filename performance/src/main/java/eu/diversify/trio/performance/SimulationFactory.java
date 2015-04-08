@@ -6,7 +6,7 @@ import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.core.Assembly;
 import static eu.diversify.trio.core.Evaluation.evaluate;
 import eu.diversify.trio.core.random.Generator;
-import eu.diversify.trio.core.statistics.AverageNodeDegree;
+import eu.diversify.trio.core.statistics.AverageNodalDegree;
 import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.performance.util.Task;
@@ -54,6 +54,11 @@ public class SimulationFactory implements TaskFactory {
      */
     private static class SimulationTask implements Task {
 
+        private static final String SIZE = "size";
+        private static final String AVERAGE_NODAL_DEGREE = "average nodal degree";
+        private static final String DENSITY = "density";
+        private static final String ROBUSTNESS = "robustness";
+
         private final Trio trio;
         private final Scenario scenario;
         private final Map<String, Object> properties;
@@ -66,23 +71,23 @@ public class SimulationFactory implements TaskFactory {
             this.properties = new HashMap<>();
             measureSize(assembly);
             measureDensity(assembly);
-            measureAverageNodeDegree(assembly);
+            measureAverageNodalDegree(assembly);
         }
 
-        private void measureAverageNodeDegree(Assembly assembly) {
-            AverageNodeDegree averageNodeDegree = new AverageNodeDegree();
-            evaluate(averageNodeDegree).on(assembly);
-            this.properties.put("average node degree", averageNodeDegree.getValue());
+        private void measureAverageNodalDegree(Assembly assembly) {
+            AverageNodalDegree averageNodalDegree = new AverageNodalDegree();
+            evaluate(averageNodalDegree).on(assembly);
+            this.properties.put(AVERAGE_NODAL_DEGREE, averageNodalDegree.getValue());
         }
 
         private void measureDensity(Assembly assembly) {
             Density density = new Density();
             evaluate(density).on(assembly);
-            this.properties.put("density", density.getValue());
+            this.properties.put(DENSITY, density.getValue());
         }
 
         private void measureSize(Assembly assembly) {
-            this.properties.put("size", assembly.size());
+            this.properties.put(SIZE, assembly.size());
         }
 
         @Override
@@ -95,7 +100,7 @@ public class SimulationFactory implements TaskFactory {
             if (result != null) {
                 Analysis analysis = trio.analyse(result);
                 double robustness = analysis.metric(RelativeRobustness.NAME).distribution().mean();
-                this.properties.put("robustness", robustness);
+                this.properties.put(ROBUSTNESS, robustness);
             }
             return this.properties;
         }

@@ -21,7 +21,7 @@ import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
 import static eu.diversify.trio.core.Evaluation.evaluate;
 import static eu.diversify.trio.core.requirements.Factory.require;
-import eu.diversify.trio.core.statistics.AverageNodeDegree;
+import eu.diversify.trio.core.statistics.AverageNodalDegree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,26 +37,26 @@ import org.junit.runners.Parameterized;
  * n, where m is the number of link and n is the number of node is a graph.
  */
 @RunWith(Parameterized.class)
-public class AverageNodeDegreeTest {
+public class AverageNodalDegreeTest {
 
     private static final double ERROR_TOLERANCE = 1e-6;
 
     private final String testName;
     private final Assembly assembly;
-    private final AverageNodeDegree averageNodeDegree;
+    private final AverageNodalDegree averageNodalDegree;
     private final double expectedValue;
 
-    public AverageNodeDegreeTest(String testName, Assembly assembly, double expectedValue) {
+    public AverageNodalDegreeTest(String testName, Assembly assembly, double expectedValue) {
         this.testName = testName;
         this.assembly = assembly;
-        this.averageNodeDegree = new AverageNodeDegree();
+        this.averageNodalDegree = new AverageNodalDegree();
         this.expectedValue = expectedValue;
     }
 
     @Test
-    public void shouldComputeAverageNodeDegreeProperly() {
-        evaluate(averageNodeDegree).on(assembly);
-        assertThat(averageNodeDegree.getValue(), is(closeTo(expectedValue, ERROR_TOLERANCE)));
+    public void shouldComputeAverageNodalDegreeProperly() {
+        evaluate(averageNodalDegree).on(assembly);
+        assertThat(averageNodalDegree.getValue(), is(closeTo(expectedValue, ERROR_TOLERANCE)));
     }
 
     @Parameterized.Parameters(name = "{0}")

@@ -24,15 +24,15 @@ import eu.diversify.trio.core.requirements.stats.VariableCount;
  * The average node degree (k-bar), commonly defined as 2*m / n, where m is the
  * number of link and n is the number of node is a graph.
  */
-public class AverageNodeDegree extends Dispatcher {
+public class AverageNodalDegree extends Dispatcher {
 
     private final GraphSizeCalculator calculator;
 
-    public AverageNodeDegree() {
+    public AverageNodalDegree() {
         this(new GraphSizeCalculator(new VariableCount()));
     }
 
-    private AverageNodeDegree(GraphSizeCalculator calculator) {
+    private AverageNodalDegree(GraphSizeCalculator calculator) {
         super(calculator.getVariableCounter(), calculator);
         this.calculator = calculator;
     }
