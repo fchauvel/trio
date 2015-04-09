@@ -17,6 +17,8 @@
     <modules>
         <module>core</module>
         <module>performance</module>
+        <module>generator</module>
+        <module>graph</module>
     </modules>
 
     

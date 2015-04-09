@@ -25,3 +25,5 @@
 *~
 /core/target/
 /performance/target/
+/graph/target/
+/generator/target/
