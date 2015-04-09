@@ -10,6 +10,11 @@ public class AdjacencyMatrix implements Graph {
     private final int nodeCount;
     private final BitSet adjacency;
 
+    public AdjacencyMatrix(BitSet adjacency) {
+        nodeCount = (int) Math.sqrt(adjacency.length());
+        this.adjacency = (BitSet) adjacency.clone();
+    }
+    
     public AdjacencyMatrix(boolean[][] adjacency) {
         this.nodeCount = adjacency.length;
         this.adjacency = new BitSet(nodeCount * nodeCount);
