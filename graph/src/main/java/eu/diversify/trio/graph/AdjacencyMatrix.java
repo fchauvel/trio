@@ -10,8 +10,8 @@ public class AdjacencyMatrix implements Graph {
     private final int nodeCount;
     private final BitSet adjacency;
 
-    public AdjacencyMatrix(BitSet adjacency) {
-        nodeCount = (int) Math.sqrt(adjacency.length());
+    public AdjacencyMatrix(int nodeCount, BitSet adjacency) {
+        this.nodeCount = nodeCount;
         this.adjacency = (BitSet) adjacency.clone();
     }
     
@@ -62,5 +62,20 @@ public class AdjacencyMatrix implements Graph {
     }
 
  
+    @Override
+    public String toString() {
+        final StringBuilder buffer = new StringBuilder();
+        for (int eachSourceNode = 0; eachSourceNode < nodeCount; eachSourceNode++) {
+            for (int eachTargetNode = 0; eachTargetNode < nodeCount; eachTargetNode++) {
+                char sign = '0';
+                if (adjacency.get(edgeIndex(eachSourceNode, eachTargetNode))) {
+                    sign = '1';
+                }
+                buffer.append(sign);
+            }
+            buffer.append(System.lineSeparator());
+        }
+        return buffer.toString();
+    }
 
 }
