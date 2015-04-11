@@ -48,15 +48,7 @@ public class BarabasiAlbertGenerator implements GraphGenerator{
     private static final boolean OUT_DEGREE = false;
 
     private Node select(Graph graph, boolean degree) {
-        double probabilities[] = new double[nodeCount];
-        double total = 0;
-        for (Node eachNode : graph.nodes()) {
-            probabilities[eachNode.index()] = degree(graph, eachNode, degree);
-            total += probabilities[eachNode.index()];
-        }
-        for (Node eachNode : graph.nodes()) {
-            probabilities[eachNode.index()] /= total;
-        }
+        double probabilities[] = computeProbabilities(graph, degree);
 
         double draw = random.nextDouble();
         double acc = 0;
@@ -67,6 +59,19 @@ public class BarabasiAlbertGenerator implements GraphGenerator{
             }
         }
         throw new RuntimeException("Unable to select node");
+    }
+
+    private double[] computeProbabilities(Graph graph, boolean degree) {
+        double probabilities[] = new double[nodeCount];
+        double total = 0;
+        for (Node eachNode : graph.nodes()) {
+            probabilities[eachNode.index()] = degree(graph, eachNode, degree);
+            total += probabilities[eachNode.index()];
+        }
+        for (Node eachNode : graph.nodes()) {
+            probabilities[eachNode.index()] /= total;
+        }
+        return probabilities;
     }
 
     private static int degree(Graph graph, Node eachNode, boolean degree) {

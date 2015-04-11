@@ -57,6 +57,21 @@ public class RandomGeneratorsTest {
 
         saveAsDot(dotFile, graph);
     }
+    
+     @Test
+    public void oneWattsStrogatz() throws UnsupportedEncodingException, FileNotFoundException, IOException {
+        final String dotFile = "target/random_watts_strogatz.dot";
+        final int NODE_COUNT = 25;
+        final int NEIGHBORHOOD = 4;
+        final double RELINKING_PROBABILITY = 0.4;
+
+        GraphGenerator generate = new WattsStrogatzGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY);
+        Graph graph = generate.nextGraph();
+
+        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
+
+        saveAsDot(dotFile, graph);
+    }
 
     private void saveAsDot(final String dotFile, Graph graph) throws FileNotFoundException, UnsupportedEncodingException, IOException {
         DotWriter dot = new DotWriter();
