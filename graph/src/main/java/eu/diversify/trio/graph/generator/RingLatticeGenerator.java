@@ -1,19 +1,19 @@
 
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.EdgeSet;
+import eu.diversify.trio.graph.AdjacencyMatrix;
+import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
-import eu.diversify.trio.graph.NodeSet;
 
 /**
  * Define the neighborhood of a ring lattice
  */
-public class RingLatticeModel implements GraphFamily {
+public class RingLatticeGenerator implements GraphGenerator {
 
     private final int nodeCount;
     private final int neighborhoodSize;
 
-    public RingLatticeModel(int nodeCount, int diameter) {
+    public RingLatticeGenerator(int nodeCount, int diameter) {
         if (diameter < 0) {
             final String description = String.format("Invalid neighborhood, diameter must be positive (found %d)", diameter);
             throw new IllegalArgumentException(description);
@@ -26,17 +26,18 @@ public class RingLatticeModel implements GraphFamily {
         this.neighborhoodSize = diameter;
     }
     
-    @Override
-    public int nodeCount() {
-        return nodeCount;
+    public Graph nextGraph() {
+        final AdjacencyMatrix graph = new AdjacencyMatrix(nodeCount);
+        for (Node eachSource: graph.nodes()) {
+            for (Node eachTarget: graph.nodes()) {
+                if (allowsEdgeBetween(eachSource, eachTarget)) {
+                    graph.connect(eachSource, eachTarget);
+                }
+            }
+        }
+        return graph;
     }
-    
-    @Override
-    public int edgeCount() {
-        return nodeCount * nodeCount;
-    }    
-    
-    @Override 
+
     public boolean allowsEdgeBetween(Node source, Node target) {
         int distance = Math.abs(source.index() - target.index());
         if (distance > nodeCount / 2) {
@@ -47,20 +48,6 @@ public class RingLatticeModel implements GraphFamily {
 
     private int radius() {
         return neighborhoodSize / 2;
-    }
-
-    @Override
-    public NodeSet nodes() {
-        final NodeSet nodes = new NodeSet();
-        for(int index=0 ; index < nodeCount ; index++) {
-            nodes.add(new Node(index));
-        }
-        return nodes;
-    }
-
-    @Override
-    public EdgeSet edges() {
-        throw new UnsupportedOperationException("Not supported in graph family"); 
     }
     
 }

@@ -9,6 +9,11 @@ public class AdjacencyMatrix implements Graph {
 
     private final int nodeCount;
     private final BitSet adjacency;
+    
+    public AdjacencyMatrix(int nodeCount) {
+        this.nodeCount = nodeCount;
+        this.adjacency = new BitSet(nodeCount * nodeCount);
+    }
 
     public AdjacencyMatrix(int nodeCount, BitSet adjacency) {
         this.nodeCount = nodeCount;
@@ -77,5 +82,17 @@ public class AdjacencyMatrix implements Graph {
         }
         return buffer.toString();
     }
+
+    @Override
+    public void connect(Node source, Node target) {
+        adjacency.set(edgeIndex(source.index(), target.index()));
+    }
+
+    @Override
+    public void disconnect(Node source, Node target) {
+        adjacency.set(edgeIndex(source.index(), target.index()), false);
+    }
+    
+    
 
 }

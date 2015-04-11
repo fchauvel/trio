@@ -1,7 +1,6 @@
 package eu.diversify.trio.graph.generator;
 
 import eu.diversify.trio.graph.Graph;
-import static eu.diversify.trio.graph.generator.GeneratorFactory.generators;
 import eu.diversify.trio.graph.storage.dot.DotWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,9 +22,9 @@ public class RandomGeneratorsTest {
         final int NODE_COUNT = 25;
         final int NEIGHBORHOOD = 6;
 
-        GraphGenerator generator = generators().regularRindLattice(NODE_COUNT, NEIGHBORHOOD);
+        GraphGenerator generator = new RingLatticeGenerator(NODE_COUNT, NEIGHBORHOOD);
 
-        Graph graph = generator.nextRandomGraph();
+        Graph graph = generator.nextGraph();
 
         assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
 
@@ -38,8 +37,21 @@ public class RandomGeneratorsTest {
         final int NODE_COUNT = 25;
         final double EDGE_PROBABILITY = 0.3;
 
-        GraphGenerator generator = generators().erdosRenyi(NODE_COUNT, EDGE_PROBABILITY);
-        Graph graph = generator.nextRandomGraph();
+        GraphGenerator generator = new ErdosRenyiGenerator(NODE_COUNT, EDGE_PROBABILITY);
+        Graph graph = generator.nextGraph();
+
+        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
+
+        saveAsDot(dotFile, graph);
+    }
+
+    @Test
+    public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
+        final String dotFile = "target/random_barabasi_albert.dot";
+        final int NODE_COUNT = 25;
+
+        GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT);
+        Graph graph = generate.nextGraph();
 
         assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
 

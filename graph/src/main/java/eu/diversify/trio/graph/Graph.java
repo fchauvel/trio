@@ -1,4 +1,3 @@
-
 package eu.diversify.trio.graph;
 
 /**
@@ -7,7 +6,11 @@ package eu.diversify.trio.graph;
 public interface Graph {
 
     NodeSet nodes();
-    
+
     EdgeSet edges();
-    
+
+    void connect(Node source, Node target);
+
+    void disconnect(Node source, Node target);
+
 }
