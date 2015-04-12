@@ -55,7 +55,7 @@ public class AdjacencyMatrixTest {
     @Test
     public void disconnectShouldDeleteAnEdge() {
         AdjacencyMatrix graph = createMatrix("11"+"11");
-        graph.disconnect(node(1), node(2));
+        graph.disconnect(new Edge(node(1), node(2)));
 
         assertThat(graph.edges(), not(hasItem(new Edge(node(1), node(2)))));
     }

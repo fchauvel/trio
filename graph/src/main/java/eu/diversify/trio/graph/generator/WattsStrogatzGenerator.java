@@ -34,7 +34,7 @@ public class WattsStrogatzGenerator implements GraphGenerator {
         Graph graph = ringLattice.nextGraph();
         for (Edge eachEdge : graph.edges()) {
             if (isRandomlyRelinked()) {
-                graph.disconnect(eachEdge.source(), eachEdge.target());
+                graph.disconnect(eachEdge);
                 graph.connect(eachEdge.source(), newTarget(graph, eachEdge));
             }
         }

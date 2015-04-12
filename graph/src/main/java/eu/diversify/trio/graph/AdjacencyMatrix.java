@@ -26,7 +26,7 @@ public class AdjacencyMatrix implements Graph {
         }
         return new AdjacencyMatrix(nodeCount, adjacency);
     }
-    
+
     private final int nodeCount;
     private final BitSet adjacency;
 
@@ -103,13 +103,14 @@ public class AdjacencyMatrix implements Graph {
     }
 
     @Override
-    public void connect(Node source, Node target) {
+    public Edge connect(Node source, Node target) {
         adjacency.set(edgeIndex(source.index(), target.index()));
+        return new Edge(source, target);
     }
 
     @Override
-    public void disconnect(Node source, Node target) {
-        adjacency.set(edgeIndex(source.index(), target.index()), false);
+    public void disconnect(Edge edge) {
+        adjacency.set(edgeIndex(edge.source().index(), edge.target().index()), false);
     }
 
 }
