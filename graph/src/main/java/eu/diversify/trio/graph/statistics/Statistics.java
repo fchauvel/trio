@@ -3,6 +3,8 @@ package eu.diversify.trio.graph.statistics;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import eu.diversify.trio.graph.Path;
+import static eu.diversify.trio.graph.queries.PredecessorOf.predecessorOf;
+import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
 
 /**
  * The adjacency matrix of a graph, that tell the connection between two nodes
@@ -48,9 +50,9 @@ public class Statistics {
     public int degreeOf(Node node, Degree kind) {
         switch (kind) {
             case IN:
-                return this.graph.edges().to(node).size();
+                return this.graph.nodes(predecessorOf(node)).size();
             case OUT:
-                return this.graph.edges().from(node).size();
+                return this.graph.nodes(successorOf(node)).size();
         }
         throw new IllegalArgumentException("Unknown degree type " + kind.name());
     }

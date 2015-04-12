@@ -4,6 +4,10 @@ import eu.diversify.trio.graph.AdjacencyMatrix;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import static eu.diversify.trio.graph.Node.node;
+import static eu.diversify.trio.graph.queries.Leaving.leaving;
+import static eu.diversify.trio.graph.queries.PredecessorOf.predecessorOf;
+import static eu.diversify.trio.graph.queries.Reaching.reaching;
+import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
 import java.util.Random;
 
 /**
@@ -80,9 +84,11 @@ public class BarabasiAlbertGenerator implements GraphGenerator{
     
     private static int degree(Graph graph, Node eachNode, boolean degree) {
         if (degree) {
-            return graph.edges().to(eachNode).size();
+            //return graph.nodes(predecessorOf(eachNode)).size();
+            return graph.edges(reaching(eachNode)).size();
         }
-        return graph.edges().from(eachNode).size();
+//        return graph.nodes(successorOf(eachNode)).size();
+        return graph.edges(leaving(eachNode)).size();
     }
 
 }

@@ -18,16 +18,16 @@ public class Edge {
     public Node source() {
         return source;
     }
-
+    
     public Node target() {
         return target;
     }
-
-    boolean startsFrom(Node node) {
+    
+    public boolean leaves(Node node) {
         return this.source.equals(node);
     }
 
-    boolean arrivesAt(Node node) {
+    public boolean reaches(Node node) {
         return this.target.equals(node);
     }
 

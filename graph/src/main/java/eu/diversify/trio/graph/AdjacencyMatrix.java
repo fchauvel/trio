@@ -1,6 +1,10 @@
 package eu.diversify.trio.graph;
 
+import eu.diversify.trio.graph.queries.EdgePredicate;
+import eu.diversify.trio.graph.queries.NodePredicate;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 /**
  * A graph, encoded as its adjacency matrix
@@ -25,6 +29,10 @@ public class AdjacencyMatrix implements Graph {
             }
         }
         return new AdjacencyMatrix(nodeCount, adjacency);
+    }
+
+    public static Graph from(String string, String string0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private final int nodeCount;
@@ -65,31 +73,58 @@ public class AdjacencyMatrix implements Graph {
     }
 
     @Override
-    public NodeSet nodes() {
+    public List<Node> nodes() {
         computeNodesIfNeeded();
         return nodes;
     }
 
     private void computeNodesIfNeeded() {
         if (nodes == null) {
-            nodes = new NodeSet(nodeCount);
+            nodes = new ArrayList<>(nodeCount);
             for (int eachNode = 0; eachNode < nodeCount; eachNode++) {
                 nodes.add(new Node(eachNode));
             }
         }
     }
     
-    private NodeSet nodes;
+    private List<Node> nodes;
 
     @Override
-    public EdgeSet edges() {
+    public List<Node> nodes(NodePredicate predicate) {
+        final List<Node> selection = new ArrayList<>(nodeCount);
+        for(Node anyNode: nodes()) {
+            if (predicate.isSatisfiedBy(this, anyNode)) {
+                selection.add(anyNode);
+            }
+        }
+        return selection;
+    }
+
+    
+    
+    
+    @Override
+    public List<Edge> edges() {
         computeEdgesIfNeeded();
         return edges;
     }
 
+    @Override
+    public List<Edge> edges(EdgePredicate predicate) {
+        final List<Edge> selection = new ArrayList<Edge>(adjacency.cardinality());
+        for (Edge anyEdge: edges()) {
+            if (predicate.isSatisfiedBy(anyEdge)) {
+                selection.add(anyEdge);
+            }
+        }
+        return selection;
+    }
+    
+    
+
     private void computeEdgesIfNeeded() {
         if (edges == null) {
-            edges = new EdgeSet(adjacency.cardinality());
+            edges = new ArrayList<>(adjacency.cardinality());
             for (int eachEdge = 0; eachEdge < adjacency.length(); eachEdge++) {
                 if (adjacency.get(eachEdge)) {
                     final Node source = new Node(eachEdge / nodeCount);
@@ -100,7 +135,7 @@ public class AdjacencyMatrix implements Graph {
         }
     }
 
-    private EdgeSet edges;
+    private List<Edge> edges;
 
     @Override
     public String toString() {

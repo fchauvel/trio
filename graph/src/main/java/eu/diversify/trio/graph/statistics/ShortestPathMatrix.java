@@ -4,6 +4,7 @@ import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import eu.diversify.trio.graph.Path;
+import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -59,8 +60,7 @@ public class ShortestPathMatrix {
         while (!frontier.isEmpty()) {
             final Node current = frontier.remove(0);
             visited.add(current);
-            for (Edge eachOutgoingEdge : graph.edges().from(current)) {
-                final Node neighbor = eachOutgoingEdge.target();
+            for (Node neighbor : graph.nodes(successorOf(current))) {
                 if (!visited.contains(neighbor)) {
                     Path oldPath = getShortestPath(source, neighbor);
                     Path newPath = getShortestPath(source, current).append(neighbor);

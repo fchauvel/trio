@@ -53,7 +53,7 @@ public class RandomGeneratorsTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_barabasi_albert";
-        final int NODE_COUNT = 250;
+        final int NODE_COUNT = 150;
 
         GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT);
         Graph graph = generate.nextGraph();
