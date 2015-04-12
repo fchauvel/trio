@@ -9,7 +9,7 @@ public class AdjacencyMatrix implements Graph {
 
     /**
      * Create an adjacency matrix from a string where edges are denote by '1',
-     * and nodes by line breaks. (e.g., 00\n01\n11)
+     * (e.g., 000111)
      *
      * @param binary the string describing the adjacency matrix
      * @return the adjacency matrix
@@ -19,8 +19,8 @@ public class AdjacencyMatrix implements Graph {
         final int nodeCount = (int) Math.sqrt(edgeCount);
         final BitSet adjacency = new BitSet(edgeCount);
         for (int eachEdge = 0; eachEdge < edgeCount; eachEdge++) {
-            char digit = binary.charAt(eachEdge);
-            if (digit == '1') {
+            char edge = binary.charAt(eachEdge);
+            if (edge == '1') {
                 adjacency.set(eachEdge);
             }
         }

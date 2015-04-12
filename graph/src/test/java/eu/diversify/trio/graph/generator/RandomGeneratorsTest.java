@@ -1,13 +1,17 @@
 package eu.diversify.trio.graph.generator;
 
+import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
+import static eu.diversify.trio.graph.Node.node;
 import eu.diversify.trio.graph.storage.dot.DotWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
@@ -63,13 +67,16 @@ public class RandomGeneratorsTest {
         final String dotFile = "target/random_watts_strogatz.dot";
         final int NODE_COUNT = 25;
         final int NEIGHBORHOOD = 4;
-        final double RELINKING_PROBABILITY = 0.4;
+        final double RELINKING_PROBABILITY = 0.2;
 
         GraphGenerator generate = new WattsStrogatzGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY);
         Graph graph = generate.nextGraph();
 
         assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
-
+        for(int i=0 ; i<graph.nodes().size() ; i++) {
+            assertThat(graph.edges(), not(hasItem(new Edge(node(i), node(i)))));
+        }
+        
         saveAsDot(dotFile, graph);
     }
 
