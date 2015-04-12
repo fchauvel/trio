@@ -7,9 +7,29 @@ import java.util.BitSet;
  */
 public class AdjacencyMatrix implements Graph {
 
+    /**
+     * Create an adjacency matrix from a string where edges are denote by '1',
+     * and nodes by line breaks. (e.g., 00\n01\n11)
+     *
+     * @param binary the string describing the adjacency matrix
+     * @return the adjacency matrix
+     */
+    public static AdjacencyMatrix from(String binary) {
+        final int edgeCount = binary.length();
+        final int nodeCount = (int) Math.sqrt(edgeCount);
+        final BitSet adjacency = new BitSet(edgeCount);
+        for (int eachEdge = 0; eachEdge < edgeCount; eachEdge++) {
+            char digit = binary.charAt(eachEdge);
+            if (digit == '1') {
+                adjacency.set(eachEdge);
+            }
+        }
+        return new AdjacencyMatrix(nodeCount, adjacency);
+    }
+    
     private final int nodeCount;
     private final BitSet adjacency;
-    
+
     public AdjacencyMatrix(int nodeCount) {
         this.nodeCount = nodeCount;
         this.adjacency = new BitSet(nodeCount * nodeCount);
@@ -19,7 +39,7 @@ public class AdjacencyMatrix implements Graph {
         this.nodeCount = nodeCount;
         this.adjacency = (BitSet) adjacency.clone();
     }
-    
+
     public AdjacencyMatrix(boolean[][] adjacency) {
         this.nodeCount = adjacency.length;
         this.adjacency = new BitSet(nodeCount * nodeCount);
@@ -47,7 +67,7 @@ public class AdjacencyMatrix implements Graph {
     @Override
     public NodeSet nodes() {
         final NodeSet nodes = new NodeSet(nodeCount);
-        for(int eachNode = 0 ; eachNode < nodeCount ; eachNode++) {
+        for (int eachNode = 0; eachNode < nodeCount; eachNode++) {
             nodes.add(new Node(eachNode));
         }
         return nodes;
@@ -56,7 +76,7 @@ public class AdjacencyMatrix implements Graph {
     @Override
     public EdgeSet edges() {
         final EdgeSet edges = new EdgeSet(adjacency.cardinality());
-        for(int eachEdge=0 ; eachEdge<adjacency.length() ; eachEdge++) {
+        for (int eachEdge = 0; eachEdge < adjacency.length(); eachEdge++) {
             if (adjacency.get(eachEdge)) {
                 final Node source = new Node(eachEdge / nodeCount);
                 final Node target = new Node(eachEdge % nodeCount);
@@ -66,7 +86,6 @@ public class AdjacencyMatrix implements Graph {
         return edges;
     }
 
- 
     @Override
     public String toString() {
         final StringBuilder buffer = new StringBuilder();
@@ -92,7 +111,5 @@ public class AdjacencyMatrix implements Graph {
     public void disconnect(Node source, Node target) {
         adjacency.set(edgeIndex(source.index(), target.index()), false);
     }
-    
-    
 
 }

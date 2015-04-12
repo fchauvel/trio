@@ -34,11 +34,14 @@ public class BarabasiAlbertGenerator implements GraphGenerator{
             if (draw < alpha) {
                 graph.connect(node(index), select(graph, IN_DEGREE));
                 index++;
+            
             } else if (draw < alpha + beta) {
                 graph.connect(select(graph, OUT_DEGREE), node(index));
                 index++;
+            
             } else {
                 graph.connect(select(graph, OUT_DEGREE), select(graph, IN_DEGREE));
+            
             }
         }
         return graph;
@@ -74,6 +77,7 @@ public class BarabasiAlbertGenerator implements GraphGenerator{
         return probabilities;
     }
 
+    
     private static int degree(Graph graph, Node eachNode, boolean degree) {
         if (degree) {
             return graph.edges().to(eachNode).size();

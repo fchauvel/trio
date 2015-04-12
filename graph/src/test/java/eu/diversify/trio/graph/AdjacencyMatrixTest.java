@@ -1,7 +1,6 @@
 package eu.diversify.trio.graph;
 
 import static eu.diversify.trio.graph.Node.node;
-import java.util.BitSet;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -20,13 +19,22 @@ public class AdjacencyMatrixTest {
 
     @Test
     public void matrixBuildFromBitSetShouldHaveACorrectEdges() {
-        AdjacencyMatrix graph = new AdjacencyMatrix(3, bitSetFrom("010101011"));
-        assertThat(graph.edges().size(), is(equalTo(5)));
+        String adjacency 
+                = "010"
+                + "101"
+                + "010";
+        
+        AdjacencyMatrix graph = createMatrix(adjacency);
+        
+        assertThat(graph.edges().size(), is(equalTo(4)));
         assertThat(graph.edges(), hasItem(new Edge(node(0), node(1))));
         assertThat(graph.edges(), hasItem(new Edge(node(1), node(0))));
         assertThat(graph.edges(), hasItem(new Edge(node(1), node(2))));
         assertThat(graph.edges(), hasItem(new Edge(node(2), node(1))));
-        assertThat(graph.edges(), hasItem(new Edge(node(2), node(2))));
+    }
+
+    private AdjacencyMatrix createMatrix(String text) throws IllegalArgumentException {
+        return AdjacencyMatrix.from(text);
     }
 
     @Test
@@ -46,7 +54,7 @@ public class AdjacencyMatrixTest {
 
     @Test
     public void disconnectShouldDeleteAnEdge() {
-        AdjacencyMatrix graph = new AdjacencyMatrix(2, bitSetFrom("1111"));
+        AdjacencyMatrix graph = createMatrix("11"+"11");
         graph.disconnect(node(1), node(2));
 
         assertThat(graph.edges(), not(hasItem(new Edge(node(1), node(2)))));
@@ -54,25 +62,8 @@ public class AdjacencyMatrixTest {
 
     @Test
     public void matrixBuildFromBitSetShouldHaveACorrectNodeCount() {
-        AdjacencyMatrix graph = new AdjacencyMatrix(3, bitSetFrom("010101011"));
+        AdjacencyMatrix graph = createMatrix("111"+"111"+"111");
         assertThat(graph.nodes().size(), is(equalTo(3)));
-    }
-
-    private BitSet bitSetFrom(final String binary) throws IllegalArgumentException {
-        BitSet adjacency = new BitSet(binary.length());
-        for (int eachDigit = 0; eachDigit < binary.length(); eachDigit++) {
-            char digit = binary.charAt(eachDigit);
-            switch (digit) {
-                case '1':
-                    adjacency.set(eachDigit);
-                    break;
-                case '0':
-                    break;
-                default:
-                    throw new IllegalArgumentException("String should only contains '1' or '0' (found '" + digit + "')");
-            }
-        }
-        return adjacency;
     }
 
 }
