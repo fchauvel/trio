@@ -66,25 +66,41 @@ public class AdjacencyMatrix implements Graph {
 
     @Override
     public NodeSet nodes() {
-        final NodeSet nodes = new NodeSet(nodeCount);
-        for (int eachNode = 0; eachNode < nodeCount; eachNode++) {
-            nodes.add(new Node(eachNode));
-        }
+        computeNodesIfNeeded();
         return nodes;
     }
 
-    @Override
-    public EdgeSet edges() {
-        final EdgeSet edges = new EdgeSet(adjacency.cardinality());
-        for (int eachEdge = 0; eachEdge < adjacency.length(); eachEdge++) {
-            if (adjacency.get(eachEdge)) {
-                final Node source = new Node(eachEdge / nodeCount);
-                final Node target = new Node(eachEdge % nodeCount);
-                edges.add(new Edge(source, target));
+    private void computeNodesIfNeeded() {
+        if (nodes == null) {
+            nodes = new NodeSet(nodeCount);
+            for (int eachNode = 0; eachNode < nodeCount; eachNode++) {
+                nodes.add(new Node(eachNode));
             }
         }
+    }
+    
+    private NodeSet nodes;
+
+    @Override
+    public EdgeSet edges() {
+        computeEdgesIfNeeded();
         return edges;
     }
+
+    private void computeEdgesIfNeeded() {
+        if (edges == null) {
+            edges = new EdgeSet(adjacency.cardinality());
+            for (int eachEdge = 0; eachEdge < adjacency.length(); eachEdge++) {
+                if (adjacency.get(eachEdge)) {
+                    final Node source = new Node(eachEdge / nodeCount);
+                    final Node target = new Node(eachEdge % nodeCount);
+                    edges.add(new Edge(source, target));
+                }
+            }
+        }
+    }
+
+    private EdgeSet edges;
 
     @Override
     public String toString() {
@@ -105,12 +121,17 @@ public class AdjacencyMatrix implements Graph {
     @Override
     public Edge connect(Node source, Node target) {
         adjacency.set(edgeIndex(source.index(), target.index()));
-        return new Edge(source, target);
+        final Edge newEdge = new Edge(source, target);
+        computeEdgesIfNeeded();
+        edges.add(newEdge);
+        return newEdge;
     }
 
     @Override
     public void disconnect(Edge edge) {
         adjacency.set(edgeIndex(edge.source().index(), edge.target().index()), false);
+        computeEdgesIfNeeded();
+        edges.remove(edge);
     }
 
 }

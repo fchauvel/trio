@@ -39,8 +39,8 @@ public class RandomGeneratorsTest {
     @Test
     public void oneRandomErdosRenyi() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_erdos_renyi";
-        final int NODE_COUNT = 25;
-        final double EDGE_PROBABILITY = 0.3;
+        final int NODE_COUNT = 250;
+        final double EDGE_PROBABILITY = 0.05;
 
         GraphGenerator generator = new ErdosRenyiGenerator(NODE_COUNT, EDGE_PROBABILITY);
         Graph graph = generator.nextGraph();
@@ -53,7 +53,7 @@ public class RandomGeneratorsTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_barabasi_albert";
-        final int NODE_COUNT = 25;
+        final int NODE_COUNT = 250;
 
         GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT);
         Graph graph = generate.nextGraph();
@@ -66,9 +66,9 @@ public class RandomGeneratorsTest {
     @Test
     public void oneWattsStrogatz() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_watts_strogatz";
-        final int NODE_COUNT = 25;
-        final int NEIGHBORHOOD = 4;
-        final double RELINKING_PROBABILITY = 0.2;
+        final int NODE_COUNT = 250;
+        final int NEIGHBORHOOD = 10;
+        final double RELINKING_PROBABILITY = 0.05;
 
         GraphGenerator generate = new WattsStrogatzGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY);
         Graph graph = generate.nextGraph();
@@ -83,7 +83,7 @@ public class RandomGeneratorsTest {
     
     private void save(String file, Graph graph) throws UnsupportedEncodingException, IOException {
         saveAsDot(file, graph);
-        saveAsCsv(file, graph);
+        saveAsCsv(file, graph);  
     }
 
     private void saveAsDot(final String file, Graph graph) throws FileNotFoundException, UnsupportedEncodingException, IOException {
