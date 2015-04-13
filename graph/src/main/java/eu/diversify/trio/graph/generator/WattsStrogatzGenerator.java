@@ -4,6 +4,7 @@ import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import static eu.diversify.trio.graph.Node.node;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -32,8 +33,8 @@ public class WattsStrogatzGenerator implements GraphGenerator {
     @Override
     public Graph nextGraph() {
         Graph graph = ringLattice.nextGraph();
-        for (Edge eachEdge : graph.edges()) {
-            if (isRandomlyRelinked()) {
+        for (Edge eachEdge : new ArrayList<>(graph.edges())) {
+            if (isRandomlyRelinked()) { 
                 graph.disconnect(eachEdge);
                 graph.connect(eachEdge.source(), newTarget(graph, eachEdge));
             }
