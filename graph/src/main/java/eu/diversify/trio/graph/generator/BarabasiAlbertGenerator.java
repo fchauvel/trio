@@ -1,13 +1,12 @@
 package eu.diversify.trio.graph.generator;
 
 import eu.diversify.trio.graph.AdjacencyMatrix;
+import eu.diversify.trio.graph.CachedGraph;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import static eu.diversify.trio.graph.Node.node;
 import static eu.diversify.trio.graph.queries.Leaving.leaving;
-import static eu.diversify.trio.graph.queries.PredecessorOf.predecessorOf;
 import static eu.diversify.trio.graph.queries.Reaching.reaching;
-import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
 import java.util.Random;
 
 /**
@@ -28,7 +27,7 @@ public class BarabasiAlbertGenerator implements GraphGenerator{
 
     @Override
     public Graph nextGraph() {
-        Graph graph = new AdjacencyMatrix(nodeCount);
+        Graph graph = new CachedGraph(new AdjacencyMatrix(nodeCount));
         graph.connect(node(0), node(1));
         graph.connect(node(1), node(0));
 
