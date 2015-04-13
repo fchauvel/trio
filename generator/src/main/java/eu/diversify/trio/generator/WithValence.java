@@ -17,7 +17,7 @@
  */
 /*
  */
-package eu.diversify.trio.core.random;
+package eu.diversify.trio.generator;
 
 import eu.diversify.trio.core.requirements.Require;
 import java.util.BitSet;

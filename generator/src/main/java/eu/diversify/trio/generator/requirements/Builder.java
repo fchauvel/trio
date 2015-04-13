@@ -16,7 +16,7 @@
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.core.requirements.random;
+package eu.diversify.trio.generator.requirements;
 
 import eu.diversify.trio.core.requirements.RequirementFactory;
 import eu.diversify.trio.core.requirements.Requirement;

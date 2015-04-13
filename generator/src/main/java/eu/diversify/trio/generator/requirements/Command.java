@@ -1,4 +1,4 @@
-package eu.diversify.trio.core.requirements.random;
+package eu.diversify.trio.generator.requirements;
 
 /**
  * The command that can be used to build a requirement

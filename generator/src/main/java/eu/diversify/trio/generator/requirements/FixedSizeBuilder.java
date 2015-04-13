@@ -1,7 +1,7 @@
-package eu.diversify.trio.core.requirements.random;
+package eu.diversify.trio.generator.requirements;
 
 import eu.diversify.trio.core.requirements.RequirementFactory;
-import static eu.diversify.trio.core.requirements.random.Command.*;
+import static eu.diversify.trio.generator.requirements.Command.*;
 import java.util.List;
 
 /**
@@ -28,11 +28,6 @@ public class FixedSizeBuilder extends Builder {
         this.lastCommand = null;
     }
     
-    private boolean isLastCommand(Command command) {
-        if (lastCommand == null) return false;
-        return lastCommand == command;
-    }
-
     @Override
     public void addNot() {
         addNegation();

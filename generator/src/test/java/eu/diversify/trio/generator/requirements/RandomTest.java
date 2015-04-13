@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
-package eu.diversify.trio.unit.core.requirements.random;
+
+package eu.diversify.trio.generator.requirements;
 
 import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
+import eu.diversify.trio.generator.requirements.CachedLiteralFactory;
 import eu.diversify.trio.core.requirements.stats.LeafCount;
 import java.util.Random;
 import org.junit.Test;
@@ -28,10 +27,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static eu.diversify.trio.core.Evaluation.evaluate;
-import eu.diversify.trio.core.requirements.random.BuildRandomizer;
-import eu.diversify.trio.core.requirements.random.Builder;
-import eu.diversify.trio.core.requirements.random.Command;
-import eu.diversify.trio.core.requirements.random.FixedSizeBuilder;
+import eu.diversify.trio.generator.requirements.BuildRandomizer;
+import eu.diversify.trio.generator.requirements.Builder;
+import eu.diversify.trio.generator.requirements.Command;
+import eu.diversify.trio.generator.requirements.FixedSizeBuilder;
 import java.util.LinkedList;
 import java.util.List;
 import static org.hamcrest.MatcherAssert.*;
@@ -82,11 +81,11 @@ public class RandomTest {
     }
 
     public static BuildRandomizer prepareBuilder(int capacity, int size) {
-        return new BuildRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), capacity);
+        return new BuildRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), BuildRandomizer.range(capacity));
     }
 
     public static LoggedRandomizer prepareLoggedBuilder(int capacity, int size) {
-        return new LoggedRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), capacity);
+        return new LoggedRandomizer(new FixedSizeBuilder(new CachedLiteralFactory(capacity), size), new Random(), BuildRandomizer.range(capacity));
     }
 
     @Test
@@ -134,8 +133,8 @@ public class RandomTest {
 
         private final List<Command> history;
 
-        public LoggedRandomizer(Builder builder, Random random, int componentCount) {
-            super(builder, random, componentCount);
+        public LoggedRandomizer(Builder builder, Random random, List<Integer> indices) {
+            super(builder, random, indices);
             history = new LinkedList<>();
         }
 

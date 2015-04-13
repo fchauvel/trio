@@ -1,4 +1,4 @@
-package eu.diversify.trio.unit.core.requirements.random;
+package eu.diversify.trio.generator.requirements;
 
 import eu.diversify.trio.core.requirements.CachedFactory;
 import eu.diversify.trio.core.requirements.Conjunction;
@@ -8,7 +8,7 @@ import eu.diversify.trio.core.requirements.Negation;
 import eu.diversify.trio.core.requirements.Require;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.requirements.RequirementFactory;
-import eu.diversify.trio.core.requirements.random.Builder;
+import eu.diversify.trio.generator.requirements.Builder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;

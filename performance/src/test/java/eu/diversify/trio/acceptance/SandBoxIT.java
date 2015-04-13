@@ -20,7 +20,7 @@ package eu.diversify.trio.acceptance;
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.codecs.SyntaxError;
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.util.random.Distribution;

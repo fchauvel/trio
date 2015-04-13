@@ -1,8 +1,8 @@
-package eu.diversify.trio.unit.core.requirements.random;
+package eu.diversify.trio.generator.requirements;
 
 import eu.diversify.trio.core.requirements.CachedFactory;
-import eu.diversify.trio.core.requirements.random.Command;
-import eu.diversify.trio.core.requirements.random.FixedSizeBuilder;
+import eu.diversify.trio.generator.requirements.Command;
+import eu.diversify.trio.generator.requirements.FixedSizeBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import org.junit.Test;
 
-import static eu.diversify.trio.core.requirements.random.Command.*;
+import static eu.diversify.trio.generator.requirements.Command.*;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItems;
 

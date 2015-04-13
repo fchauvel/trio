@@ -1,7 +1,8 @@
-package eu.diversify.trio.core.requirements.random;
+package eu.diversify.trio.generator.requirements;
 
 import eu.diversify.trio.core.requirements.Requirement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -10,22 +11,30 @@ import java.util.Random;
  */
 public class BuildRandomizer {
 
+    public static List<Integer> range(int count) {
+        return range(0, count - 1);
+    }
+
+    public static List<Integer> range(int start, int end) {
+        final List<Integer> range = new ArrayList<>(end - start);
+        for (int index = start; index <= end; index++) {
+            range.add(index);
+        }
+        return range;
+    }
+
     private final Builder builder;
     private final Random random;
-    private final int componentCount;
-    private final List<Integer> components;
+    private final Iterator<Integer> indices;
 
-    public BuildRandomizer(Builder builder, Random random, int componentCount) {
+    public BuildRandomizer(Builder builder, Random random, List<Integer> indices) {
         if (builder == null) {
             throw new IllegalArgumentException("Invalid builder ('null' found)");
         }
+
         this.builder = builder;
         this.random = random;
-        this.componentCount = componentCount;
-        this.components = new ArrayList<>(componentCount);
-        for (int index = 0; index < componentCount; index++) {
-            components.add(index);
-        }
+        this.indices = indices.iterator();
     }
 
     public Requirement build() {
@@ -52,8 +61,7 @@ public class BuildRandomizer {
                 builder.addNot();
                 break;
             case ADD_REQUIRE:
-                int index = pickAny(components);
-                builder.addRequire(index);
+                builder.addRequire(indices.next());
                 break;
         }
     }
@@ -65,21 +73,6 @@ public class BuildRandomizer {
             return candidates.get(0);
         }
         return candidates.get(random.nextInt(candidates.size()));
-    }
-
-    private <T> T pickAny(List<T> candidates) {
-        assert !candidates.isEmpty() : "Cannot pick from an empty collection";
-
-        if (candidates.size() == 1) {
-            T result = candidates.get(0);
-            candidates.remove(0);
-            return result;
-        }
-        
-        final int index = random.nextInt(candidates.size());
-        T result = candidates.get(index);
-        candidates.remove(index);
-        return result;
     }
 
 }

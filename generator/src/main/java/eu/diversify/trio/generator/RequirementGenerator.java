@@ -16,7 +16,7 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.core.random;
+package eu.diversify.trio.generator;
 
 import eu.diversify.trio.core.requirements.*;
 import java.util.Random;

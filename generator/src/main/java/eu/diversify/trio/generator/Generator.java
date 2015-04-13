@@ -16,7 +16,7 @@
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package eu.diversify.trio.core.random;
+package eu.diversify.trio.generator;
 
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.requirements.Requirement;
@@ -24,9 +24,12 @@ import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.RequirementFactory;
-import eu.diversify.trio.core.requirements.random.BuildRandomizer;
-import eu.diversify.trio.core.requirements.random.CachedLiteralFactory;
-import eu.diversify.trio.core.requirements.random.FixedSizeBuilder;
+import eu.diversify.trio.generator.requirements.BuildRandomizer;
+import eu.diversify.trio.generator.requirements.CachedLiteralFactory;
+import eu.diversify.trio.generator.requirements.FixedSizeBuilder;
+import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.Node;
+import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
 import eu.diversify.trio.util.random.Distribution;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +57,50 @@ public class Generator {
         this.factory = new CachedLiteralFactory(DEFAULT_LITERAL_COUNT);
     }
 
+    /**
+     * Build an assembly whose dependencies are specified by the given graph.
+     * The logical expression that govern the local failure propagation will be
+     * randomized, but will reference only the nodes specified in the graph.
+     *
+     * @param dependencyGraph the graph describing the dependencies between
+     * components
+     *
+     * @return a randomized assembly, whose dependency graph matches the given
+     * graph.
+     */
+    public Assembly assembly(Graph dependencyGraph) {
+        final List<Component> components = new ArrayList<>(dependencyGraph.nodes().size());
+        for (Node eachNode : dependencyGraph.nodes()) {
+            List<Node> dependencies = dependencyGraph.nodes(successorOf(eachNode));
+            components.add(component(eachNode.index(), indices(dependencies)));
+        }
+        
+        return new Assembly(DEFAULT_ASSEMBLY_NAME, components, defaultTags());
+    }
+
+    private List<Tag> defaultTags() {
+        final List<Tag> tags = new ArrayList<>(1);
+        return tags;
+    }
+
+    
+    private List<Integer> indices(List<Node> nodes) {
+        final List<Integer> indices = new ArrayList<>(nodes.size());
+        for (Node eachNode : nodes) {
+            indices.add(eachNode.index());
+        }
+        return indices;
+    }
+
+    /**
+     * Generate a random assembly with a specific valence distribution
+     *
+     * @param componentCount the number of components in the assembly
+     * @param valence the distribution of valence (i.e., nodal degree) for each
+     * component
+     *
+     * @return the newly generated assembly
+     */
     public Assembly assembly(int componentCount, Distribution valence) {
         final Component[] components = new Component[componentCount];
         for (int index = 0; index < componentCount; index++) {
@@ -124,9 +171,21 @@ public class Generator {
         }
 
         logger.log(Level.FINEST, "New requirement with {0} variables chosen from {1}", new Object[]{dependencyCount, capacity});
-        BuildRandomizer builder = new BuildRandomizer(new FixedSizeBuilder(factory, dependencyCount), random, capacity);
-        Requirement dependencies = builder.build();
+        final FixedSizeBuilder builder = new FixedSizeBuilder(factory, dependencyCount);
+        BuildRandomizer randomizer = new BuildRandomizer(builder, random, BuildRandomizer.range(capacity));
+        Requirement dependencies = randomizer.build();
+
         return new Component(("C" + index).intern(), dependencies);
     }
+
+    private Component component(int index, List<Integer> dependencies) {
+        final FixedSizeBuilder builder = new FixedSizeBuilder(factory, dependencies.size());
+        BuildRandomizer randomizer = new BuildRandomizer(builder, random, dependencies);
+        Requirement requirement = randomizer.build();
+
+        return new Component(("C" + index).intern(), requirement);
+    }
+
+   
 
 }

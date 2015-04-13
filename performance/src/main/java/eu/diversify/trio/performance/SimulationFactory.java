@@ -5,7 +5,7 @@ import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.core.Assembly;
 import static eu.diversify.trio.core.Evaluation.evaluate;
-import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.core.statistics.AverageNodalDegree; 
 import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;

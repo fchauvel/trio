@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.unit.core.random;
+package eu.diversify.trio.generator;
 
 import eu.diversify.trio.core.Assembly;
 import static eu.diversify.trio.core.Evaluation.evaluate;
-import eu.diversify.trio.core.random.Generator;
+import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.util.random.Distribution;
 import static org.hamcrest.MatcherAssert.assertThat;
