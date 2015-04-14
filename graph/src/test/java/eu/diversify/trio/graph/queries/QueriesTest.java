@@ -1,4 +1,4 @@
-package eu.diversify.trio.graph.queries.QueriesTest;
+package eu.diversify.trio.graph.queries;
 
 import eu.diversify.trio.graph.AdjacencyMatrix;
 import eu.diversify.trio.graph.Edge;

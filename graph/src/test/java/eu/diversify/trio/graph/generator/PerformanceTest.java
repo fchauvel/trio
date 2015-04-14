@@ -5,6 +5,7 @@
  */
 package eu.diversify.trio.graph.generator;
 
+import eu.diversify.trio.graph.generator.barabasi.BAGenerator;
 import eu.diversify.trio.graph.Graph;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class PerformanceTest {
         final int RUN_COUNT = 100;
         final int NODE_COUNT = 250;
 
-        GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT);
+        GraphGenerator generate = new BAGenerator(NODE_COUNT);
 
         long duration = 0L;
         for (int eachRun = 0; eachRun < RUN_COUNT; eachRun++) {

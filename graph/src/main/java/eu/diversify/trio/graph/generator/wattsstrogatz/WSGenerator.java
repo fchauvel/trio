@@ -1,8 +1,10 @@
-package eu.diversify.trio.graph.generator;
+package eu.diversify.trio.graph.generator.wattsstrogatz;
 
 import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
+import eu.diversify.trio.graph.generator.GraphGenerator;
+import eu.diversify.trio.graph.generator.RingLatticeGenerator;
 import static eu.diversify.trio.graph.Node.node;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,12 +12,12 @@ import java.util.Random;
 /**
  * The small world networks, following the model proposed by Strogatz and Watts.
  */
-public class WattsStrogatzGenerator implements GraphGenerator {
+public class WSGenerator implements GraphGenerator {
 
     private final RingLatticeGenerator ringLattice;
     private final double relinkingProbability;
 
-    public WattsStrogatzGenerator(int nodeCount, int diameter, double relinkingProbability) {
+    public WSGenerator(int nodeCount, int diameter, double relinkingProbability) {
         random = new Random();
         validateProbability(relinkingProbability);
 

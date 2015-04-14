@@ -1,9 +1,10 @@
-package eu.diversify.trio.graph.generator;
+package eu.diversify.trio.graph.generator.barabasi;
 
 import eu.diversify.trio.graph.AdjacencyMatrix;
 import eu.diversify.trio.graph.CachedGraph;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
+import eu.diversify.trio.graph.generator.GraphGenerator;
 import static eu.diversify.trio.graph.Node.node;
 import static eu.diversify.trio.graph.queries.Leaving.leaving;
 import static eu.diversify.trio.graph.queries.Reaching.reaching;
@@ -13,16 +14,26 @@ import java.util.Random;
  * The Barabasi and Albert model, where in and out degree follow a power law
  * distribution.
  */
-public class BarabasiAlbertGenerator implements GraphGenerator{
+public class BAGenerator implements GraphGenerator {
+
+    public static final double DEFAULT_BETA = 1D / 3;
+    public static final double DEFAULT_ALPHA = 1D / 3;
 
     private final Random random;
     private final int nodeCount;
-    private final double alpha = 1D / 3;
-    private final double beta = 1D / 3;
+    private final double alpha;
+    private final double beta;
 
-    public BarabasiAlbertGenerator(int nodeCount) {
+    
+    public BAGenerator(int nodeCount) {
+      this(nodeCount, DEFAULT_ALPHA, DEFAULT_BETA);
+    }
+    
+    public BAGenerator(int nodeCount, double alpha, double beta) {
         this.random = new Random();
         this.nodeCount = nodeCount;
+        this.alpha = alpha;
+        this.beta = beta;
     }
 
     @Override

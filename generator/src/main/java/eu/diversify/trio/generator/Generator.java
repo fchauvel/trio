@@ -107,8 +107,7 @@ public class Generator {
             final int dependencyCount = componentCount;
             components[index] = component(index, componentCount, dependencyCount);
         }
-        final List<Tag> tags = new ArrayList<Tag>(1);
-        return new Assembly(DEFAULT_ASSEMBLY_NAME, Arrays.asList(components), tags);
+        return new Assembly(DEFAULT_ASSEMBLY_NAME, Arrays.asList(components), defaultTags());
     }
 
     /**

@@ -1,5 +1,7 @@
 package eu.diversify.trio.graph.generator;
 
+import eu.diversify.trio.graph.generator.wattsstrogatz.WSGenerator;
+import eu.diversify.trio.graph.generator.barabasi.BAGenerator;
 import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import static eu.diversify.trio.graph.Node.node;
@@ -55,7 +57,7 @@ public class RandomGeneratorsTest {
         final String file = "target/random_barabasi_albert";
         final int NODE_COUNT = 150;
 
-        GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT);
+        GraphGenerator generate = new BAGenerator(NODE_COUNT);
         Graph graph = generate.nextGraph();
 
         assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
@@ -70,7 +72,7 @@ public class RandomGeneratorsTest {
         final int NEIGHBORHOOD = 10;
         final double RELINKING_PROBABILITY = 0.05;
 
-        GraphGenerator generate = new WattsStrogatzGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY);
+        GraphGenerator generate = new WSGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY);
         Graph graph = generate.nextGraph();
 
         assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
