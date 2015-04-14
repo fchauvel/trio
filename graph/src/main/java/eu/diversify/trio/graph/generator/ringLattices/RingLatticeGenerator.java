@@ -1,9 +1,10 @@
 
-package eu.diversify.trio.graph.generator;
+package eu.diversify.trio.graph.generator.ringLattices;
 
 import eu.diversify.trio.graph.AdjacencyMatrix;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
+import eu.diversify.trio.graph.generator.GraphGenerator;
 
 /**
  * Define the neighborhood of a ring lattice

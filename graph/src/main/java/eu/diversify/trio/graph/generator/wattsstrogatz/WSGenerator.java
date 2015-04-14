@@ -4,7 +4,7 @@ import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import eu.diversify.trio.graph.generator.GraphGenerator;
-import eu.diversify.trio.graph.generator.RingLatticeGenerator;
+import eu.diversify.trio.graph.generator.ringLattices.RingLatticeGenerator;
 import static eu.diversify.trio.graph.Node.node;
 import java.util.ArrayList;
 import java.util.Random;

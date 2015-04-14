@@ -1,5 +1,6 @@
 package eu.diversify.trio.graph.generator;
 
+import eu.diversify.trio.graph.generator.ringLattices.RingLatticeGenerator;
 import eu.diversify.trio.graph.generator.wattsstrogatz.WSGenerator;
 import eu.diversify.trio.graph.generator.barabasi.BAGenerator;
 import eu.diversify.trio.graph.Edge;

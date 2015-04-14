@@ -1,5 +1,6 @@
 package eu.diversify.trio.graph.generator;
 
+import eu.diversify.trio.graph.generator.ringLattices.RingLatticeGenerator;
 import static eu.diversify.trio.graph.Node.node;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
