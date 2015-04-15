@@ -1,13 +1,12 @@
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.generator.ringLattices.RingLatticeGenerator;
-import eu.diversify.trio.graph.generator.wattsstrogatz.WSGenerator;
-import eu.diversify.trio.graph.generator.barabasi.BAGenerator;
 import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import static eu.diversify.trio.graph.Node.node;
 import eu.diversify.trio.graph.storage.csv.CsvWriter;
 import eu.diversify.trio.graph.storage.dot.DotWriter;
+import eu.diversify.trio.graph.util.Count;
+import eu.diversify.trio.graph.util.Probability;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,14 +26,14 @@ public class RandomGeneratorsTest {
     @Test
     public void sampleOneRandomRegularLattice() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/regular_lattice";
-        final int NODE_COUNT = 25;
-        final int NEIGHBORHOOD = 6;
+        final Count NODE_COUNT = new Count(25);
+        final Count NEIGHBORHOOD = new Count(6);
 
         GraphGenerator generator = new RingLatticeGenerator(NODE_COUNT, NEIGHBORHOOD);
 
         Graph graph = generator.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
+        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
 
         save(file, graph);
     }
@@ -42,13 +41,13 @@ public class RandomGeneratorsTest {
     @Test
     public void oneRandomErdosRenyi() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_erdos_renyi";
-        final int NODE_COUNT = 250;
-        final double EDGE_PROBABILITY = 0.05;
+        final Count NODE_COUNT = new Count(250);
+        final Probability EDGE_PROBABILITY = new Probability(0.05);
 
         GraphGenerator generator = new ErdosRenyiGenerator(NODE_COUNT, EDGE_PROBABILITY);
         Graph graph = generator.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
+        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
 
         save(file, graph);
     }
@@ -56,12 +55,14 @@ public class RandomGeneratorsTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_barabasi_albert";
-        final int NODE_COUNT = 150;
+        final Count NODE_COUNT = new Count(150);
+        final Probability ALPHA = new Probability(1D / 3);
+        final Probability BETA = new Probability(1D / 3);
 
-        GraphGenerator generate = new BAGenerator(NODE_COUNT);
+        GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT, ALPHA, BETA);
         Graph graph = generate.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
+        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
 
         save(file, graph);
     }
@@ -69,24 +70,24 @@ public class RandomGeneratorsTest {
     @Test
     public void oneWattsStrogatz() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_watts_strogatz";
-        final int NODE_COUNT = 250;
-        final int NEIGHBORHOOD = 10;
-        final double RELINKING_PROBABILITY = 0.05;
+        final Count NODE_COUNT = new Count(250);
+        final Count NEIGHBORHOOD = new Count(10);
+        final Probability RELINKING_PROBABILITY = new Probability(0.05);
 
-        GraphGenerator generate = new WSGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY);
+        GraphGenerator generate = new WattsStrogatzGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY); 
         Graph graph = generate.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT)));
+        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
         for (int i = 0; i < graph.nodes().size(); i++) {
             assertThat(graph.edges(), not(hasItem(new Edge(node(i), node(i)))));
         }
 
         save(file, graph);
     }
-    
+
     private void save(String file, Graph graph) throws UnsupportedEncodingException, IOException {
         saveAsDot(file, graph);
-        saveAsCsv(file, graph);  
+        saveAsCsv(file, graph);
     }
 
     private void saveAsDot(final String file, Graph graph) throws FileNotFoundException, UnsupportedEncodingException, IOException {
