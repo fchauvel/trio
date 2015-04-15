@@ -5,8 +5,9 @@
  */
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.generator.barabasi.BAGenerator;
 import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.util.Count;
+import eu.diversify.trio.graph.util.Probability;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,9 +18,9 @@ public class PerformanceTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final int RUN_COUNT = 100;
-        final int NODE_COUNT = 250;
+        final Count NODE_COUNT = new Count(250);
 
-        GraphGenerator generate = new BAGenerator(NODE_COUNT);
+        GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT, new Probability(1D/3), new Probability(1D/3));
 
         long duration = 0L;
         for (int eachRun = 0; eachRun < RUN_COUNT; eachRun++) {

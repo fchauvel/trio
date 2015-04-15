@@ -32,7 +32,7 @@ public class Runner {
         showHeader();
         final OutputStream outputFile = openOutputFile();
         final Setup setup = loadSetupFile();
-        runBenchmark(setup, outputFile);
+        runBenchmarks(setup, new CsvRecorder(outputFile));
         closeOutput(outputFile);
     }
 
@@ -79,9 +79,10 @@ public class Runner {
         return outputFile;
     }
 
-    private void runBenchmark(final Setup setup, final OutputStream outputFile) {
-        final MicroBenchmark benchmark = setup.prepareBenchmark();
-        benchmark.run(new CsvRecorder(outputFile));
+    private void runBenchmarks(final Setup setup, final CsvRecorder recorder) {
+        for (MicroBenchmark eachBenchmark: setup.prepareBenchmarks()) {
+            eachBenchmark.run(recorder);
+        }
         System.out.println("");
         System.out.println("OK");
         System.out.println("Results written in '" + options.getOutputFile() + "'");

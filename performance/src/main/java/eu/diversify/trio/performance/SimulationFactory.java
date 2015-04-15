@@ -9,43 +9,35 @@ import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.core.statistics.AverageNodalDegree; 
 import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.generator.GraphGenerator;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Generate simulation of random models
  */
 public class SimulationFactory implements TaskFactory {
 
-    private final Setup setup;
-    private final Random random;
+    private final GraphGenerator graphs;
     private final Generator generate;
     private final Trio trio;
+    
 
-    public SimulationFactory() {
-        this(new Setup());
-    }
-
-    public SimulationFactory(Setup setup) {
-        this.setup = setup;
-        this.random = new Random();
+    public SimulationFactory(GraphGenerator graphs) {
+        this.graphs = graphs;
         this.generate = new Generator();
         this.trio = new Trio();
     }
 
     @Override
     public Task prepareNewTask() {
-        Logger.getAnonymousLogger().log(Level.FINEST, "MAX SIZE = {0}", setup.getMaximumAssemblySize());
-        int size = setup.getMinimumAssemblySize() + random.nextInt(setup.getMaximumAssemblySize() - setup.getMinimumAssemblySize());
-        double edgeProbability = setup.getMinimumEdgeProbability() + (setup.getMaximumEdgeProbability() - setup.getMinimumEdgeProbability()) * random.nextDouble();
-        final Assembly assembly = generate.assembly(size, edgeProbability);
+        final Graph graph = graphs.nextGraph();
+        final Assembly assembly = generate.assembly(graph);
         return new SimulationTask(trio, assembly);
     }
 
@@ -65,13 +57,13 @@ public class SimulationFactory implements TaskFactory {
         private DataSet result;
 
         public SimulationTask(Trio trio, Assembly assembly) {
-            this.scenario = new RandomFailureSequence(assembly);
-            this.trio = trio;
-
             this.properties = new HashMap<>();
             measureSize(assembly);
             measureDensity(assembly);
             measureAverageNodalDegree(assembly);
+            
+            this.scenario = new RandomFailureSequence(assembly);
+            this.trio = trio;           
         }
 
         private void measureAverageNodalDegree(Assembly assembly) {
