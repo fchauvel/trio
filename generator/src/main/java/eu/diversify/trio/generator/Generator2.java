@@ -81,7 +81,6 @@ public class Generator2 {
         final FixedSizeBuilder builder = new FixedSizeBuilder(factory, dependencies.size());
         BuildRandomizer randomizer = new BuildRandomizer(builder, random, dependencies);
         Requirement requirement = randomizer.build();
-
         return new Component(("C" + index).intern(), requirement);
     }
 
