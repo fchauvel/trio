@@ -3,9 +3,9 @@ package eu.diversify.trio.graph.generator;
 import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
-import static eu.diversify.trio.graph.Node.node;
 import eu.diversify.trio.utility.Count;
 import eu.diversify.trio.utility.Probability;
+import static eu.diversify.trio.graph.Node.node;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,7 +21,7 @@ public class WattsStrogatzGenerator implements GraphGenerator {
 
     public WattsStrogatzGenerator(Count nodeCount, Count neighborCount, Probability relinking) {
         this(new Random(), nodeCount, neighborCount, relinking);
-    }
+    } 
     
     public WattsStrogatzGenerator(Random random, Count nodeCount, Count neighborCount, Probability relinking) {
         this.random = random;
