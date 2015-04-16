@@ -10,6 +10,7 @@ import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.generator.AssemblyKind;
 import eu.diversify.trio.generator.Generator2;
+import eu.diversify.trio.generator.Setup;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
@@ -22,19 +23,21 @@ import java.util.Map;
  */
 public class SimulationFactory implements TaskFactory {
 
-    private final Generator2 generate;
+    private final GeneratorSetupRandomizer setups;
     private final AssemblyKind kind;
     private final Trio trio;
     
 
-    public SimulationFactory(AssemblyKind kind) {
+    public SimulationFactory(AssemblyKind kind, GeneratorSetupRandomizer setups) {
         this.kind = kind;
-        this.generate = new Generator2();
+        this.setups = setups;
         this.trio = new Trio();
     }
 
     @Override
     public Task prepareNewTask() {
+        final Setup setup = setups.next();
+        final Generator2 generate = new Generator2(setup);
         final Assembly assembly = generate.nextAssembly(kind);
         return new SimulationTask(trio, kind, assembly);
     }

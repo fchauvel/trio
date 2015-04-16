@@ -5,6 +5,7 @@
  */
 package eu.diversify.trio.performance;
 
+import eu.diversify.trio.performance.setup.Setup;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.Properties;
 /**
  * The options which can be given through the command line
  */
-public class Options {
+public class Arguments {
 
     public static final String DEFAULT_OUTPUT_FILE = "scalability.csv";
     public static final String DEFAULT_SETUP_FILE = "setup.properties";
@@ -24,11 +25,11 @@ public class Options {
     private String outputFileName;
     private String setupFile;
 
-    public Options() {
+    public Arguments() {
         this(DEFAULT_SETUP_FILE, DEFAULT_OUTPUT_FILE);
     }
 
-    public Options(String setupFile, String outputFile) {
+    public Arguments(String setupFile, String outputFile) {
         this.setupFile = setupFile;
         this.outputFileName = outputFile;
     }
@@ -49,12 +50,6 @@ public class Options {
         this.setupFile = setupFile;
     }
 
-    public Setup getSetup() throws FileNotFoundException, IOException {
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(setupFile));
-        return new Setup(properties);
-    }
-
     private static List<String> SETUP_MARKERS = Arrays.asList(new String[]{"-setup", "-s"});
     private static List<String> OUTPUT_MARKERS = Arrays.asList(new String[]{"-output", "-o"});
 
@@ -64,8 +59,8 @@ public class Options {
      * @param args the raw command line argument
      * @return the corresponding Option object.
      */
-    public static Options readFrom(String[] args) {
-        final Options results = new Options();
+    public static Arguments readFrom(String[] args) {
+        final Arguments results = new Arguments();
         final Iterator<String> iterator = Arrays.asList(args).iterator();
         while (iterator.hasNext()) {
             String next = iterator.next();
@@ -80,14 +75,14 @@ public class Options {
         return results;
     }
 
-    private static void extractOutputFile(final Iterator<String> iterator, final Options results) throws IllegalArgumentException {
+    private static void extractOutputFile(final Iterator<String> iterator, final Arguments results) throws IllegalArgumentException {
         if (!iterator.hasNext()) {
             throw new IllegalArgumentException("Expecting output file");
         }
         results.setOutputFile(iterator.next());
     }
 
-    private static void extractSetupFile(final Iterator<String> iterator, final Options results) throws IllegalArgumentException {
+    private static void extractSetupFile(final Iterator<String> iterator, final Arguments results) throws IllegalArgumentException {
         if (!iterator.hasNext()) {
             throw new IllegalArgumentException("Expecting setup file");
         }

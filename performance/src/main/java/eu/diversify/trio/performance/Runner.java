@@ -1,11 +1,15 @@
 package eu.diversify.trio.performance;
 
+import eu.diversify.trio.performance.setup.Setup;
+import eu.diversify.trio.performance.setup.SetupStore;
 import eu.diversify.trio.performance.util.CsvRecorder;
 import eu.diversify.trio.performance.util.MicroBenchmark;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  * Entry point of the performance test
@@ -14,7 +18,7 @@ public class Runner {
 
     public static void main(String[] args) {
         try {
-            Runner runner = new Runner(Options.readFrom(args));
+            Runner runner = new Runner(Arguments.readFrom(args));
             runner.run();
 
         } catch (IllegalArgumentException error) {
@@ -22,25 +26,25 @@ public class Runner {
         }
     }
 
-    private final Options options;
+    private final Arguments arguments;
 
-    public Runner(Options options) {
-        this.options = options;
+    public Runner(Arguments arguments) {
+        this.arguments = arguments;
     }
 
     public void run() {
         showOpening();
-        
+
         final Setup setup = loadSetupFile();
-        
+
         final OutputStream outputFile = openOutputFile();
-        
+
         final CsvRecorder recorder = new CsvRecorder(outputFile);
         for (MicroBenchmark eachBenchmark : setup.prepareBenchmarks()) {
             eachBenchmark.run(recorder);
         }
-        
-        closeOutput(outputFile);
+
+        closeOutputFile(outputFile);
     }
 
     private void showOpening() {
@@ -50,57 +54,58 @@ public class Runner {
     }
 
     private Setup loadSetupFile() {
-        Setup result;
+        final SetupStore store = new SetupStore();
+        final Properties properties = readProperties();
+        final Setup setup = store.loadFromProperties(properties);
+
+        System.out.println("%n" + setup.summary());
+        
+        return setup;
+    }
+
+    private Properties readProperties() {
+        System.out.println("Reading configuration in '" + arguments.getSetupFile() + "'");
+        final Properties properties = new Properties();
         try {
-            System.out.println("Reading configuration in '" + options.getSetupFile() + "'");
-            result = options.getSetup();
+            
+            properties.load(new FileInputStream(arguments.getSetupFile()));
 
         } catch (IOException ex) {
             final String error
                     = String.format("Unable to open the setup file '%s' (%s)",
-                            options.getSetupFile(),
+                            arguments.getSetupFile(),
                             ex.getMessage());
 
             System.out.println(error);
             System.out.println("Switching to the default setup");
-            result = new Setup(); // The default setup
         }
-
-        System.out.println("");
-        System.out.println(result.summary());
-        return result;
+        return properties;
     }
 
     private OutputStream openOutputFile() throws IllegalArgumentException {
         OutputStream outputFile = null;
         try {
-            outputFile = new FileOutputStream(options.getOutputFile());
+            outputFile = new FileOutputStream(arguments.getOutputFile());
 
         } catch (FileNotFoundException error) {
             final String message
                     = String.format("Unable to open output file '%s' (%s)",
-                            options.getOutputFile(),
+                            arguments.getOutputFile(),
                             error.getMessage());
             throw new IllegalArgumentException(message, error);
         }
         return outputFile;
     }
 
-    private void runBenchmarks(final Setup setup, final CsvRecorder recorder) {
 
-        System.out.println("");
-        System.out.println("OK");
-        System.out.println("Results written in '" + options.getOutputFile() + "'");
-    }
-
-    private void closeOutput(final OutputStream outputFile) throws IllegalArgumentException {
+    private void closeOutputFile(final OutputStream outputFile) throws IllegalArgumentException {
         try {
             outputFile.close();
 
         } catch (IOException error) {
             String message
                     = String.format("Unable to close the selected output '%s' (%s)",
-                            options.getOutputFile(),
+                            arguments.getOutputFile(),
                             error.getMessage());
             throw new IllegalArgumentException(message, error);
         }
