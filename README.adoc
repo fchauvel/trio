@@ -1,0 +1,86 @@
+= TRIO - Topologies Robustness Indicators
+Franck Chauvel
+2015-04-15
+
+TRIO computes robustness metrics for software architectures. These metrics include 
+an overall robustness, the most sensitive components, and the most threatening
+failure sequences.
+
+== Overview
+
+As shown in the following example, TRIO takes as input a simple description of the components that form
+the software architecture of interest, including their dependencies. Note how each component defines 
+a condition (keyword `requires`) that what dependencies must be available for the component to be running.
+
+.Input of TRIO (in a text file)
+[source,trio]
+----
+system: 
+    'SensApp'
+
+components:
+    - Admin         requires    Notifier and Registry and Storage
+    - Notifier
+    - Registry      requires    Storage
+    - Dispatcher    requires    Notifier and Registry and Storage
+    - Storage       requires    DB
+    - DB
+
+tags:
+    - 'platform'  on  DB
+    - 'service'   on  Admin, Registry, Storage, Dispatcher, Notifier
+----
+
+TRIO simulates a large number of failure sequences: it randomly injects failures into the system, 
+and simulate how these failure propagates. Once the simulation is completed, TRIO outputs the 
+following metrics:
+
+.Output of trio
+----
+$> java -jar trio-bundle.jar -o service -c infra -t trace.csv samples/sensapp_topo4.trio
+Trio v0.1 -- Topology Robustness IndicatOr
+Copyright (C) 2014 - SINTEF ICT
+Licensed under LGPLv3
+
+SYSTEM: SensApp, topology no. 4
+SCENARIO: Robustness of the 'service' layer to failure in the 'infra' layer
+INDICATORS:
+ + Robustness: 0.0297
+ + Five most sensitive components:
+   1: 1.7375e+00  VM2
+   2: 8.2376e-01  VM1
+   3: 6.8183e-01  VM4
+   4: 6.6244e-01  VM3
+   5: 5.6873e-01  VM5
+ + Five most harmful sequences:
+   1: 1.9200e-01 [none,  VM2]
+   2: 5.6990e-02 [none,  VM3,  VM2]
+   3: 5.2990e-02 [none,  VM4,  VM2]
+   4: 5.1991e-02 [none,  VM1,  VM2]
+   5: 3.1994e-02 [none,  VM5,  VM2]
+
+That's all folks!
+----
+
+= Releases
+
+Stable releases are available on the link:https://github.com/fchauvel/trio/releases[Github releases page].
+
+In addition, a binary distribution, continuously updated, is available at on 
+link:http://dist.thingml.org/trio/trio-dist.zip[SINTEF server].
+
+
+= Documentation
+
+The documentation of Trio is available online and evolve with the version:
+
+ * link:http://fchauvel.github.io/trio/0.2/index.html[0.2]
+ * link:http://fchauvel.github.io/trio/0.3/index.html[0.3]
+
+== Contact
+
+Please report any bugs or desired feature, using the link:https://github.com/fchauvel/trio/issues[GitHub issue tracker].
+
+Should you have any additional information, please contact mailto:franck.chauvel@sintef.no[me].
+
+
