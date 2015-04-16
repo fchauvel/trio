@@ -1,7 +1,7 @@
 package eu.diversify.trio.graph.generator;
 
 import static eu.diversify.trio.graph.Node.node;
-import eu.diversify.trio.graph.util.Count;
+import eu.diversify.trio.utility.Count;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;

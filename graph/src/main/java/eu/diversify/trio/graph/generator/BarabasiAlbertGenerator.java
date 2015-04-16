@@ -7,8 +7,8 @@ import eu.diversify.trio.graph.Node;
 import static eu.diversify.trio.graph.Node.node;
 import static eu.diversify.trio.graph.queries.Leaving.leaving;
 import static eu.diversify.trio.graph.queries.Reaching.reaching;
-import eu.diversify.trio.graph.util.Count;
-import eu.diversify.trio.graph.util.Probability;
+import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.utility.Probability;
 import java.util.Random;
 
 /**

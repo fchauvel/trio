@@ -19,6 +19,7 @@
         <module>performance</module>
         <module>generator</module>
         <module>graph</module>
+        <module>utility</module>
     </modules>
 
     

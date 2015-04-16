@@ -1,6 +1,9 @@
+package eu.diversify.trio.utility;
 
-package eu.diversify.trio.graph.util;
 
+
+
+import eu.diversify.trio.utility.Probability;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;

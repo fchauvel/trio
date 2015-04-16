@@ -4,7 +4,7 @@ package eu.diversify.trio.graph.generator;
 import eu.diversify.trio.graph.AdjacencyMatrix;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
-import eu.diversify.trio.graph.util.Count;
+import eu.diversify.trio.utility.Count;
 
 /**
  * Define the neighborhood of a ring lattice

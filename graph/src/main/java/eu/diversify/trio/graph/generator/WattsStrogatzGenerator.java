@@ -4,8 +4,8 @@ import eu.diversify.trio.graph.Edge;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
 import static eu.diversify.trio.graph.Node.node;
-import eu.diversify.trio.graph.util.Count;
-import eu.diversify.trio.graph.util.Probability;
+import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.utility.Probability;
 import java.util.ArrayList;
 import java.util.Random;
 

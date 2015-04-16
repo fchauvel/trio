@@ -6,8 +6,8 @@
 package eu.diversify.trio.graph.generator;
 
 import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.util.Count;
-import eu.diversify.trio.graph.util.Probability;
+import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.utility.Probability;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

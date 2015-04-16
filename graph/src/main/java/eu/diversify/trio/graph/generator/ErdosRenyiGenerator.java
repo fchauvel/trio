@@ -3,8 +3,8 @@ package eu.diversify.trio.graph.generator;
 import eu.diversify.trio.graph.AdjacencyMatrix;
 import eu.diversify.trio.graph.Graph;
 import eu.diversify.trio.graph.Node;
-import eu.diversify.trio.graph.util.Count;
-import eu.diversify.trio.graph.util.Probability;
+import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.utility.Probability;
 import java.util.Random;
 
 /**

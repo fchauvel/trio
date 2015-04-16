@@ -1,5 +1,5 @@
 
-package eu.diversify.trio.graph.util;
+package eu.diversify.trio.utility;
 
 /**
  * A value object to represent counts

@@ -1,9 +1,9 @@
 package eu.diversify.trio.performance;
 
 import eu.diversify.trio.graph.generator.ErdosRenyiGenerator;
-import eu.diversify.trio.graph.util.Count;
-import eu.diversify.trio.graph.util.Probability;
-import eu.diversify.trio.performance.util.MicroBenchmark;
+import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.utility.Probability;
+import eu.diversify.trio.performance.util.MicroBenchmark; 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;

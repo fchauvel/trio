@@ -1,10 +1,13 @@
+package eu.diversify.trio.utility;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.diversify.trio.graph.util;
 
+
+import eu.diversify.trio.utility.Count;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package eu.diversity.trio.unit.performance;
+package eu.diversify.trio.unit.performance;
 
 import eu.diversify.trio.performance.Options;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,4 +1,4 @@
-package eu.diversify.trio.graph.util;
+package eu.diversify.trio.utility;
 
 /**
  * A simple value that represents a probability
