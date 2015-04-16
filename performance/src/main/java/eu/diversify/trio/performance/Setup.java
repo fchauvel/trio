@@ -1,9 +1,7 @@
 package eu.diversify.trio.performance;
 
-import eu.diversify.trio.graph.generator.ErdosRenyiGenerator;
-import eu.diversify.trio.utility.Count;
-import eu.diversify.trio.utility.Probability;
-import eu.diversify.trio.performance.util.MicroBenchmark; 
+import eu.diversify.trio.generator.AssemblyKind;
+import eu.diversify.trio.performance.util.MicroBenchmark;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -92,18 +90,18 @@ public class Setup {
         Entry.MAX_EDGE_PROBABILITY.set(properties, maximumEdgeProbability);
     }
 
-
     /**
      * @return a new micro benchmark object initialized according to this setup
      */
     public List<MicroBenchmark> prepareBenchmarks() {
-        List<MicroBenchmark> result = new ArrayList<>();
-        
-        result.add(new MicroBenchmark(getSampleCount(), getWarmupSampleCount(), new SimulationFactory(new ErdosRenyiGenerator(new Count(100), new Probability(0.5)))));
-        
-        throw new UnsupportedOperationException("To be completed!");
-    }
+        final List<MicroBenchmark> benchmarks = new ArrayList<>();
 
+        for (AssemblyKind eachKind : AssemblyKind.values()) {
+            benchmarks.add(new MicroBenchmark(getSampleCount(), getWarmupSampleCount(), new SimulationFactory(eachKind)));
+        }
+        
+        return benchmarks;
+    }
 
     public String summary() {
         return String.format("Running %d simulation(s) with: %n - assembly sizes within [%d, %d] %n - assembly edge densities in [%.1f, %.1f]",

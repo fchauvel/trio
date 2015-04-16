@@ -39,8 +39,8 @@ public class BuildRandomizer {
 
     public Requirement build() {
         while (!builder.isResultReady()) {
-            List<Command> candidates = builder.getAllowedCommands();
-            Command command = chooseAny(candidates);
+            final List<Command> candidates = builder.getAllowedCommands();
+            final Command command = chooseAny(candidates);
             execute(command);
         }
         return builder.getResult();

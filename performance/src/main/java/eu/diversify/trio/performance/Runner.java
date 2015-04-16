@@ -29,14 +29,21 @@ public class Runner {
     }
 
     public void run() {
-        showHeader();
-        final OutputStream outputFile = openOutputFile();
+        showOpening();
+        
         final Setup setup = loadSetupFile();
-        runBenchmarks(setup, new CsvRecorder(outputFile));
+        
+        final OutputStream outputFile = openOutputFile();
+        
+        final CsvRecorder recorder = new CsvRecorder(outputFile);
+        for (MicroBenchmark eachBenchmark : setup.prepareBenchmarks()) {
+            eachBenchmark.run(recorder);
+        }
+        
         closeOutput(outputFile);
     }
 
-    private void showHeader() {
+    private void showOpening() {
         System.out.println("TRIO - Topology Robustness Indicator");
         System.out.println("Copyright (C) 2015 - SINTEF ICT");
         System.out.println("");
@@ -80,23 +87,20 @@ public class Runner {
     }
 
     private void runBenchmarks(final Setup setup, final CsvRecorder recorder) {
-        for (MicroBenchmark eachBenchmark: setup.prepareBenchmarks()) {
-            eachBenchmark.run(recorder);
-        }
+
         System.out.println("");
         System.out.println("OK");
         System.out.println("Results written in '" + options.getOutputFile() + "'");
     }
-
 
     private void closeOutput(final OutputStream outputFile) throws IllegalArgumentException {
         try {
             outputFile.close();
 
         } catch (IOException error) {
-            String message 
-                    = String.format("Unable to close the selected output '%s' (%s)", 
-                            options.getOutputFile(), 
+            String message
+                    = String.format("Unable to close the selected output '%s' (%s)",
+                            options.getOutputFile(),
                             error.getMessage());
             throw new IllegalArgumentException(message, error);
         }

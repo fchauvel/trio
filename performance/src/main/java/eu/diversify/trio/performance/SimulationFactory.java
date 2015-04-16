@@ -5,12 +5,11 @@ import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.core.Assembly;
 import static eu.diversify.trio.core.Evaluation.evaluate;
-import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.core.statistics.AverageNodalDegree; 
 import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.generator.GraphGenerator;
+import eu.diversify.trio.generator.AssemblyKind;
+import eu.diversify.trio.generator.Generator2;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
@@ -23,22 +22,21 @@ import java.util.Map;
  */
 public class SimulationFactory implements TaskFactory {
 
-    private final GraphGenerator graphs;
-    private final Generator generate;
+    private final Generator2 generate;
+    private final AssemblyKind kind;
     private final Trio trio;
     
 
-    public SimulationFactory(GraphGenerator graphs) {
-        this.graphs = graphs;
-        this.generate = new Generator();
+    public SimulationFactory(AssemblyKind kind) {
+        this.kind = kind;
+        this.generate = new Generator2();
         this.trio = new Trio();
     }
 
     @Override
     public Task prepareNewTask() {
-        final Graph graph = graphs.nextGraph();
-        final Assembly assembly = generate.assembly(graph);
-        return new SimulationTask(trio, assembly);
+        final Assembly assembly = generate.nextAssembly(kind);
+        return new SimulationTask(trio, kind, assembly);
     }
 
     /**
@@ -56,8 +54,11 @@ public class SimulationFactory implements TaskFactory {
         private final Map<String, Object> properties;
         private DataSet result;
 
-        public SimulationTask(Trio trio, Assembly assembly) {
+        public SimulationTask(Trio trio, AssemblyKind kind, Assembly assembly) {
             this.properties = new HashMap<>();
+            
+            this.properties.put("kind", kind.name());
+            
             measureSize(assembly);
             measureDensity(assembly);
             measureAverageNodalDegree(assembly);
