@@ -1,12 +1,11 @@
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.Edge;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
+import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.utility.Count;
 import eu.diversify.trio.utility.Probability;
-import static eu.diversify.trio.graph.Node.node;
-import java.util.ArrayList;
+import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import eu.diversify.trio.graph.model.Edge;
+import eu.diversify.trio.graph.model.Vertex;
 import java.util.Random;
 
 /**
@@ -32,8 +31,8 @@ public class WattsStrogatzGenerator implements GraphGenerator {
 
     @Override
     public Graph nextGraph() {
-        final Graph ringLattice = initialRingLattice();
-        for (Edge eachEdge : new ArrayList<>(ringLattice.edges())) {
+        final Graph ringLattice = graphFactory().regularRingLattice(nodeCount, neighborCount);
+        for (Edge eachEdge : ringLattice.edges()) {
             if (isRelinked()) {
                 ringLattice.disconnect(eachEdge);
                 ringLattice.connect(eachEdge.source(), newTarget(ringLattice, eachEdge));
@@ -42,16 +41,13 @@ public class WattsStrogatzGenerator implements GraphGenerator {
         return ringLattice;
     }
 
-    private Graph initialRingLattice() {
-        return new RingLatticeGenerator(nodeCount, neighborCount).nextGraph();
-    }
-
-    private Node newTarget(Graph graph, Edge edge) {
-        int newTarget = random.nextInt(graph.nodes().size() - 1);
-        if (newTarget == edge.source().index()) {
+ 
+    private Vertex newTarget(Graph graph, Edge edge) {
+        int newTarget = random.nextInt(graph.vertexCount() - 1);
+        if (newTarget == edge.source().id()) {
             newTarget++;
         }
-        return node(newTarget);
+        return graph.vertexWithId(newTarget);
     }
 
     private boolean isRelinked() {

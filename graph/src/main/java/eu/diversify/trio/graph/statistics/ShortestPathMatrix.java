@@ -1,14 +1,13 @@
 package eu.diversify.trio.graph.statistics;
 
-import eu.diversify.trio.graph.Edge;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
-import eu.diversify.trio.graph.Path;
-import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
-import java.util.ArrayList;
+import eu.diversify.trio.graph.model.Edge;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,24 +16,25 @@ import java.util.Set;
 public class ShortestPathMatrix {
 
     private final Graph graph;
-    private final int nodeCount;
-    private final List<Path> shortestPaths;
+    private final Map<Route, Path> shortestPaths;
+    private final Set<Vertex> visited;
 
     public ShortestPathMatrix(Graph graph) {
-        visited = new HashSet<>();
         this.graph = graph;
-        nodeCount = graph.nodes().size();
-        this.shortestPaths = new ArrayList<>((int) Math.pow(nodeCount, 2));
-        for (Node eachSource : graph.nodes()) {
-            for (Node eachTarget : graph.nodes()) {
-                setShortestPath(eachSource, eachTarget, Path.infinite(eachSource));
+
+        this.shortestPaths = new HashMap<>();
+        for (Vertex eachSource : graph.vertexes()) {
+            for (Vertex destination : graph.vertexes()) {
+                shortestPaths.put(new Route(eachSource, destination), new Path());
             }
         }
+
+        this.visited = new HashSet<>();
     }
 
-    public int eccentricityOf(Node node) {
+    public int eccentricityOf(Vertex node) {
         int maxDistance = 0;
-        for (Node eachTarget : graph.nodes()) {
+        for (Vertex eachTarget : graph.vertexes()) {
             if (!node.equals(eachTarget)) {
                 Path path = between(node, eachTarget);
                 if (path.isDefined()) {
@@ -47,48 +47,70 @@ public class ShortestPathMatrix {
 
     public int diameter() {
         int maxEccenctricity = 0;
-        for (Node eachNode : graph.nodes()) {
-            maxEccenctricity = Math.max(maxEccenctricity, eccentricityOf(eachNode));
+        for (Vertex eachVertex : graph.vertexes()) {
+            maxEccenctricity = Math.max(maxEccenctricity, eccentricityOf(eachVertex));
         }
         return maxEccenctricity;
     }
 
-    public Path between(Node source, Node target) {
+    public Path between(Vertex source, Vertex target) {
         visited.clear();
-        final List<Node> frontier = new LinkedList<>();
+        final List<Vertex> frontier = new LinkedList<>();
         frontier.add(source);
         while (!frontier.isEmpty()) {
-            final Node current = frontier.remove(0);
+            final Vertex current = frontier.remove(0);
             visited.add(current);
-            for (Node neighbor : graph.nodes(successorOf(current))) {
-                if (!visited.contains(neighbor)) {
-                    Path oldPath = getShortestPath(source, neighbor);
-                    Path newPath = getShortestPath(source, current).append(neighbor);
-                    setShortestPath(source, neighbor, Path.getShortest(newPath, oldPath));
-                    frontier.add(neighbor);
+            for (Edge anyOutgoingEdge : current.outgoingEdges()) {
+                if (!visited.contains(anyOutgoingEdge.destination())) {
+                    Path oldPath = shortestPaths.get(new Route(source, anyOutgoingEdge.destination()));
+                    Path newPath = shortestPaths.get(new Route(source, current)).append(anyOutgoingEdge);
+                    shortestPaths.put(new Route(source, anyOutgoingEdge.destination()), Path.getShortest(oldPath, newPath));
+                    frontier.add(anyOutgoingEdge.destination());
                 }
             }
         }
-        return getShortestPath(source, target);
+        return shortestPaths.get(new Route(source, target));
     }
 
-    private final Set<Node> visited;
+    /**
+     * A route is the specification of a path, i.e., only the needed source and
+     * target.
+     */
+    private static class Route {
 
-    private Path getShortestPath(Node source, Node target) {
-        return shortestPaths.get(pathIndex(source, target));
-    }
+        private final int sourceId;
+        private final int targetId;
 
-    private void setShortestPath(Node source, Node target, Path shortest) {
-        final int pathIndex = pathIndex(source, target);
-        if (shortestPaths.size() == pathIndex) {
-            shortestPaths.add(shortest);
-        } else {
-            shortestPaths.set(pathIndex, shortest);
+        public Route(Vertex source, Vertex target) {
+            this(source.id(), target.id());
         }
-    }
 
-    private int pathIndex(Node source, Node target) {
-        return source.index() * nodeCount + target.index();
+        public Route(int sourceId, int targetId) {
+            this.sourceId = sourceId;
+            this.targetId = targetId;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 37 * hash + this.sourceId;
+            hash = 37 * hash + this.targetId;
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Route other = (Route) obj;
+            return this.sourceId == other.sourceId
+                    && this.targetId == other.targetId;
+        }
+
     }
 
 }

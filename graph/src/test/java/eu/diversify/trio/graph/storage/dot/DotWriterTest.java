@@ -1,6 +1,6 @@
 package eu.diversify.trio.graph.storage.dot;
 
-import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.graph.SampleGraphs;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;

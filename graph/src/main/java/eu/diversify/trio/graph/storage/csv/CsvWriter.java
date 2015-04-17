@@ -1,8 +1,8 @@
 
 package eu.diversify.trio.graph.storage.csv;
 
-import eu.diversify.trio.graph.Edge;
-import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.model.Edge;
+import eu.diversify.trio.graph.model.Graph;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -18,7 +18,7 @@ public class CsvWriter {
         PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(output, "UTF-8")));
         writer.printf("source,target%n");
         for(Edge eachEdge: graph.edges()) {
-            writer.printf("n%d,n%d%n", eachEdge.source().index(), eachEdge.target().index());
+            writer.printf("n%d,n%d%n", eachEdge.source().id(), eachEdge.destination().id());
         }
         writer.flush();
     }

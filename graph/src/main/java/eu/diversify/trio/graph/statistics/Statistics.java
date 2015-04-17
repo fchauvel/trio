@@ -1,10 +1,7 @@
 package eu.diversify.trio.graph.statistics;
 
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
-import eu.diversify.trio.graph.Path;
-import static eu.diversify.trio.graph.queries.PredecessorOf.predecessorOf;
-import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 
 /**
  * The adjacency matrix of a graph, that tell the connection between two nodes
@@ -22,14 +19,14 @@ public class Statistics {
      * @return the number of nodes in the graph
      */
     public int nodeCount() {
-        return this.graph.nodes().size();
+        return this.graph.vertexCount();
     }
 
     /**
      * @return the number of edges in the graph
      */
     public int edgeCount() {
-        return this.graph.edges().size();
+        return this.graph.edgeCount();
     }
 
     /**
@@ -43,18 +40,22 @@ public class Statistics {
     /**
      * Compute the degree of a given node.
      *
-     * @param node the node whose degree is needed
+     * @param vertex the node whose degree is needed
      * @param kind the type of degree (i.e., IN or OUT)
      * @return the degree of the given node
      */
-    public int degreeOf(Node node, Degree kind) {
+    public int degreeOf(Vertex vertex, Degree kind) {
         switch (kind) {
             case IN:
-                return this.graph.nodes(predecessorOf(node)).size();
+                return vertex.incomingEdges().size();
             case OUT:
-                return this.graph.nodes(successorOf(node)).size();
+                return vertex.outgoingEdges().size();
         }
         throw new IllegalArgumentException("Unknown degree type " + kind.name());
+    }
+    
+    public int degreeOf(int vertexId, Degree kind) {
+        return degreeOf(graph.vertexWithId(vertexId), kind);
     }
 
     /**
@@ -63,8 +64,8 @@ public class Statistics {
      */
     public double averageNodeDegree(Degree kind) {
         int total = 0;
-        for (Node eachNode : graph.nodes()) {
-            total += degreeOf(eachNode, kind);
+        for (Vertex eachVertex : graph.vertexes()) {
+            total += degreeOf(eachVertex, kind);
         }
         return (double) total / nodeCount();
     }
@@ -76,7 +77,7 @@ public class Statistics {
      * @param target the last node of the path
      * @return the shortest possible path
      */
-    public Path shortestPathBetween(Node source, Node target) {
+    public Path shortestPathBetween(Vertex source, Vertex target) {
         return shortestPaths.between(source, target);
     }
 
@@ -89,7 +90,7 @@ public class Statistics {
      * @param target the last node
      * @return the number of edges between the two given nodes
      */
-    public int distanceBetween(Node source, Node target) {
+    public int distanceBetween(Vertex source, Vertex target) {
         return shortestPathBetween(source, target).length();
     }
 
@@ -97,11 +98,11 @@ public class Statistics {
      * Compute the eccentricity of the node, i.e., the greatest distance with
      * all other node.
      *
-     * @param node the node whose eccentricity is needed
+     * @param vertex the node whose eccentricity is needed
      * @return the eccentricity of the node
      */
-    public int eccentricityOf(Node node) {
-        return shortestPaths.eccentricityOf(node);
+    public int eccentricityOf(Vertex vertex) {
+        return shortestPaths.eccentricityOf(vertex);
     }
 
     /**

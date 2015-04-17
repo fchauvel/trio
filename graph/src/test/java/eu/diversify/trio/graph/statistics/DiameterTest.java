@@ -1,9 +1,7 @@
 package eu.diversify.trio.graph.statistics;
 
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
-import static eu.diversify.trio.graph.Node.node;
 import eu.diversify.trio.graph.SampleGraphs;
+import eu.diversify.trio.graph.model.Graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

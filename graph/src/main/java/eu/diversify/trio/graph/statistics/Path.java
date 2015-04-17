@@ -1,5 +1,6 @@
-package eu.diversify.trio.graph;
+package eu.diversify.trio.graph.statistics;
 
+import eu.diversify.trio.graph.model.Edge;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,38 +18,39 @@ public class Path {
         return p2;
     }
 
-    public static Path infinite(Node source) {
-        return new Path(source);
+    private final List<Long> edgeIds;
+
+
+    public Path(Long... edgeIds) {
+        this(Arrays.asList(edgeIds));
     }
 
-    private final List<Node> nodes;
-
-    public Path(Node... nodes) {
-        this(Arrays.asList(nodes));
-    }
-
-    public Path(List<Node> nodes) {
-        this.nodes = new ArrayList<>(nodes);
+    public Path(List<Long> edgeIds) {
+        this.edgeIds = new ArrayList<>(edgeIds);
     }
 
     public int length() {
-        return isDefined() ? nodes.size() - 1 : Integer.MAX_VALUE;
+        return isDefined() ? edgeIds.size() : Integer.MAX_VALUE;
     }
 
-    public Path append(Node node) {
-        final List<Node> copy = new ArrayList<>(nodes);
-        copy.add(node);
+    public Path append(long edgeId) {
+        final List<Long> copy = new ArrayList<>(edgeIds);
+        copy.add(edgeId);
         return new Path(copy);
     }
-    
+
+    public Path append(Edge edge) {
+        return append(edge.id());
+    }
+
     public boolean isDefined() {
-        return nodes.size() > 1;
+        return !edgeIds.isEmpty();
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.nodes);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.edgeIds);
         return hash;
     }
 
@@ -61,17 +63,12 @@ public class Path {
             return false;
         }
         final Path other = (Path) obj;
-        if (!Objects.equals(this.nodes, other.nodes)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.edgeIds, other.edgeIds);
     }
 
     @Override
     public String toString() {
-        return "path " + nodes;
+        return "path " + edgeIds;
     }
-    
-    
 
 }

@@ -1,9 +1,8 @@
-
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.AdjacencyMatrix;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
+import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 import eu.diversify.trio.utility.Count;
 
 /**
@@ -18,7 +17,7 @@ public class RingLatticeGenerator implements GraphGenerator {
         this.nodeCount = nodeCount;
         this.neighborCount = validate(neighborCount);
     }
-    
+
     private Count validate(Count neighborCount) {
         if (neighborCount.isOdd()) {
             final String description = String.format("Neighbor count must be even (found %d)", neighborCount.value());
@@ -26,12 +25,12 @@ public class RingLatticeGenerator implements GraphGenerator {
         }
         return neighborCount;
     }
-    
+
     @Override
     public Graph nextGraph() {
-        final AdjacencyMatrix graph = new AdjacencyMatrix(nodeCount.value());
-        for (Node eachSource: graph.nodes()) {
-            for (Node eachTarget: graph.nodes()) {
+        final Graph graph = graphFactory().emptyGraph(nodeCount);
+        for (Vertex eachSource : graph.vertexes()) {
+            for (Vertex eachTarget : graph.vertexes()) {
                 if (allowsEdgeBetween(eachSource, eachTarget)) {
                     graph.connect(eachSource, eachTarget);
                 }
@@ -39,15 +38,17 @@ public class RingLatticeGenerator implements GraphGenerator {
         }
         return graph;
     }
-
-    public boolean allowsEdgeBetween(Node source, Node target) {
-        int distance = Math.abs(source.index() - target.index());
-        if (distance > nodeCount.value() / 2) {
-            distance  = nodeCount.value() - distance;
-        }
-        return distance > 0 && distance <=  neighborCount.value() / 2;
+    
+    private boolean allowsEdgeBetween(Vertex source, Vertex target) {
+        return allowsEdgeBetween(source.id(), target.id());
     }
 
-   
-    
+    boolean allowsEdgeBetween(int sourceId, int targetId) {
+        int distance = Math.abs(sourceId - targetId);
+        if (distance > nodeCount.value() / 2) {
+            distance = nodeCount.value() - distance;
+        }
+        return distance > 0 && distance <= neighborCount.value() / 2;
+    }
+
 }

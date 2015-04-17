@@ -1,36 +1,36 @@
-
 package eu.diversify.trio.graph;
+
+import eu.diversify.trio.graph.generator.GraphFactory;
+import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.utility.Count;
 
 /**
  * Defines various graphs for testing purpose
  */
 public class SampleGraphs {
-    
-     public static Graph twoNodesRing() {
-        boolean matrixData[][] = new boolean[][]{
-            {false, true},
-            {true, false}
-        };
-        return new AdjacencyMatrix(matrixData);
+
+    public static Graph twoNodesRing() {
+        String adjacency
+                = "01"
+                + "10";
+        return graphFactory().fromAdjacencyMatrix(new Count(2), adjacency);
     }
-     
-     public static Graph twoPaths() {
-        boolean matrixData[][] = new boolean[][]{
-            {false, true,   true    },
-            {false, false,  false   },
-            {false, true,   false   }
-        };
-        return new AdjacencyMatrix(matrixData);
+
+    public static Graph twoPaths() {
+        String adjacency
+                = "011"
+                + "000"
+                + "010";
+        return graphFactory().fromAdjacencyMatrix(new Count(3), adjacency);
     }
-    
-     
-     public static Graph aLoopInTheMiddle() {
-         boolean matrixData[][] = new boolean[][]{
-            {false, true,   false,  false   },
-            {false, false,  true,   false   },
-            {false, true,   false,  true    },
-            {false, false,  false,  false    }
-        };
-        return new AdjacencyMatrix(matrixData);
-     }
+
+    public static Graph aLoopInTheMiddle() {
+        String adjacency
+                = "0100"
+                + "0010"
+                + "0101"
+                + "0000";
+        return graphFactory().fromAdjacencyMatrix(new Count(4), adjacency);
+    }
 }

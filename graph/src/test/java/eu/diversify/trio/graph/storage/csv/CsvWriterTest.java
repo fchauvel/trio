@@ -1,7 +1,9 @@
 package eu.diversify.trio.graph.storage.csv;
 
-import eu.diversify.trio.graph.AdjacencyMatrix;
-import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.generator.GraphFactory;
+import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.utility.Count;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -24,7 +26,7 @@ public class CsvWriterTest {
                 + "001"
                 + "110";
         
-        Graph graph = AdjacencyMatrix.from(adjacency);
+        Graph graph = graphFactory().fromAdjacencyMatrix(new Count(3), adjacency);
         
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         CsvWriter writer = new CsvWriter();

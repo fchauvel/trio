@@ -1,9 +1,9 @@
 
 package eu.diversify.trio.graph.storage.dot;
 
-import eu.diversify.trio.graph.Edge;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
+import eu.diversify.trio.graph.model.Edge;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -20,15 +20,17 @@ public class DotWriter {
      * 
      * @param graph the graph that shall be converted in DOT
      * @param output the stream where the DOT code shall be written
+     * 
+     * @throws java.io.UnsupportedEncodingException
      */
     public void write(Graph graph, OutputStream output) throws UnsupportedEncodingException {
         PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(output, DEFAULT_ENCODING)));
         writer.printf("digraph %s {%n", DEFAULT_GRAPH_NAME);
-        for(Node eachNode: graph.nodes()) {
-            writer.printf("\tn%d;%n", eachNode.index());
+        for(Vertex eachVertex: graph.vertexes()) {
+            writer.printf("\tn%d;%n", eachVertex.id());
         }
         for(Edge eachEdge: graph.edges()) {
-            writer.printf("\tn%d -> n%d;%n", eachEdge.source().index(), eachEdge.target().index());
+            writer.printf("\tn%d -> n%d;%n", eachEdge.source().id(), eachEdge.destination().id());
         }
         writer.printf("}%n");
         writer.flush();

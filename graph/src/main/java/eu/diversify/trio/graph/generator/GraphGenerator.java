@@ -1,6 +1,6 @@
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.model.Graph;
 
 /**
  * Graph Generator

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.Graph;
+import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.utility.Count;
 import eu.diversify.trio.utility.Probability;
 import java.io.FileNotFoundException;
@@ -18,7 +14,7 @@ public class PerformanceTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final int RUN_COUNT = 100;
-        final Count NODE_COUNT = new Count(250);
+        final Count NODE_COUNT = new Count(1000);
 
         GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT, new Probability(1D/3), new Probability(1D/3));
 

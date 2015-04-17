@@ -1,8 +1,7 @@
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.Edge;
-import eu.diversify.trio.graph.Graph;
-import static eu.diversify.trio.graph.Node.node;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 import eu.diversify.trio.graph.storage.csv.CsvWriter;
 import eu.diversify.trio.graph.storage.dot.DotWriter;
 import eu.diversify.trio.utility.Count;
@@ -12,9 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
@@ -26,14 +23,14 @@ public class RandomGeneratorsTest {
     @Test
     public void sampleOneRandomRegularLattice() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/regular_lattice";
-        final Count NODE_COUNT = new Count(25);
-        final Count NEIGHBORHOOD = new Count(6);
+        final Count NODE_COUNT = new Count(50);
+        final Count NEIGHBORHOOD = new Count(10);
 
         GraphGenerator generator = new RingLatticeGenerator(NODE_COUNT, NEIGHBORHOOD);
 
         Graph graph = generator.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
+        assertThat(graph.vertexCount(), is(equalTo(NODE_COUNT.value())));
 
         save(file, graph);
     }
@@ -47,7 +44,7 @@ public class RandomGeneratorsTest {
         GraphGenerator generator = new ErdosRenyiGenerator(NODE_COUNT, EDGE_PROBABILITY);
         Graph graph = generator.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
+        assertThat(graph.vertexCount(), is(equalTo(NODE_COUNT.value())));
 
         save(file, graph);
     }
@@ -62,7 +59,7 @@ public class RandomGeneratorsTest {
         GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT, ALPHA, BETA);
         Graph graph = generate.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
+        assertThat(graph.vertexCount(), is(equalTo(NODE_COUNT.value())));
 
         save(file, graph);
     }
@@ -77,9 +74,9 @@ public class RandomGeneratorsTest {
         GraphGenerator generate = new WattsStrogatzGenerator(NODE_COUNT, NEIGHBORHOOD, RELINKING_PROBABILITY); 
         Graph graph = generate.nextGraph();
 
-        assertThat(graph.nodes().size(), is(equalTo(NODE_COUNT.value())));
-        for (int i = 0; i < graph.nodes().size(); i++) {
-            assertThat(graph.edges(), not(hasItem(new Edge(node(i), node(i)))));
+        assertThat(graph.vertexCount(), is(equalTo(NODE_COUNT.value())));
+        for (Vertex eachVertex: graph.vertexes()) {
+            assertThat(graph.hasEdge(eachVertex, eachVertex), is(false));
         }
 
         save(file, graph);

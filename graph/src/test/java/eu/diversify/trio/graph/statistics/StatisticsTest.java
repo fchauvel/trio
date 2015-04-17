@@ -1,6 +1,5 @@
 package eu.diversify.trio.graph.statistics;
 
-import static eu.diversify.trio.graph.Node.node;
 import eu.diversify.trio.graph.SampleGraphs;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -38,14 +37,14 @@ public class StatisticsTest {
 
     @Test
     public void shouldProvideTheInDegreeOfNodes() {
-        assertThat(statistics.degreeOf(node(0), Degree.IN), is(equalTo(1)));
-        assertThat(statistics.degreeOf(node(1), Degree.IN), is(equalTo(1)));
+        assertThat(statistics.degreeOf(0, Degree.IN), is(equalTo(1)));
+        assertThat(statistics.degreeOf(1, Degree.IN), is(equalTo(1)));
     }
 
     @Test
     public void shouldProvideTheOutDegreeOfNodes() {
-        assertThat(statistics.degreeOf(node(0), Degree.OUT), is(equalTo(1)));
-        assertThat(statistics.degreeOf(node(1), Degree.OUT), is(equalTo(1)));
+        assertThat(statistics.degreeOf(0, Degree.OUT), is(equalTo(1)));
+        assertThat(statistics.degreeOf(1, Degree.OUT), is(equalTo(1)));
     }
     
     @Test

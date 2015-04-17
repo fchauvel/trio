@@ -1,8 +1,8 @@
 package eu.diversify.trio.graph.generator;
 
-import eu.diversify.trio.graph.AdjacencyMatrix;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
+import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 import eu.diversify.trio.utility.Count;
 import eu.diversify.trio.utility.Probability;
 import java.util.Random;
@@ -27,10 +27,10 @@ public class ErdosRenyiGenerator  implements GraphGenerator {
     }
 
     @Override
-     public Graph nextGraph() {
-        final AdjacencyMatrix graph = new AdjacencyMatrix(graphSize.value());
-        for (Node eachSource: graph.nodes()) {
-            for (Node eachTarget: graph.nodes()) {
+     public Graph nextGraph() { 
+        final Graph graph = graphFactory().emptyGraph(graphSize); 
+        for (Vertex eachSource: graph.vertexes()) {
+            for (Vertex eachTarget: graph.vertexes()) {
                 if (edgeCreated()) {
                     graph.connect(eachSource, eachTarget);
                 }
