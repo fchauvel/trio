@@ -1,5 +1,6 @@
 package eu.diversify.trio.graph.model;
 
+import eu.diversify.trio.graph.Services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +12,10 @@ import java.util.Map;
  */
 public class Graph {
 
+    private static final long DEFAULT_GRAPH_ID = 1L;
+
+    private final long id;
+    
     private final Map<Integer, Vertex> vertexes;
     private final Map<Long, Edge> edges;
 
@@ -18,12 +23,21 @@ public class Graph {
     private long edgeIdSequence;
 
     public Graph() {
+        this(DEFAULT_GRAPH_ID);
+    }
+    
+    public Graph(long graphId) {
+        this.id = graphId;
         this.vertexes = new HashMap<>();
         this.edges = new HashMap<>();
         vertexIdSequence = -1;
         edgeIdSequence = -1;
     }
 
+    public long id() {
+        return id;
+    }
+    
     public Collection<Vertex> vertexes() {
         return Collections.unmodifiableCollection(this.vertexes.values());
     }
@@ -49,6 +63,13 @@ public class Graph {
         
         return destination.isSuccessorOf(source);
     }
+    
+    public Edge edgeWithId(long edgeId) {
+        if (!edges.containsKey(edgeId)) {
+            throw new IllegalArgumentException("Unknown edge with ID '" + edgeId + "'");
+        }
+        return edges.get(edgeId);
+    }
 
     public boolean isEmpty() {
         return this.edges.isEmpty();
@@ -61,6 +82,9 @@ public class Graph {
     public Vertex createVertex() {
         final Vertex newVertex = new Vertex(nextVertexId());
         this.vertexes.put(newVertex.id(), newVertex);
+        
+        Services.registry().events().publish(new VertexCreated(id, newVertex.id()));
+        
         return newVertex;
     }
 
@@ -96,6 +120,8 @@ public class Graph {
         target.addIncomingEdge(newEdge);
         this.edges.put(newEdge.id(), newEdge);
 
+        Services.registry().events().publish(new EdgeCreated(id, newEdge.id()));
+        
         return newEdge;
     }
 

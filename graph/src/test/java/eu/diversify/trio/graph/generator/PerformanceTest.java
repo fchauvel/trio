@@ -14,7 +14,7 @@ public class PerformanceTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final int RUN_COUNT = 100;
-        final Count NODE_COUNT = new Count(1000);
+        final Count NODE_COUNT = new Count(2500);
 
         GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT, new Probability(1D/3), new Probability(1D/3));
 
@@ -28,7 +28,7 @@ public class PerformanceTest {
         
         double averageDuration = (double) duration / RUN_COUNT;
         
-        System.out.printf("%d B&A graph(s) generated in %.3f ms.%n", RUN_COUNT, averageDuration);
+        System.out.printf("B&A graph(s) generated in %.3f ms. (%d vertexes ; average over %d run(s))%n", averageDuration, NODE_COUNT.value(), RUN_COUNT);
     }
 
 }

@@ -39,7 +39,7 @@ public class RandomGeneratorsTest {
     public void oneRandomErdosRenyi() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_erdos_renyi";
         final Count NODE_COUNT = new Count(250);
-        final Probability EDGE_PROBABILITY = new Probability(0.05);
+        final Probability EDGE_PROBABILITY = new Probability(0.01);
 
         GraphGenerator generator = new ErdosRenyiGenerator(NODE_COUNT, EDGE_PROBABILITY);
         Graph graph = generator.nextGraph();
@@ -52,9 +52,9 @@ public class RandomGeneratorsTest {
     @Test
     public void oneBarabasiAndAlbert() throws UnsupportedEncodingException, FileNotFoundException, IOException {
         final String file = "target/random_barabasi_albert";
-        final Count NODE_COUNT = new Count(150);
-        final Probability ALPHA = new Probability(1D / 3);
-        final Probability BETA = new Probability(1D / 3);
+        final Count NODE_COUNT = new Count(250);
+        final Probability ALPHA = new Probability(0.4);
+        final Probability BETA = new Probability(0.4);
 
         GraphGenerator generate = new BarabasiAlbertGenerator(NODE_COUNT, ALPHA, BETA);
         Graph graph = generate.nextGraph();

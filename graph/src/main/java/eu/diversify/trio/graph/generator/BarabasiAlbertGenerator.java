@@ -1,11 +1,15 @@
 package eu.diversify.trio.graph.generator;
 
+import eu.diversify.trio.graph.Services;
 import eu.diversify.trio.graph.model.Graph;
-import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
 import eu.diversify.trio.graph.model.Vertex;
+import eu.diversify.trio.graph.statistics.VertexDegreeAnalysis;
 import eu.diversify.trio.utility.Count;
 import eu.diversify.trio.utility.Probability;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -32,32 +36,38 @@ public class BarabasiAlbertGenerator implements GraphGenerator {
 
     @Override
     public Graph nextGraph() {
-        final Graph graph = graphFactory().meshedGraph(new Count(2));
+        final Graph graph = Services.registry().factory().meshedGraph(new Count(INITIAL_SIZE));
+        final VertexDegreeAnalysis degrees = new VertexDegreeAnalysis(graph);
+
         while (graph.vertexCount() < nodeCount()) {
             final Action action = selectAction();
             switch (action) {
                 case NEW_NODE_WITH_OUTGOING_EDGE: {
+                    Vertex destination = aCommonlyUsed(graph, degrees, TARGET);
                     Vertex newVertex = graph.createVertex();
-                    Vertex destination = aCommonlyUsed(graph, TARGET);
                     graph.connect(newVertex, destination);
                     break;
                 }
                 case NEW_NODE_WITH_INCOMING_EDGE: {
-                    Vertex source = aCommonlyUsed(graph, SOURCE);
+                    Vertex source = aCommonlyUsed(graph, degrees, SOURCE);
                     Vertex newVertex = graph.createVertex();
                     graph.connect(source, newVertex);
                     break;
                 }
                 case NEW_EDGE: {
-                    Vertex source = aCommonlyUsed(graph, SOURCE);
-                    Vertex destination = aCommonlyUsed(graph, TARGET);
-                    graph.connect(source, destination);
+                    Vertex source = aCommonlyUsed(graph, degrees, SOURCE);
+                    Vertex destination = aCommonlyUsed(graph, degrees, TARGET);
+                    if (!graph.hasEdge(source, destination)) {
+                        graph.connect(source, destination);
+                    }
                     break;
                 }
             }
         }
         return graph;
     }
+
+    private static final int INITIAL_SIZE = 3;
 
     private int nodeCount() {
         return nodeCount.value();
@@ -81,40 +91,28 @@ public class BarabasiAlbertGenerator implements GraphGenerator {
         }
     }
 
-    private Vertex aCommonlyUsed(Graph graph, boolean role) {
-        Map<Vertex, Double> probabilities = computeProbabilities(graph, role);
-
+    private Vertex aCommonlyUsed(Graph graph, VertexDegreeAnalysis degrees, boolean role) {
         double draw = random.nextDouble();
         double acc = 0;
         for (Vertex eachVertex : graph.vertexes()) {
-            acc += probabilities.get(eachVertex);
+            acc += probabilityOf(degrees, eachVertex, role);
             if (acc > draw) {
                 return eachVertex;
             }
         }
-        throw new RuntimeException("Unable to select node");
+
+        final String description = String.format("Unable to select node (%d candidates, draw = %1.3e)", graph.vertexCount(), draw);
+        throw new RuntimeException(description);
     }
 
-    private Map<Vertex, Double> computeProbabilities(Graph graph, boolean role) {
-        final Map<Vertex, Double> probabilities = new HashMap<>(graph.vertexCount());
-        double total = 0;
-        for (Vertex eachVertex : graph.vertexes()) {
-            final double degree = degree(eachVertex, role);
-            probabilities.put(eachVertex, degree);
-            total += degree;
-        }
-        for (Vertex eachNode : graph.vertexes()) {
-            double probability = probabilities.get(eachNode) / total;
-            probabilities.put(eachNode, probability);
-        }
-        return probabilities;
-    }
-
-    private static double degree(Vertex vertex, boolean role) {
+    private static double probabilityOf(VertexDegreeAnalysis degrees, Vertex eachVertex, boolean role) {
         if (role) {
-            return vertex.incomingEdges().size();
+            assert degrees.totalInDegree() > 0D : "Invalid total in-degree";
+            return (double) degrees.inDegreeOf(eachVertex) / degrees.totalInDegree();
         }
-        return vertex.outgoingEdges().size();
+
+        assert degrees.totalOutDegree() > 0D : "Invalid total out-degree";
+        return (double) degrees.outDegreeOf(eachVertex) / degrees.totalOutDegree();
     }
 
 }

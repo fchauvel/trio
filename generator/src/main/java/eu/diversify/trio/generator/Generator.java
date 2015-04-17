@@ -27,14 +27,14 @@ import eu.diversify.trio.core.requirements.RequirementFactory;
 import eu.diversify.trio.generator.requirements.BuildRandomizer;
 import eu.diversify.trio.generator.requirements.CachedLiteralFactory;
 import eu.diversify.trio.generator.requirements.FixedSizeBuilder;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
-import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 import eu.diversify.trio.util.random.Distribution;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,12 +69,12 @@ public class Generator {
      * graph.
      */
     public Assembly assembly(Graph dependencyGraph) {
-        final List<Component> components = new ArrayList<>(dependencyGraph.nodes().size());
-        for (Node eachNode : dependencyGraph.nodes()) {
-            List<Node> dependencies = dependencyGraph.nodes(successorOf(eachNode));
-            components.add(component(eachNode.index(), indices(dependencies)));
+        final List<Component> components = new ArrayList<>(dependencyGraph.vertexCount());
+        for (Vertex eachNode : dependencyGraph.vertexes()) {
+            Set<Vertex> dependencies = eachNode.successors();
+            components.add(component(eachNode.id(), indices(dependencies)));
         }
-        
+
         return new Assembly(DEFAULT_ASSEMBLY_NAME, components, defaultTags());
     }
 
@@ -83,11 +83,10 @@ public class Generator {
         return tags;
     }
 
-    
-    private List<Integer> indices(List<Node> nodes) {
+    private List<Integer> indices(Set<Vertex> nodes) {
         final List<Integer> indices = new ArrayList<>(nodes.size());
-        for (Node eachNode : nodes) {
-            indices.add(eachNode.index());
+        for (Vertex eachNode : nodes) {
+            indices.add(eachNode.id());
         }
         return indices;
     }
@@ -184,7 +183,5 @@ public class Generator {
 
         return new Component(("C" + index).intern(), requirement);
     }
-
-   
 
 }

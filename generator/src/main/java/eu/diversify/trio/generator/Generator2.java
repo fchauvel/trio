@@ -10,13 +10,13 @@ import static eu.diversify.trio.generator.Generator.DEFAULT_LITERAL_COUNT;
 import eu.diversify.trio.generator.requirements.BuildRandomizer;
 import eu.diversify.trio.generator.requirements.CachedLiteralFactory;
 import eu.diversify.trio.generator.requirements.FixedSizeBuilder;
-import eu.diversify.trio.graph.Graph;
-import eu.diversify.trio.graph.Node;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.model.Vertex;
 import eu.diversify.trio.graph.generator.GraphGenerator;
-import static eu.diversify.trio.graph.queries.SuccessorOf.successorOf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Generate various type of architecture models
@@ -56,19 +56,19 @@ public class Generator2 {
      * graph.
      */
     private Assembly buildAssembly(Graph graph) {
-        final List<Component> components = new ArrayList<>(graph.nodes().size());
-        for (Node eachNode : graph.nodes()) {
-            List<Node> dependencies = graph.nodes(successorOf(eachNode));
-            components.add(component(eachNode.index(), indices(dependencies)));
+        final List<Component> components = new ArrayList<>(graph.vertexCount());
+        for (Vertex eachNode : graph.vertexes()) {
+            Set<Vertex> dependencies = eachNode.successors();
+            components.add(component(eachNode.id(), indices(dependencies)));
         }
 
         return new Assembly(DEFAULT_ASSEMBLY_NAME, components, defaultTags());
     }
 
-    private List<Integer> indices(List<Node> nodes) {
+    private List<Integer> indices(Set<Vertex> nodes) {
         final List<Integer> indices = new ArrayList<>(nodes.size());
-        for (Node eachNode : nodes) {
-            indices.add(eachNode.index());
+        for (Vertex eachVertex : nodes) {
+            indices.add(eachVertex.id());
         }
         return indices;
     }
