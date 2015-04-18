@@ -38,10 +38,13 @@ public class Generator2 {
     }
     
     
-    public Assembly nextAssembly(AssemblyKind kind) {
+    public Graph nextGraph(AssemblyKind kind) {
         GraphGenerator graphs = setup.generatorFor(kind);
-        Graph graph = graphs.nextGraph();
-        return buildAssembly(graph);
+        return graphs.nextGraph();
+    }
+    
+    public Assembly nextAssembly(AssemblyKind kind) {
+        return nextAssembly(nextGraph(kind));
     }
 
     /**
@@ -55,11 +58,11 @@ public class Generator2 {
      * @return a randomized assembly, whose dependency graph matches the given
      * graph.
      */
-    private Assembly buildAssembly(Graph graph) {
+    public Assembly nextAssembly(Graph graph) {
         final List<Component> components = new ArrayList<>(graph.vertexCount());
-        for (Vertex eachNode : graph.vertexes()) {
-            Set<Vertex> dependencies = eachNode.successors();
-            components.add(component(eachNode.id(), indices(dependencies)));
+        for (Vertex eachVertex : graph.vertexes()) {
+            Set<Vertex> dependencies = eachVertex.successors();
+            components.add(component(eachVertex.id(), indices(dependencies)));
         }
 
         return new Assembly(DEFAULT_ASSEMBLY_NAME, components, defaultTags());

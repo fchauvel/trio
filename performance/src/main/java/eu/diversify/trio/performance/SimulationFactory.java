@@ -11,6 +11,9 @@ import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.generator.AssemblyKind;
 import eu.diversify.trio.generator.Generator2;
 import eu.diversify.trio.generator.Setup;
+import eu.diversify.trio.graph.model.Graph;
+import eu.diversify.trio.graph.statistics.Degree;
+import eu.diversify.trio.graph.statistics.Statistics;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskFactory;
 import eu.diversify.trio.simulation.RandomFailureSequence;
@@ -38,8 +41,9 @@ public class SimulationFactory implements TaskFactory {
     public Task prepareNewTask() {
         final Setup setup = setups.next();
         final Generator2 generate = new Generator2(setup);
-        final Assembly assembly = generate.nextAssembly(kind);
-        return new SimulationTask(trio, kind, assembly);
+        final Graph graph = generate.nextGraph(kind);
+        final Assembly assembly = generate.nextAssembly(graph);
+        return new SimulationTask(trio, kind, new Statistics(graph), assembly);
     }
 
     /**
@@ -48,42 +52,27 @@ public class SimulationFactory implements TaskFactory {
     private static class SimulationTask implements Task {
 
         private static final String SIZE = "size";
-        private static final String AVERAGE_NODAL_DEGREE = "average nodal degree";
         private static final String DENSITY = "density";
         private static final String ROBUSTNESS = "robustness";
+        private static final String KIND = "kind";
+        private static final String DIAMETER = "diameter";
 
         private final Trio trio;
         private final Scenario scenario;
         private final Map<String, Object> properties;
         private DataSet result;
 
-        public SimulationTask(Trio trio, AssemblyKind kind, Assembly assembly) {
+        public SimulationTask(Trio trio, AssemblyKind kind, Statistics graph, Assembly assembly) {
             this.properties = new HashMap<>();
             
-            this.properties.put("kind", kind.name());
-            
-            measureSize(assembly);
-            measureDensity(assembly);
-            measureAverageNodalDegree(assembly);
+            this.properties.put(KIND, kind.name());
+            this.properties.put(SIZE, graph.nodeCount());
+            this.properties.put(DENSITY, graph.density());
+            this.properties.put("average node degree", graph.averageNodeDegree(Degree.OUT));
+            //this.properties.put(DIAMETER, graph.diameter());
             
             this.scenario = new RandomFailureSequence(assembly);
             this.trio = trio;           
-        }
-
-        private void measureAverageNodalDegree(Assembly assembly) {
-            AverageNodalDegree averageNodalDegree = new AverageNodalDegree();
-            evaluate(averageNodalDegree).on(assembly);
-            this.properties.put(AVERAGE_NODAL_DEGREE, averageNodalDegree.getValue());
-        }
-
-        private void measureDensity(Assembly assembly) {
-            Density density = new Density();
-            evaluate(density).on(assembly);
-            this.properties.put(DENSITY, density.getValue());
-        }
-
-        private void measureSize(Assembly assembly) {
-            this.properties.put(SIZE, assembly.size());
         }
 
         @Override
