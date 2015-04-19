@@ -17,7 +17,7 @@ public class ShortestPathMatrix {
 
     private final Graph graph;
     private final Map<Route, Path> shortestPaths;
-    private final Set<Vertex> visited;
+    private final Set<Vertex> visitedVertexes;
 
     public ShortestPathMatrix(Graph graph) {
         this.graph = graph;
@@ -29,7 +29,7 @@ public class ShortestPathMatrix {
             }
         }
 
-        this.visited = new HashSet<>();
+        this.visitedVertexes = new HashSet<>();
     }
 
     public int eccentricityOf(Vertex node) {
@@ -54,21 +54,26 @@ public class ShortestPathMatrix {
     }
 
     public Path between(Vertex source, Vertex target) {
-        visited.clear();
+        visitedVertexes.clear();
         final List<Vertex> frontier = new LinkedList<>();
         frontier.add(source);
         while (!frontier.isEmpty()) {
             final Vertex current = frontier.remove(0);
-            visited.add(current);
+            visitedVertexes.add(current);
             for (Edge anyOutgoingEdge : current.outgoingEdges()) {
-                if (!visited.contains(anyOutgoingEdge.destination())) {
-                    Path oldPath = shortestPaths.get(new Route(source, anyOutgoingEdge.destination()));
-                    Path newPath = shortestPaths.get(new Route(source, current)).append(anyOutgoingEdge);
-                    shortestPaths.put(new Route(source, anyOutgoingEdge.destination()), Path.getShortest(oldPath, newPath));
+                if (!visitedVertexes.contains(anyOutgoingEdge.destination())) {
+                    final Path oldPath = shortestPaths.get(new Route(source, anyOutgoingEdge.destination()));
+                    final Path newPath = shortestPaths.get(new Route(source, current));
+                    if (oldPath.length() <= newPath.length() + 1) {
+                        shortestPaths.put(new Route(source, anyOutgoingEdge.destination()), oldPath);
+                    } else {
+                        shortestPaths.put(new Route(source, anyOutgoingEdge.destination()), newPath.append(anyOutgoingEdge));
+                    }
                     frontier.add(anyOutgoingEdge.destination());
                 }
             }
         }
+        
         return shortestPaths.get(new Route(source, target));
     }
 
