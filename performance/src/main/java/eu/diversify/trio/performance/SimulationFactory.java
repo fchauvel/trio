@@ -4,9 +4,6 @@ import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.core.Assembly;
-import static eu.diversify.trio.core.Evaluation.evaluate;
-import eu.diversify.trio.core.statistics.AverageNodalDegree; 
-import eu.diversify.trio.core.statistics.Density;
 import eu.diversify.trio.data.DataSet;
 import eu.diversify.trio.generator.AssemblyKind;
 import eu.diversify.trio.generator.Generator2;
@@ -29,7 +26,6 @@ public class SimulationFactory implements TaskFactory {
     private final GeneratorSetupRandomizer setups;
     private final AssemblyKind kind;
     private final Trio trio;
-    
 
     public SimulationFactory(AssemblyKind kind, GeneratorSetupRandomizer setups) {
         this.kind = kind;
@@ -46,9 +42,13 @@ public class SimulationFactory implements TaskFactory {
         return new SimulationTask(trio, kind, new Statistics(graph), assembly);
     }
 
-    /**
-     * Run one simulation of the given assembly
-     */
+    @Override
+    public void reset() {
+        // nothing to be done
+    }
+    
+    
+
     private static class SimulationTask implements Task {
 
         private static final String SIZE = "size";
@@ -56,7 +56,6 @@ public class SimulationFactory implements TaskFactory {
         private static final String ROBUSTNESS = "robustness";
         private static final String KIND = "kind";
         private static final String DIAMETER = "diameter";
-
         private final Trio trio;
         private final Scenario scenario;
         private final Map<String, Object> properties;
@@ -64,16 +63,14 @@ public class SimulationFactory implements TaskFactory {
 
         public SimulationTask(Trio trio, AssemblyKind kind, Statistics graph, Assembly assembly) {
             this.properties = new HashMap<>();
-            
             this.properties.put(KIND, kind.name());
             this.properties.put(SIZE, graph.nodeCount());
             this.properties.put(DENSITY, graph.density());
             this.properties.put("average node degree", graph.averageNodeDegree(Degree.OUT));
             //this.properties.put(DIAMETER, graph.diameter());
-            
             this.scenario = new RandomFailureSequence(assembly);
-            this.trio = trio;           
-        }
+            this.trio = trio;
+        } //this.properties.put(DIAMETER, graph.diameter());
 
         @Override
         public void execute() {
@@ -91,4 +88,5 @@ public class SimulationFactory implements TaskFactory {
         }
 
     }
+
 }

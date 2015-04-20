@@ -16,7 +16,6 @@ public class MicroBenchmarkTest {
     }
 
     // TODO should reject wrong sample count
-    
     @Test
     public void testBehaviour() {
         final int SAMPLE_COUNT = 10;
@@ -29,17 +28,20 @@ public class MicroBenchmarkTest {
 
         context.checking(new Expectations() {
             {
-                exactly(TOTAL_COUNT).of(tasks).prepareNewTask(); will(returnValue(aTask));
+                exactly(TOTAL_COUNT).of(tasks).prepareNewTask();
+                will(returnValue(aTask));
+                
+                exactly(1).of(tasks).reset();
 
                 exactly(TOTAL_COUNT).of(aTask).execute();
 
                 exactly(SAMPLE_COUNT).of(trace).record(with(any(Integer.class)), with(aTask), with(any(Performance.class)));
             }
         });
-        
+
         MicroBenchmark benchmark = new MicroBenchmark(SAMPLE_COUNT, WARMUP_COUNT, tasks);
         benchmark.run(trace);
-        
+
         context.assertIsSatisfied();
     }
 

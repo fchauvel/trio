@@ -1,15 +1,16 @@
 package eu.diversify.trio.graph.statistics;
 
-import eu.diversify.trio.graph.Services;
 import eu.diversify.trio.graph.generator.ErdosRenyiGenerator;
 import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.utility.Count;
 import eu.diversify.trio.utility.Probability;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Check the time spent calculating the statistics
  */
+@Ignore
 public class PerformanceTest {
 
     @Test

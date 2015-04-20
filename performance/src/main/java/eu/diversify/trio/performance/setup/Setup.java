@@ -1,6 +1,7 @@
 package eu.diversify.trio.performance.setup;
 
 import eu.diversify.trio.generator.AssemblyKind;
+import eu.diversify.trio.performance.FileSimulationFactory;
 import eu.diversify.trio.performance.GeneratorSetupRandomizer;
 import eu.diversify.trio.performance.SimulationFactory;
 import eu.diversify.trio.performance.util.MicroBenchmark;
@@ -35,9 +36,7 @@ public class Setup {
 
     public List<MicroBenchmark> prepareBenchmarks() {
         final List<MicroBenchmark> benchmarks = new ArrayList<>();
-        for (AssemblyKind eachKind : AssemblyKind.values()) {
-            benchmarks.add(new MicroBenchmark(sampleCount, warmupSampleCount, new SimulationFactory(eachKind, setups)));
-        }
+        benchmarks.add(new MicroBenchmark(sampleCount, warmupSampleCount, new FileSimulationFactory()));
         return benchmarks;
     }
 

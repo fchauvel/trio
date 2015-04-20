@@ -18,6 +18,7 @@ public class MicroBenchmark {
     
     public void run(Recorder output) {
         warmUp();
+        factory.reset();
         benchmark(output);
     }
 
