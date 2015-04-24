@@ -17,7 +17,7 @@
  */
 
 
-package eu.diversify.trio.data;
+package eu.diversify.trio.simulation.data;
 
 import eu.diversify.trio.codecs.DataFormat;
 import eu.diversify.trio.simulation.Action;

@@ -15,21 +15,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.filter;
+package eu.diversify.trio.simulation.filter;
 
 import eu.diversify.trio.core.Assembly;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Logical disjunction
+ * Logical conjunction
  */
-public class Or extends Filter {
+public class And extends Filter {
 
     private final Filter left;
     private final Filter right;
 
-    public Or(Filter left, Filter right) {
+    public And(Filter left, Filter right) {
         this.left = left;
         this.right = right;
     }
@@ -38,15 +38,13 @@ public class Or extends Filter {
     public Set<String> resolve(Assembly system) {
         final Set<String> results = new HashSet<String>();
         results.addAll(left.resolve(system));
-        results.addAll(right.resolve(system));
+        results.retainAll(right.resolve(system));
         return results;
     }
 
     @Override
     public String toString() {
-        return String.format("(%s or %s)", left.toString(), right.toString());
+        return String.format("(%s and %s)", left.toString(), right.toString());
     }
 
-    
-    
 }

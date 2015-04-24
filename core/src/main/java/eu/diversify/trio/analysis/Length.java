@@ -19,7 +19,7 @@
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.Trace;
 
 /**
  * Compute statistics about the length of sequences

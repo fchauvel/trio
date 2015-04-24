@@ -38,7 +38,7 @@ import eu.diversify.trio.simulation.FixedFailureSequence;
 import eu.diversify.trio.Samples;
 import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.simulation.data.DataSet;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 
 import static eu.diversify.trio.simulation.actions.Inactivate.*;

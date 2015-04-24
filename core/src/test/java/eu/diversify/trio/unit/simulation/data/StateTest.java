@@ -18,9 +18,9 @@
 /*
  */
 
-package eu.diversify.trio.unit.data;
+package eu.diversify.trio.unit.simulation.data;
 
-import eu.diversify.trio.data.State;
+import eu.diversify.trio.simulation.data.State;
 import eu.diversify.trio.simulation.Action;
 import eu.diversify.trio.simulation.actions.Inactivate;
 import junit.framework.TestCase;

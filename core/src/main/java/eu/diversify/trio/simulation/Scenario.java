@@ -20,10 +20,10 @@
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.data.Trace;
-import eu.diversify.trio.filter.All;
-import eu.diversify.trio.filter.Filter;
+import eu.diversify.trio.simulation.data.DataSet;
+import eu.diversify.trio.simulation.data.Trace;
+import eu.diversify.trio.simulation.filter.All;
+import eu.diversify.trio.simulation.filter.Filter;
 
 /**
  * The scenario taken as input by Trio

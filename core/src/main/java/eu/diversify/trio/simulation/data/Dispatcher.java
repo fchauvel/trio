@@ -17,7 +17,7 @@
  */
 /*
  */
-package eu.diversify.trio.data;
+package eu.diversify.trio.simulation.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -4,7 +4,7 @@ import eu.diversify.trio.Trio;
 import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.simulation.data.DataSet;
 import eu.diversify.trio.generator.AssemblyKind;
 import eu.diversify.trio.generator.Generator2;
 import eu.diversify.trio.generator.Setup;

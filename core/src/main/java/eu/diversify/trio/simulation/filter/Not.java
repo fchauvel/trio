@@ -15,36 +15,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.filter;
+
+package eu.diversify.trio.simulation.filter;
 
 import eu.diversify.trio.core.Assembly;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Logical conjunction
+ * Logical negation
  */
-public class And extends Filter {
+public class Not extends Filter {
 
-    private final Filter left;
-    private final Filter right;
+    private final Filter operand;
 
-    public And(Filter left, Filter right) {
-        this.left = left;
-        this.right = right;
+    public Not(Filter filter) {
+        this.operand = filter;
     }
 
     @Override
     public Set<String> resolve(Assembly system) {
         final Set<String> results = new HashSet<String>();
-        results.addAll(left.resolve(system));
-        results.retainAll(right.resolve(system));
+        results.addAll(system.getComponentNames());
+        results.removeAll(operand.resolve(system));
         return results;
     }
 
     @Override
     public String toString() {
-        return String.format("(%s and %s)", left.toString(), right.toString());
+        return String.format("(not %s)", operand.toString());
     }
 
+    
+    
 }

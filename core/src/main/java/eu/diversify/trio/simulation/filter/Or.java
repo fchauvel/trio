@@ -15,33 +15,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
-
-package eu.diversify.trio.filter;
+package eu.diversify.trio.simulation.filter;
 
 import eu.diversify.trio.core.Assembly;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Logical disjunction
  */
-public class TaggedAs extends Filter {
+public class Or extends Filter {
 
-    private final String tag;
+    private final Filter left;
+    private final Filter right;
 
-    public TaggedAs(String tag) {
-        this.tag = tag;
+    public Or(Filter left, Filter right) {
+        this.left = left;
+        this.right = right;
     }
-    
+
     @Override
     public Set<String> resolve(Assembly system) {
-        return system.taggedAs(tag);
+        final Set<String> results = new HashSet<String>();
+        results.addAll(left.resolve(system));
+        results.addAll(right.resolve(system));
+        return results;
     }
 
     @Override
     public String toString() {
-        return String.format("%s", tag);
+        return String.format("(%s or %s)", left.toString(), right.toString());
     }
 
     

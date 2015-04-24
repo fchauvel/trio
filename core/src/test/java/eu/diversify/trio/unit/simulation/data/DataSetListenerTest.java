@@ -17,13 +17,13 @@
  */
 /*
  */
-package eu.diversify.trio.unit.data;
+package eu.diversify.trio.unit.simulation.data;
 
-import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.data.DataSetListener;
-import eu.diversify.trio.data.Dispatcher;
-import eu.diversify.trio.data.State;
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.DataSet;
+import eu.diversify.trio.simulation.data.DataSetListener;
+import eu.diversify.trio.simulation.data.Dispatcher;
+import eu.diversify.trio.simulation.data.State;
+import eu.diversify.trio.simulation.data.Trace;
 import eu.diversify.trio.simulation.actions.AbstractAction;
 import junit.framework.TestCase;
 import org.jmock.Expectations;

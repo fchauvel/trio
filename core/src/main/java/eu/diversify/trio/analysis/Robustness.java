@@ -34,8 +34,8 @@
  */
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.State;
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.State;
+import eu.diversify.trio.simulation.data.Trace;
 import java.util.List;
 
 /**

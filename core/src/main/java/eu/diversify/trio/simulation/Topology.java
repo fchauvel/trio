@@ -35,8 +35,8 @@
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.filter.All;
-import eu.diversify.trio.filter.Filter;
+import eu.diversify.trio.simulation.filter.All;
+import eu.diversify.trio.simulation.filter.Filter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;

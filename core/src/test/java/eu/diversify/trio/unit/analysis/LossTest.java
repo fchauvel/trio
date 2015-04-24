@@ -21,7 +21,7 @@
 package eu.diversify.trio.unit.analysis;
 
 import eu.diversify.trio.analysis.Loss;
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.Trace;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;

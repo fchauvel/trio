@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.unit.data;
+package eu.diversify.trio.unit.simulation.data;
 
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.Trace;
 
 import static eu.diversify.trio.simulation.actions.AbstractAction.*;
 

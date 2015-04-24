@@ -18,8 +18,8 @@
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.AbstractDataSetListener;
-import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.simulation.data.AbstractDataSetListener;
+import eu.diversify.trio.simulation.data.DataSet;
 
 /**
  * A metric is an value computed on a data set

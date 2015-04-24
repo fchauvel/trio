@@ -18,11 +18,11 @@
 
 package eu.diversify.trio.core;
 
-import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.simulation.data.DataSet;
 import eu.diversify.trio.simulation.Listener;
 import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.data.Trace;
-import eu.diversify.trio.filter.All;
+import eu.diversify.trio.simulation.data.Trace;
+import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.util.Require;
 import java.util.ArrayList;
 import java.util.Arrays;

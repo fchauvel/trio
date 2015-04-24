@@ -19,8 +19,8 @@
 
 package eu.diversify.trio.analysis;
 
-import eu.diversify.trio.data.DataSetListener;
-import eu.diversify.trio.data.Dispatcher;
+import eu.diversify.trio.simulation.data.DataSetListener;
+import eu.diversify.trio.simulation.data.Dispatcher;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

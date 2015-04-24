@@ -19,8 +19,8 @@ package eu.diversify.trio.unit.analysis;
 
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.analysis.Robustness;
-import eu.diversify.trio.data.Dispatcher;
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.Dispatcher;
+import eu.diversify.trio.simulation.data.Trace;
 import eu.diversify.trio.simulation.actions.AbstractAction;
 import junit.framework.TestCase;
 import org.junit.Test;

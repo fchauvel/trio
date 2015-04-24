@@ -15,37 +15,26 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ */
 
-package eu.diversify.trio.filter;
-
-import eu.diversify.trio.core.Assembly;
-import java.util.HashSet;
-import java.util.Set;
+package eu.diversify.trio.simulation.data;
 
 /**
- * Logical negation
+ * React to the traversal of a DataSet
  */
-public class Not extends Filter {
-
-    private final Filter operand;
-
-    public Not(Filter filter) {
-        this.operand = filter;
-    }
-
-    @Override
-    public Set<String> resolve(Assembly system) {
-        final Set<String> results = new HashSet<String>();
-        results.addAll(system.getComponentNames());
-        results.removeAll(operand.resolve(system));
-        return results;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("(not %s)", operand.toString());
-    }
-
+public interface DataSetListener {
     
+    void enterDataSet(DataSet dataSet);
+    
+    void exitDataSet(DataSet dataSet);
+    
+    void enterTrace(Trace trace);
+    
+    void exitTrace(Trace trace);
+    
+    void enterState(State state);
+    
+    void exitState(State state);
     
 }

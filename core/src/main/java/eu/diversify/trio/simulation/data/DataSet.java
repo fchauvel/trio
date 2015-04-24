@@ -15,26 +15,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+package eu.diversify.trio.simulation.data;
 
-package eu.diversify.trio.data;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * React to the traversal of a DataSet
+ * Aggregate information obtained during extinction sequences
  */
-public interface DataSetListener {
-    
-    void enterDataSet(DataSet dataSet);
-    
-    void exitDataSet(DataSet dataSet);
-    
-    void enterTrace(Trace trace);
-    
-    void exitTrace(Trace trace);
-    
-    void enterState(State state);
-    
-    void exitState(State state);
-    
+public class DataSet {
+
+    private final List<Trace> traces;
+
+    public DataSet() {
+        this.traces = new ArrayList<Trace>();
+    }
+       
+    public void accept(DataSetListener listener) {
+        listener.enterDataSet(this);
+        for(Trace eachTrace: traces) {
+            eachTrace.accept(listener);
+        }
+        listener.exitDataSet(this);
+    }
+
+    public void include(Trace trace) {
+        this.traces.add(trace);
+    }
+
+    public Trace get(int index) {
+        return traces.get(0);
+    }
+
 }

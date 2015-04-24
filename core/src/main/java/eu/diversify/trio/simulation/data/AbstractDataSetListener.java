@@ -15,36 +15,40 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.data;
-
-import java.util.ArrayList;
-import java.util.List;
+package eu.diversify.trio.simulation.data;
 
 /**
- * Aggregate information obtained during extinction sequences
+ * Provide default behaviour for listener
  */
-public class DataSet {
+public abstract class AbstractDataSetListener implements DataSetListener {
 
-    private final List<Trace> traces;
-
-    public DataSet() {
-        this.traces = new ArrayList<Trace>();
-    }
-       
-    public void accept(DataSetListener listener) {
-        listener.enterDataSet(this);
-        for(Trace eachTrace: traces) {
-            eachTrace.accept(listener);
-        }
-        listener.exitDataSet(this);
+    public void enterDataSet(DataSet dataSet) {
+        byDefault();
     }
 
-    public void include(Trace trace) {
-        this.traces.add(trace);
+    public void exitDataSet(DataSet dataSet) {
+        byDefault();
     }
 
-    public Trace get(int index) {
-        return traces.get(0);
+    public void enterTrace(Trace trace) {
+        byDefault();
     }
+
+    public void exitTrace(Trace trace) {
+        byDefault();
+    }
+
+    public void enterState(State state) {
+        byDefault();
+    }
+
+    public void exitState(State state) {
+        byDefault();
+    }
+
+    protected void byDefault() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

@@ -25,7 +25,7 @@ import eu.diversify.trio.analysis.Analysis;
 import eu.diversify.trio.analysis.Length;
 import eu.diversify.trio.analysis.RelativeRobustness;
 import eu.diversify.trio.analysis.Robustness;
-import eu.diversify.trio.data.DataSet;
+import eu.diversify.trio.simulation.data.DataSet;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Scenario;
 import java.util.ArrayList;

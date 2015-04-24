@@ -15,40 +15,35 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.data;
+/*
+ */
+
+package eu.diversify.trio.simulation.filter;
+
+import eu.diversify.trio.core.Assembly;
+import java.util.Set;
 
 /**
- * Provide default behaviour for listener
+ *
  */
-public abstract class AbstractDataSetListener implements DataSetListener {
+public class TaggedAs extends Filter {
 
-    public void enterDataSet(DataSet dataSet) {
-        byDefault();
+    private final String tag;
+
+    public TaggedAs(String tag) {
+        this.tag = tag;
+    }
+    
+    @Override
+    public Set<String> resolve(Assembly system) {
+        return system.taggedAs(tag);
     }
 
-    public void exitDataSet(DataSet dataSet) {
-        byDefault();
+    @Override
+    public String toString() {
+        return String.format("%s", tag);
     }
 
-    public void enterTrace(Trace trace) {
-        byDefault();
-    }
-
-    public void exitTrace(Trace trace) {
-        byDefault();
-    }
-
-    public void enterState(State state) {
-        byDefault();
-    }
-
-    public void exitState(State state) {
-        byDefault();
-    }
-
-    protected void byDefault() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
+    
+    
 }

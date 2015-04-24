@@ -32,7 +32,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.filter;
+package eu.diversify.trio.simulation.filter;
 
 import eu.diversify.trio.core.Assembly;
 import java.util.Set;

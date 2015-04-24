@@ -19,8 +19,8 @@
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.filter.Filter;
+import eu.diversify.trio.simulation.data.DataSet;
+import eu.diversify.trio.simulation.filter.Filter;
 import eu.diversify.trio.simulation.actions.Inactivate;
 import java.util.ArrayList;
 import java.util.Collection;

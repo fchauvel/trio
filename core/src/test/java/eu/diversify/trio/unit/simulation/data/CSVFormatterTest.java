@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.unit.data;
+package eu.diversify.trio.unit.simulation.data;
 
-import eu.diversify.trio.data.CSVFormatter;
-import eu.diversify.trio.data.DataSet;
-import eu.diversify.trio.data.State;
-import eu.diversify.trio.data.Trace;
+import eu.diversify.trio.simulation.data.CSVFormatter;
+import eu.diversify.trio.simulation.data.DataSet;
+import eu.diversify.trio.simulation.data.State;
+import eu.diversify.trio.simulation.data.Trace;
 import java.io.ByteArrayOutputStream;
 
 import static eu.diversify.trio.simulation.actions.AbstractAction.*;

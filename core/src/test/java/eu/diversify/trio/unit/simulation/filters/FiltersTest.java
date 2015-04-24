@@ -32,13 +32,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.unit.filters;
+package eu.diversify.trio.unit.simulation.filters;
 
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.*;
-import eu.diversify.trio.filter.All;
-import eu.diversify.trio.filter.Filter;
-import eu.diversify.trio.filter.TaggedAs;
+import eu.diversify.trio.simulation.filter.All;
+import eu.diversify.trio.simulation.filter.Filter;
+import eu.diversify.trio.simulation.filter.TaggedAs;
 import java.util.*;
 import junit.framework.TestCase;
 import org.junit.Test;

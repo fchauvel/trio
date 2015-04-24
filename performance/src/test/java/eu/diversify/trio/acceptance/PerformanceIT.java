@@ -24,7 +24,7 @@ import eu.diversify.trio.codecs.SyntaxError;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.core.statistics.Statistics;
-import eu.diversify.trio.filter.TaggedAs;
+import eu.diversify.trio.simulation.filter.TaggedAs;
 import eu.diversify.trio.simulation.*;
 import eu.diversify.trio.util.random.Distribution;
 import java.io.*;
