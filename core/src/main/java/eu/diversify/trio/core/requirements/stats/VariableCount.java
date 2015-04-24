@@ -20,6 +20,7 @@ package eu.diversify.trio.core.requirements.stats;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.DefaultAssemblyVisitor;
 import eu.diversify.trio.core.requirements.Require;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,6 +49,10 @@ public class VariableCount extends DefaultAssemblyVisitor {
 
     public int get() {
         return variableNames.size();
+    }
+    
+    public Collection<String> getVariableNames() {
+        return variableNames;
     }
     
 }
