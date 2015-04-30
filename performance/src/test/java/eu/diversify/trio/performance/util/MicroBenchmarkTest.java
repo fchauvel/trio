@@ -28,7 +28,7 @@ public class MicroBenchmarkTest {
 
         context.checking(new Expectations() {
             {
-                exactly(TOTAL_COUNT).of(tasks).prepareNewTask();
+                exactly(TOTAL_COUNT).of(tasks).nextTask();
                 will(returnValue(aTask));
                 
                 exactly(1).of(tasks).reset();
