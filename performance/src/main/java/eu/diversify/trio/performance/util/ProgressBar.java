@@ -58,7 +58,7 @@ public class ProgressBar {
             String description = String.format("Regression detected (current state %.3f, next %.3f)", this.progress, progress);
             throw new IllegalArgumentException(description);
         }
-        this.progress = progress;
+        this.progress = progress;        
     }
 
     private long progressAsPercentage() {

@@ -2,6 +2,9 @@ package eu.diversify.trio.performance.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
@@ -17,6 +20,12 @@ public class EventBrokerTest {
         mockery = new Mockery();
     }
 
+    @Test
+    public void shouldBeGloballyAvailable() {
+        EventBroker broker = EventBroker.instance();
+        assertThat(broker, is(not(nullValue())));
+    }
+    
     @Test
     public void shouldSupportListenerSubscription() {
         EventBroker broker = new EventBroker();

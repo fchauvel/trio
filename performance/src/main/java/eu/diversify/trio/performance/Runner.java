@@ -3,7 +3,9 @@ package eu.diversify.trio.performance;
 import eu.diversify.trio.performance.setup.Setup;
 import eu.diversify.trio.performance.setup.SetupStore;
 import eu.diversify.trio.performance.util.CsvRecorder;
+import eu.diversify.trio.performance.util.EventBroker;
 import eu.diversify.trio.performance.util.MicroBenchmark;
+import eu.diversify.trio.performance.util.MicroBenchmarkListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,12 +29,16 @@ public class Runner {
     }
 
     private final Arguments arguments;
+    private final UI ui;
 
     public Runner(Arguments arguments) {
         this.arguments = arguments;
+        this.ui = new UI();
     }
 
     public void run() {
+        EventBroker.instance().subscribe(ui);
+
         showOpening();
 
         final Setup setup = loadSetupFile();
@@ -59,7 +65,7 @@ public class Runner {
         final Setup setup = store.loadFromProperties(properties);
 
         System.out.println("%n" + setup.summary());
-        
+
         return setup;
     }
 
@@ -67,7 +73,7 @@ public class Runner {
         System.out.println("Reading configuration in '" + arguments.getSetupFile() + "'");
         final Properties properties = new Properties();
         try {
-            
+
             properties.load(new FileInputStream(arguments.getSetupFile()));
 
         } catch (IOException ex) {
@@ -96,7 +102,6 @@ public class Runner {
         }
         return outputFile;
     }
-
 
     private void closeOutputFile(final OutputStream outputFile) throws IllegalArgumentException {
         try {

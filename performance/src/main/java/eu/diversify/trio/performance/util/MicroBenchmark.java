@@ -26,6 +26,7 @@ public class MicroBenchmark {
         for(int sampleIndex = 0 ; sampleIndex < warmupCount ; sampleIndex++) {
             Task task = factory.prepareNewTask();
             task.execute();
+            EventBroker.instance().taskCompleted(sampleIndex, sampleCount, true);
         }
     }
     
@@ -34,6 +35,7 @@ public class MicroBenchmark {
             Task task = factory.prepareNewTask();
             Performance performance = monitorExecutionOf(task);
             output.record(index, task, performance);
+            EventBroker.instance().taskCompleted(index, sampleCount, false);
         }
     }
 

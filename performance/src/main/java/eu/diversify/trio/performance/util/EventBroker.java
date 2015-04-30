@@ -11,6 +11,15 @@ import java.util.List;
  */
 public class EventBroker {
     
+    private static EventBroker singleInstance;
+    
+    public static EventBroker instance() {
+        if (singleInstance == null) {
+            singleInstance = new EventBroker();
+        }
+        return singleInstance;
+    }
+    
     private final List<MicroBenchmarkListener> listeners;
     
     public EventBroker() {
