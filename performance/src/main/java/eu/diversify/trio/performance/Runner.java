@@ -5,7 +5,6 @@ import eu.diversify.trio.performance.setup.SetupStore;
 import eu.diversify.trio.performance.util.CsvRecorder;
 import eu.diversify.trio.performance.util.EventBroker;
 import eu.diversify.trio.performance.util.MicroBenchmark;
-import eu.diversify.trio.performance.util.MicroBenchmarkListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -39,7 +38,7 @@ public class Runner {
     public void run() {
         EventBroker.instance().subscribe(ui);
 
-        showOpening();
+        ui.showOpening();
 
         final Setup setup = loadSetupFile();
 
@@ -51,13 +50,11 @@ public class Runner {
         }
 
         closeOutputFile(outputFile);
+        
+        ui.showClosing();
     }
 
-    private void showOpening() {
-        System.out.println("TRIO - Topology Robustness Indicator");
-        System.out.println("Copyright (C) 2015 - SINTEF ICT");
-        System.out.println("");
-    }
+   
 
     private Setup loadSetupFile() {
         final SetupStore store = new SetupStore();
@@ -70,20 +67,20 @@ public class Runner {
     }
 
     private Properties readProperties() {
-        System.out.println("Reading configuration in '" + arguments.getSetupFile() + "'");
+        ui.info("Reading configuration in '" + arguments.getSetupFile() + "'");
         final Properties properties = new Properties();
         try {
 
             properties.load(new FileInputStream(arguments.getSetupFile()));
 
         } catch (IOException ex) {
-            final String error
+            final String description
                     = String.format("Unable to open the setup file '%s' (%s)",
                             arguments.getSetupFile(),
                             ex.getMessage());
 
-            System.out.println(error);
-            System.out.println("Switching to the default setup");
+            ui.error(description);
+            ui.info("Switching to the default setup");
         }
         return properties;
     }

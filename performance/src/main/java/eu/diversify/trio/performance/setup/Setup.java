@@ -1,9 +1,7 @@
 package eu.diversify.trio.performance.setup;
 
-import eu.diversify.trio.generator.AssemblyKind;
 import eu.diversify.trio.performance.FileSimulationFactory;
 import eu.diversify.trio.performance.GeneratorSetupRandomizer;
-import eu.diversify.trio.performance.SimulationFactory;
 import eu.diversify.trio.performance.util.MicroBenchmark;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +19,7 @@ public class Setup {
     private final GeneratorSetupRandomizer setups;
 
     public Setup() {
-        this(
-                DEFAULT_SAMPLE_COUNT,
-                DEFAULT_WARMUP_SAMPLE_COUNT,
-                new GeneratorSetupRandomizer()
-        );
+        this(DEFAULT_SAMPLE_COUNT, DEFAULT_WARMUP_SAMPLE_COUNT, new GeneratorSetupRandomizer());
     }
 
     public Setup(int sampleCount, int warmupSampleCount, GeneratorSetupRandomizer setups) {

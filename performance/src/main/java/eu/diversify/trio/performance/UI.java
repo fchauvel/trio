@@ -16,18 +16,34 @@ public class UI implements MicroBenchmarkListener {
     private ProgressBar warmup;
     private ProgressBar benchmark;
 
-    public ProgressBar warmup() {
+    private ProgressBar warmup() {
         if (warmup == null) {
+            System.out.println("");
+            System.out.println("Warming-up ... ");
             warmup = new ProgressBar(System.out, BAR_WIDTH);
         }
         return warmup;
     }
 
-    public ProgressBar benchmark() {
+    private ProgressBar benchmark() {
         if (benchmark == null) {
+            System.out.println();
+            System.out.println();
+            System.out.println("Evaluating performance ... ");
             benchmark = new ProgressBar(System.out, BAR_WIDTH);
         }
         return benchmark;
+    }
+
+    public void showOpening() {
+        System.out.println("TRIO - Topology Robustness Indicator");
+        System.out.println("Copyright (C) 2015 - SINTEF ICT");
+        System.out.println();
+    }
+    
+    public void showClosing() {
+        System.out.println();
+        System.out.println("That's all folks!");
     }
 
     @Override
@@ -39,11 +55,19 @@ public class UI implements MicroBenchmarkListener {
                 warmup().refresh();
             } else {
                 benchmark().setProgress(progress);
-                warmup().refresh();
+                benchmark().refresh();
             }
         } catch (IOException ex) {
             Logger.getAnonymousLogger().log(Level.INFO, "I/O error while refreshing the UI", ex);
         }
+    }
+    
+    public void info(String info) {
+        System.out.println(info);
+    }
+    
+    public void error(String error) {
+        System.err.println(error);
     }
 
 }

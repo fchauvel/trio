@@ -1,8 +1,7 @@
 package eu.diversify.trio.performance.util;
 
 /**
- * Generate 'n' models and simulate random extinction failures on them, measuring
- * the time it takes to simulate failures.
+ * Run a sequence of tasks and measure their duration. It send
  */
 public class MicroBenchmark {
 
@@ -26,7 +25,7 @@ public class MicroBenchmark {
         for(int sampleIndex = 0 ; sampleIndex < warmupCount ; sampleIndex++) {
             Task task = factory.prepareNewTask();
             task.execute();
-            EventBroker.instance().taskCompleted(sampleIndex, sampleCount, true);
+            EventBroker.instance().taskCompleted(sampleIndex, warmupCount-1, true);
         }
     }
     
@@ -34,8 +33,8 @@ public class MicroBenchmark {
         for (int index = 0; index < sampleCount; index++) {
             Task task = factory.prepareNewTask();
             Performance performance = monitorExecutionOf(task);
+            EventBroker.instance().taskCompleted(index, sampleCount-1, false);
             output.record(index, task, performance);
-            EventBroker.instance().taskCompleted(index, sampleCount, false);
         }
     }
 
