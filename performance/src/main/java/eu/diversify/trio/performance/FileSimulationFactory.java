@@ -173,8 +173,9 @@ public class FileSimulationFactory implements TaskFactory {
 
         @Override
         public void execute() {
-            result = trio.run(new RandomFailureSequence(assembly));
+            result = trio.run(new RandomFailureSequence(assembly), RUN_COUNT);
         }
+        private static final int RUN_COUNT = 500;
 
     }
 
