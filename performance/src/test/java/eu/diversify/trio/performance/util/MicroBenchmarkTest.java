@@ -1,5 +1,7 @@
 package eu.diversify.trio.performance.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
@@ -15,31 +17,32 @@ public class MicroBenchmarkTest {
         context = new Mockery();
     }
 
-    // TODO should reject wrong sample count
     @Test
     public void testBehaviour() {
-        final int SAMPLE_COUNT = 10;
-        final int WARMUP_COUNT = 5;
-        final int TOTAL_COUNT = SAMPLE_COUNT + WARMUP_COUNT;
+        final int TASK_COUNT = 10;
 
+        final List<Integer> tasks = new ArrayList<>(TASK_COUNT);
         final Task aTask = context.mock(Task.class);
-        final TaskFactory tasks = context.mock(TaskFactory.class);
+        for (int i = 0; i < TASK_COUNT; i++) {
+            tasks.add(i);
+        }
+
+        final TaskStore taskStore = context.mock(TaskStore.class);
         final Recorder trace = context.mock(Recorder.class);
 
         context.checking(new Expectations() {
-            {
-                exactly(TOTAL_COUNT).of(tasks).nextTask();
-                will(returnValue(aTask));
+            {                
+                ignoring(taskStore).fetch(with(any(Integer.class))); will(returnValue(aTask));
                 
-                exactly(1).of(tasks).reset();
+                ignoring(aTask).id(); will(returnValue(0)); 
+                
+                exactly(TASK_COUNT).of(aTask).execute();
 
-                exactly(TOTAL_COUNT).of(aTask).execute();
-
-                exactly(SAMPLE_COUNT).of(trace).record(with(any(Integer.class)), with(aTask), with(any(Performance.class)));
+                exactly(TASK_COUNT).of(trace).record(with(any(Integer.class)), with(aTask), with(any(Observation.class)));
             }
         });
 
-        MicroBenchmark benchmark = new MicroBenchmark(SAMPLE_COUNT, WARMUP_COUNT, tasks);
+        MicroBenchmark benchmark = new MicroBenchmark(taskStore, tasks);
         benchmark.run(trace);
 
         context.assertIsSatisfied();

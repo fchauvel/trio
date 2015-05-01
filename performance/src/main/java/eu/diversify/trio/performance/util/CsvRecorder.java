@@ -29,14 +29,14 @@ public class CsvRecorder implements Recorder {
     }
 
     @Override
-    public void record(int runIndex, Task task, Performance performance) {
+    public void record(int runIndex, Task task, Observation performance) {
         if (!headerPrinted) {
             printHeaderLine(task, performance);
         }
         printProperties(runIndex, task, performance);
     }
 
-    private void printProperties(int runIndex, Task task, Performance performance) {
+    private void printProperties(int runIndex, Task task, Observation performance) {
         output.print(runIndex);
         final Map<String, Object> taskProperties = task.getProperties();
         for (String eachProperty : taskProperties.keySet()) {
@@ -51,7 +51,7 @@ public class CsvRecorder implements Recorder {
         output.println();
     }
 
-    private void printHeaderLine(Task task, Performance performance) {
+    private void printHeaderLine(Task task, Observation performance) {
         headerPrinted = true;
         output.print("run");
         for (String eachProperty : task.getProperties().keySet()) {

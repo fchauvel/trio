@@ -1,49 +1,49 @@
 package eu.diversify.trio.performance.util;
 
+import java.util.Collection;
+
 /**
  * Run a sequence of tasks and measure their duration. It send
  */
 public class MicroBenchmark {
 
-    private final int warmupCount;
-    private final int sampleCount;
-    private final TaskFactory factory;
+    private final int id;
+    private final TaskStore store;
+    private final Collection<Integer> tasks;
 
-    public MicroBenchmark(int sampleCount, int warmUpCount, TaskFactory factory) {
-        warmupCount = warmUpCount;
-        this.sampleCount = sampleCount;
-        this.factory = factory;
+    public MicroBenchmark(TaskStore store, Collection<Integer> tasks) {
+        this(0, store, tasks);
     }
-    
+
+    public MicroBenchmark(int id, TaskStore store, Collection<Integer> tasks) {
+        this.id = id;
+        this.tasks = tasks;
+        this.store = store;
+    }
+
+    public int id() {
+        return this.id;
+    }
+
     public void run(Recorder output) {
-        warmUp();
-        factory.reset();
         benchmark(output);
     }
 
-    private void warmUp() {
-        for(int sampleIndex = 0 ; sampleIndex < warmupCount ; sampleIndex++) {
-            Task task = factory.nextTask();
-            task.execute();
-            EventBroker.instance().taskCompleted(sampleIndex, warmupCount-1, true);
-        }
-    }
-    
     private void benchmark(Recorder output) {
-        for (int index = 0; index < sampleCount; index++) {
-            Task task = factory.nextTask();
-            Performance performance = monitorExecutionOf(task);
-            EventBroker.instance().taskCompleted(index, sampleCount-1, false);
-            output.record(index, task, performance);
+        for (int eachId : tasks) {
+            Task task = store.fetch(eachId);
+            Observation performance = monitor(task);
+            output.record(task.id(), task, performance);
+            EventBroker.instance().taskCompleted(id, task.id(), tasks.size());
         }
     }
 
-    private Performance monitorExecutionOf(Task task) {
+    private Observation monitor(Task task) {
         long start = System.nanoTime();
         task.execute();
         long end = System.nanoTime();
         long duration = end - start;
-        return new Performance(duration);
+        return new Observation(duration);
     }
 
 }

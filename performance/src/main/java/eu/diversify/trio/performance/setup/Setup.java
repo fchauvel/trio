@@ -1,7 +1,7 @@
 package eu.diversify.trio.performance.setup;
 
-import eu.diversify.trio.performance.FileSimulationFactory;
-import eu.diversify.trio.performance.GeneratorSetupRandomizer;
+import eu.diversify.trio.performance.SimulationFactory;
+import eu.diversify.trio.performance.GraphStore;
 import eu.diversify.trio.performance.util.MicroBenchmark;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,33 +11,75 @@ import java.util.List;
  */
 public class Setup {
 
-    public static final int DEFAULT_SAMPLE_COUNT = 100;
-    public static final int DEFAULT_WARMUP_SAMPLE_COUNT = 10;
+    public static final double DEFAULT_WARMUP_RATIO = 0.05;
+    public static final int DEFAULT_LAST_GRAPH_ID = 100;
+    public static final int DEFAULT_FIRST_GRAPH_ID = 1;
 
-    private final int sampleCount;
-    private final int warmupSampleCount;
-    private final GeneratorSetupRandomizer setups;
+    private final double warmupRatio;
+    private final int firstGraphId;
+    private final int lastGraphId;
+    private final String graphDirectory;
+    private final String graphFilePattern;
 
     public Setup() {
-        this(DEFAULT_SAMPLE_COUNT, DEFAULT_WARMUP_SAMPLE_COUNT, new GeneratorSetupRandomizer());
+        this(DEFAULT_FIRST_GRAPH_ID, DEFAULT_LAST_GRAPH_ID, DEFAULT_WARMUP_RATIO, GraphStore.DEFAULT_GRAPH_PATH, GraphStore.DEFAULT_GRAPH_FILE_PATTERN);
     }
 
-    public Setup(int sampleCount, int warmupSampleCount, GeneratorSetupRandomizer setups) {
-        this.sampleCount = sampleCount;
-        this.warmupSampleCount = warmupSampleCount;
-        this.setups = setups;
+    public Setup(int firstGraphId, int lastGraphId, double warmupRatio, String graphDirectory, String graphFilePattern) {
+        this.firstGraphId = firstGraphId;
+        this.lastGraphId = lastGraphId;
+        this.warmupRatio = warmupRatio;
+        this.graphDirectory = graphDirectory;
+        this.graphFilePattern = graphFilePattern;
     }
 
-    public List<MicroBenchmark> prepareBenchmarks() {
-        final List<MicroBenchmark> benchmarks = new ArrayList<>();
-        benchmarks.add(new MicroBenchmark(sampleCount, warmupSampleCount, new FileSimulationFactory()));
-        return benchmarks;
+    public MicroBenchmark benchmark() {
+        return new MicroBenchmark(BENCHMARK_ID, taskStore(), tasks());
+    }
+
+    public MicroBenchmark warmup() {
+        return new MicroBenchmark(WARMUP_ID, taskStore(), warmupTasks());
+    }
+
+    private static final int BENCHMARK_ID = 1;
+    private static final int WARMUP_ID = 2;
+
+    
+    private SimulationFactory taskStore() {
+        return new SimulationFactory(graphStore());
+    }
+
+    private GraphStore graphStore() {
+        GraphStore graphs = new GraphStore(graphDirectory, graphFilePattern);
+        return graphs;
+    }
+
+    private List<Integer> warmupTasks() {
+        final int length =  (int) Math.floor(warmupRatio * taskCount());
+        final ArrayList<Integer> tasks = new ArrayList<>(length);
+        for (int i = 0 ; i < length ; i++) {
+            tasks.add(firstGraphId + i);
+        }
+        return tasks;
+    }
+
+    private ArrayList<Integer> tasks() {
+        final ArrayList<Integer> tasks = new ArrayList<>(taskCount());
+        for (int eachId = firstGraphId; eachId <= lastGraphId; eachId++) {
+            tasks.add(eachId);
+        }
+        return tasks;
+    }
+
+    private int taskCount() {
+        return lastGraphId - firstGraphId + 1;
     }
 
     public String summary() {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append("Setup Summary:");
-        buffer.append(" - 3 x ").append(sampleCount).append("( + 3 x ").append(warmupSampleCount).append(" as warmup)");
+        buffer.append(String.format(" - %d topologies(s) ;%n", taskCount()));
+        buffer.append(String.format(" - from files '%s' in '%s' ;%n", graphFilePattern, graphDirectory));
+        buffer.append(String.format(" - %d %% as warmup.%n", (int) (warmupRatio * 100)));
         return buffer.toString();
     }
 

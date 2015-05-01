@@ -6,6 +6,6 @@ package eu.diversify.trio.performance.util;
  */
 public interface Recorder {
     
-    void record(int runIndex, Task task, Performance performance);
+    void record(int runIndex, Task task, Observation performance);
     
 }

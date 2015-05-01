@@ -36,19 +36,22 @@ public class Runner {
     }
 
     public void run() {
-        EventBroker.instance().subscribe(ui);
-
+        
         ui.showOpening();
 
         final Setup setup = loadSetupFile();
 
         final OutputStream outputFile = openOutputFile();
-
         final CsvRecorder recorder = new CsvRecorder(outputFile);
-        for (MicroBenchmark eachBenchmark : setup.prepareBenchmarks()) {
-            eachBenchmark.run(recorder);
-        }
 
+        final MicroBenchmark warmup = setup.warmup();
+        EventBroker.instance().subscribe(warmup.id(), ui.warmupView()); 
+        warmup.run(recorder);
+        
+        final MicroBenchmark benchmark = setup.benchmark();
+        EventBroker.instance().subscribe(benchmark.id(), ui.benchmarkView()); 
+        benchmark.run(recorder);
+        
         closeOutputFile(outputFile);
         
         ui.showClosing();
@@ -61,7 +64,7 @@ public class Runner {
         final Properties properties = readProperties();
         final Setup setup = store.loadFromProperties(properties);
 
-        System.out.println("%n" + setup.summary());
+        System.out.println(setup.summary());
 
         return setup;
     }

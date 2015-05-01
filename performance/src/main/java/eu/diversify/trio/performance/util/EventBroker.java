@@ -1,10 +1,13 @@
 
 package eu.diversify.trio.performance.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple event broker that permits the UI to follow the progress of the benchmark
@@ -20,24 +23,36 @@ public class EventBroker {
         return singleInstance;
     }
     
-    private final List<MicroBenchmarkListener> listeners;
+    private final Map<Integer, List<Listener>> listeners;
     
     public EventBroker() {
-        this.listeners = new LinkedList<>();
+        this.listeners = new HashMap<>();
     }
     
-    public void subscribe(MicroBenchmarkListener listener) {
-        this.listeners.add(listener);
+    public void subscribe(int benchmarkId, Listener listener) {
+        List<Listener> ls = listeners.get(benchmarkId);
+        if (ls == null) {
+            ls = new LinkedList<>();
+            listeners.put(benchmarkId, ls);
+        }
+        ls.add(listener);
     }
         
-    public void taskCompleted(int taskId, int totalTaskCount, boolean isWarmup) {
-        for (MicroBenchmarkListener eachListener: listeners) {
-            eachListener.onCompletionOfTask(taskId, totalTaskCount, isWarmup);
+    public void taskCompleted(int benchmarkId, int taskId, int totalTaskCount) {
+        final List<Listener> listeners = this.listeners.get(benchmarkId);
+        if (listeners != null) {
+           for (Listener eachListener: listeners) {
+                eachListener.onCompletionOfTask(taskId, totalTaskCount); 
+            }
         }
     }
     
-    public Collection<MicroBenchmarkListener> subscribers() {
-        return Collections.unmodifiableCollection(listeners);
+    public Collection<Listener> subscribers() {
+        final List<Listener> allListeners = new ArrayList<>();
+        for (List<Listener> ofEachBenchmark: listeners.values()) {
+            allListeners.addAll(ofEachBenchmark);
+        }
+        return Collections.unmodifiableCollection(allListeners);
     }
     
 }

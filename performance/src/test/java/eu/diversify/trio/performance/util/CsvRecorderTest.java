@@ -16,6 +16,11 @@ public class CsvRecorderTest {
         final Task task = new Task() {
 
             @Override
+            public int id() {
+                return 0;
+            }
+            
+            @Override
             public Map<String, Object> getProperties() {
                 Map<String, Object> results = new HashMap<>();
                 results.put("size", 234.456);
@@ -28,7 +33,7 @@ public class CsvRecorderTest {
             }
         };
 
-        Performance performance = new Performance(23L);
+        Observation performance = new Observation(23L);
 
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 

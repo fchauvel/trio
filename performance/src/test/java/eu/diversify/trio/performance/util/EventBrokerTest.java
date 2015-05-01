@@ -30,13 +30,13 @@ public class EventBrokerTest {
     public void shouldSupportListenerSubscription() {
         EventBroker broker = new EventBroker();
 
-        MicroBenchmarkListener listener = new MicroBenchmarkListener() {
+        Listener listener = new Listener() {
             @Override
-            public void onCompletionOfTask(int taskId, int totalTaskCount, boolean isWarmUp) {
+            public void onCompletionOfTask(int taskId, int totalTaskCount) {
             }
         };
 
-        broker.subscribe(listener);
+        broker.subscribe(0, listener);
 
         assertThat(broker.subscribers(), hasItem(listener));
     }
@@ -45,16 +45,20 @@ public class EventBrokerTest {
     public void shouldSupportPublishingInformation() {
         final EventBroker broker = new EventBroker();
 
-        final MicroBenchmarkListener listener = mockery.mock(MicroBenchmarkListener.class);
-        broker.subscribe(listener);
+        final Listener listener1 = mockery.mock(Listener.class, "l1");
+        final Listener listener2 = mockery.mock(Listener.class, "l2");
+        
+        broker.subscribe(0, listener1);
+        broker.subscribe(1, listener2);  
 
         mockery.checking(new Expectations() {
             {
-               exactly(1).of(listener).onCompletionOfTask(1, 100, true);
+               never(listener1).onCompletionOfTask(1, 100);
+               exactly(1).of(listener2).onCompletionOfTask(1, 100);
             }
         });
 
-        broker.taskCompleted(1, 100, true);
+        broker.taskCompleted(1, 1, 100);
 
         mockery.assertIsSatisfied();
     }

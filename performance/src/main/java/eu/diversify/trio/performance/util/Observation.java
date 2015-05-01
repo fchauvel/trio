@@ -6,11 +6,11 @@ import java.util.Map;
 /**
  * Hold the performance information of a given task
  */
-public class Performance {
+public class Observation {
 
     private final Map<String, Object> measurements;
 
-    public Performance(long duration) {
+    public Observation(long duration) {
         measurements = new HashMap<>();
         measurements.put("duration", duration);
     }
