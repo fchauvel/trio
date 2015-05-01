@@ -17,8 +17,8 @@ public class SetupStore {
     public Setup loadFromProperties(Properties properties) {
         return new Setup(
                 extractInt(properties, FIRST_GRAPH_ID_KEY, Setup.DEFAULT_FIRST_GRAPH_ID),
-                extractInt(properties, LAST_GRAPH_ID, Setup.DEFAULT_LAST_GRAPH_ID),
-                extractDouble(properties, WARMUP_RATIO, Setup.DEFAULT_WARMUP_RATIO),
+                extractInt(properties, LAST_GRAPH_ID_KEY, Setup.DEFAULT_LAST_GRAPH_ID),
+                extractDouble(properties, WARMUP_RATIO_KEY, Setup.DEFAULT_WARMUP_RATIO),
                 extractString(properties, GRAPH_DIRECTORY_KEY, GraphStore.DEFAULT_GRAPH_PATH),
                 extractString(properties, GRAPH_FILE_PATTERN_KEY, GraphStore.DEFAULT_GRAPH_FILE_PATTERN)
         );
@@ -60,9 +60,9 @@ public class SetupStore {
         return sampleCount;
     }
 
-    private static final String WARMUP_RATIO = "warmup.ratio";
+    private static final String WARMUP_RATIO_KEY = "warmup.ratio";
     private static final String GRAPH_FILE_PATTERN_KEY = "graph.file.pattern";
     private static final String GRAPH_DIRECTORY_KEY = "graph.directory";
-    private static final String LAST_GRAPH_ID = "last.graph.id";
+    private static final String LAST_GRAPH_ID_KEY = "last.graph.id";
     private static final String FIRST_GRAPH_ID_KEY = "first.graph.id";
 }
