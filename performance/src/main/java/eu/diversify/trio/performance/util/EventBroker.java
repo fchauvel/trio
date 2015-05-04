@@ -15,15 +15,6 @@ import java.util.Properties;
  */
 public class EventBroker {
     
-    private static EventBroker singleInstance;
-    
-    public static EventBroker instance() {
-        if (singleInstance == null) {
-            singleInstance = new EventBroker();
-        }
-        return singleInstance;
-    }
-    
     private final Map<Integer, List<Listener>> listeners;
     
     public EventBroker() {

@@ -16,15 +16,21 @@ public class MicroBenchmark {
     private final int id;
     private final TaskStore store;
     private final Collection<Integer> tasks;
+    private final EventBroker events;
 
     public MicroBenchmark(TaskStore store, Collection<Integer> tasks) {
         this(DEFAULT_ID, store, tasks);
     }
 
     public MicroBenchmark(int id, TaskStore store, Collection<Integer> tasks) {
+        this(id, store, tasks, new EventBroker());
+    }
+
+    public MicroBenchmark(int id, TaskStore store, Collection<Integer> tasks, EventBroker events) {
         this.id = id;
         this.tasks = tasks;
         this.store = store;
+        this.events = events;
     }
 
     /**
@@ -38,11 +44,11 @@ public class MicroBenchmark {
         for (int eachId : tasks) {
             final Task task = store.fetch(eachId);
             final Properties performance = monitor(task);
-            EventBroker.instance().taskCompleted(id, allProperties(task, performance));
+            events.taskCompleted(id, aggregateProperties(task, performance));
         }
     }
 
-    private Properties allProperties(Task task, final Properties performance) {
+    private Properties aggregateProperties(Task task, final Properties performance) {
         final Properties properties = new Properties();
         properties.put(TOTAL_TASK_COUNT_KEY, tasks.size());
         properties.putAll(task.properties());

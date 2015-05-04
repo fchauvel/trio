@@ -30,36 +30,46 @@ public class Runner {
 
     private final Arguments arguments;
     private final UI ui;
+    private final EventBroker events;
 
     public Runner(Arguments arguments) {
         this.arguments = arguments;
         this.ui = new UI();
+        this.events = new EventBroker();
     }
 
     public void run() {
-        
+
         ui.showOpening();
 
         final Setup setup = loadSetupFile();
 
+        warmup(setup);
+
         final OutputStream outputFile = openOutputFile();
-        final CsvRecorder recorder = new CsvRecorder(outputFile);
-        
-        final MicroBenchmark warmup = setup.warmup();
-        EventBroker.instance().subscribe(warmup.id(), ui.warmupView()); 
-        warmup.run();
-        
-        final MicroBenchmark benchmark = setup.benchmark();
-        EventBroker.instance().subscribe(benchmark.id(), ui.benchmarkView()); 
-        EventBroker.instance().subscribe(benchmark.id(), recorder);
-        benchmark.run();
-        
+
+        benchmark(outputFile, setup);
+
         closeOutputFile(outputFile);
-        
+
         ui.showClosing();
     }
 
-   
+    private void benchmark(final OutputStream outputFile, final Setup setup) {
+        final MicroBenchmark benchmark = setup.benchmark(events);
+        events.subscribe(benchmark.id(), ui.benchmarkView());
+
+        final CsvRecorder recorder = new CsvRecorder(outputFile);
+        events.subscribe(benchmark.id(), recorder);
+        
+        benchmark.run();
+    }
+
+    private void warmup(final Setup setup) {
+        final MicroBenchmark warmup = setup.warmup(events);
+        events.subscribe(warmup.id(), ui.warmupView());
+        warmup.run();
+    }
 
     private Setup loadSetupFile() {
         final SetupStore store = new SetupStore();

@@ -2,6 +2,7 @@ package eu.diversify.trio.performance.setup;
 
 import eu.diversify.trio.performance.SimulationFactory;
 import eu.diversify.trio.performance.GraphStore;
+import eu.diversify.trio.performance.util.EventBroker;
 import eu.diversify.trio.performance.util.MicroBenchmark;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,12 @@ public class Setup {
         this.graphFilePattern = graphFilePattern;
     }
 
-    public MicroBenchmark benchmark() {
-        return new MicroBenchmark(BENCHMARK_ID, taskStore(), tasks());
+    public MicroBenchmark benchmark(EventBroker events) {
+        return new MicroBenchmark(BENCHMARK_ID, taskStore(), tasks(), events);
     }
 
-    public MicroBenchmark warmup() {
-        return new MicroBenchmark(WARMUP_ID, taskStore(), warmupTasks());
+    public MicroBenchmark warmup(EventBroker events) {
+        return new MicroBenchmark(WARMUP_ID, taskStore(), warmupTasks(), events);
     }
 
     private static final int BENCHMARK_ID = 1;
