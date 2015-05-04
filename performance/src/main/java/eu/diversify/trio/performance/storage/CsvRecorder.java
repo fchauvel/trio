@@ -1,5 +1,6 @@
-package eu.diversify.trio.performance.util;
+package eu.diversify.trio.performance.storage;
 
+import eu.diversify.trio.performance.util.Listener;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

@@ -1,6 +1,6 @@
-package eu.diversify.trio.unit.performance.util;
+package eu.diversify.trio.unit.performance.storage;
 
-import eu.diversify.trio.performance.util.CsvRecorder;
+import eu.diversify.trio.performance.storage.CsvRecorder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;

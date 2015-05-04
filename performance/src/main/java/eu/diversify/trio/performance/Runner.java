@@ -3,7 +3,7 @@ package eu.diversify.trio.performance;
 import eu.diversify.trio.performance.ui.UI;
 import eu.diversify.trio.performance.setup.Setup;
 import eu.diversify.trio.performance.setup.SetupStore;
-import eu.diversify.trio.performance.util.CsvRecorder;
+import eu.diversify.trio.performance.storage.CsvRecorder;
 import eu.diversify.trio.performance.util.EventBroker;
 import eu.diversify.trio.performance.util.MicroBenchmark;
 import java.io.FileInputStream;
