@@ -7,8 +7,6 @@ import eu.diversify.trio.performance.storage.CsvRecorder;
 import eu.diversify.trio.performance.util.EventBroker;
 import eu.diversify.trio.performance.util.MicroBenchmark;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
@@ -46,11 +44,11 @@ public class Runner {
 
         warmup(setup);
 
-        final OutputStream outputFile = openOutputFile();
+        final OutputStream outputFile = arguments.openOutputFile();
 
         benchmark(outputFile, setup);
 
-        closeOutputFile(outputFile);
+        arguments.closeOutputFile(outputFile);
 
         ui.showClosing();
     }
@@ -98,34 +96,6 @@ public class Runner {
             ui.info("Switching to the default setup");
         }
         return properties;
-    }
-
-    private OutputStream openOutputFile() throws IllegalArgumentException {
-        OutputStream outputFile = null;
-        try {
-            outputFile = new FileOutputStream(arguments.getOutputFile());
-
-        } catch (FileNotFoundException error) {
-            final String message
-                    = String.format("Unable to open output file '%s' (%s)",
-                            arguments.getOutputFile(),
-                            error.getMessage());
-            throw new IllegalArgumentException(message, error);
-        }
-        return outputFile;
-    }
-
-    private void closeOutputFile(final OutputStream outputFile) throws IllegalArgumentException {
-        try {
-            outputFile.close();
-
-        } catch (IOException error) {
-            String message
-                    = String.format("Unable to close the selected output '%s' (%s)",
-                            arguments.getOutputFile(),
-                            error.getMessage());
-            throw new IllegalArgumentException(message, error);
-        }
     }
 
 }
