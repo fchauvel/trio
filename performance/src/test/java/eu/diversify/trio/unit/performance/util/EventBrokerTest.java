@@ -1,5 +1,8 @@
-package eu.diversify.trio.performance.util;
+package eu.diversify.trio.unit.performance.util;
 
+import eu.diversify.trio.performance.util.EventBroker;
+import eu.diversify.trio.performance.util.Listener;
+import java.util.Properties;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -31,8 +34,10 @@ public class EventBrokerTest {
         EventBroker broker = new EventBroker();
 
         Listener listener = new Listener() {
+
             @Override
-            public void onCompletionOfTask(int taskId, int totalTaskCount) {
+            public void onTaskCompleted(Properties properties) {
+               
             }
         };
 
@@ -53,12 +58,12 @@ public class EventBrokerTest {
 
         mockery.checking(new Expectations() {
             {
-               never(listener1).onCompletionOfTask(1, 100);
-               exactly(1).of(listener2).onCompletionOfTask(1, 100);
+               never(listener1).onTaskCompleted(with(any(Properties.class)));
+               exactly(1).of(listener2).onTaskCompleted(with(any(Properties.class)));
             }
         });
 
-        broker.taskCompleted(1, 1, 100);
+        broker.taskCompleted(1, new Properties());
 
         mockery.assertIsSatisfied();
     }

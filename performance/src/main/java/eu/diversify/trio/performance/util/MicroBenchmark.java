@@ -1,18 +1,24 @@
 package eu.diversify.trio.performance.util;
 
 import java.util.Collection;
+import java.util.Properties;
 
 /**
- * Run a sequence of tasks and measure their duration. It send
+ * Run a sequence of tasks and measure their duration.
  */
 public class MicroBenchmark {
+
+    private static final int DEFAULT_ID = 0;
+
+    public static final String TOTAL_TASK_COUNT_KEY = "total task count";
+    public static final String DURATION_KEY = "duration";
 
     private final int id;
     private final TaskStore store;
     private final Collection<Integer> tasks;
 
     public MicroBenchmark(TaskStore store, Collection<Integer> tasks) {
-        this(0, store, tasks);
+        this(DEFAULT_ID, store, tasks);
     }
 
     public MicroBenchmark(int id, TaskStore store, Collection<Integer> tasks) {
@@ -21,29 +27,37 @@ public class MicroBenchmark {
         this.store = store;
     }
 
+    /**
+     * @return the unique identifier of this benchmark
+     */
     public int id() {
         return this.id;
     }
 
-    public void run(Recorder output) {
-        benchmark(output);
-    }
-
-    private void benchmark(Recorder output) {
+    public void run() {
         for (int eachId : tasks) {
-            Task task = store.fetch(eachId);
-            Observation performance = monitor(task);
-            output.record(task.id(), task, performance);
-            EventBroker.instance().taskCompleted(id, task.id(), tasks.size());
+            final Task task = store.fetch(eachId);
+            final Properties performance = monitor(task);
+            EventBroker.instance().taskCompleted(id, allProperties(task, performance));
         }
     }
 
-    private Observation monitor(Task task) {
+    private Properties allProperties(Task task, final Properties performance) {
+        final Properties properties = new Properties();
+        properties.put(TOTAL_TASK_COUNT_KEY, tasks.size());
+        properties.putAll(task.properties());
+        properties.putAll(performance);
+        return properties;
+    }
+
+    private Properties monitor(Task task) {
+        final Properties performances = new Properties();
         long start = System.nanoTime();
         task.execute();
         long end = System.nanoTime();
-        long duration = end - start;
-        return new Observation(duration);
+        performances.put(DURATION_KEY, end - start);
+
+        return performances;
     }
 
 }

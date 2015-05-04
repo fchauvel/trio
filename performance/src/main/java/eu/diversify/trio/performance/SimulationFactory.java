@@ -13,6 +13,7 @@ import eu.diversify.trio.simulation.RandomFailureSequence;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Build task that simulate assembly build after graphs from CSV file on disks.
@@ -44,19 +45,19 @@ public class SimulationFactory implements TaskStore {
     
     private static class SimulationTask implements Task {
 
-        private static final String ROBUSTNESS = "robustness";
+        private static final String ROBUSTNESS_KEY = "robustness";
 
         private final int id;
         private final Trio trio;
         private final Assembly assembly;
-        private final Map<String, Object> properties;
+        private final Properties properties;
         private DataSet result;
 
         public SimulationTask(int id, Trio trio, Assembly assembly) {
             this.id = id;
             this.trio = trio;
             this.assembly = assembly;
-            this.properties = new HashMap<>();
+            this.properties = new Properties();
         }
 
         @Override
@@ -65,12 +66,12 @@ public class SimulationFactory implements TaskStore {
         }
         
         @Override
-        public Map<String, Object> getProperties() {
+        public Properties properties() {
             properties.put("id", id);
 
             Analysis analysis = trio.analyse(result);
             double robustness = analysis.metric(RelativeRobustness.NAME).distribution().mean();
-            this.properties.put(ROBUSTNESS, robustness);
+            this.properties.put(ROBUSTNESS_KEY, robustness);
 
             return properties;
         }

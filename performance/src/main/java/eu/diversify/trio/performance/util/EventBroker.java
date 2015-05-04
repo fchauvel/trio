@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * A simple event broker that permits the UI to follow the progress of the benchmark
@@ -37,12 +38,12 @@ public class EventBroker {
         }
         ls.add(listener);
     }
-        
-    public void taskCompleted(int benchmarkId, int taskId, int totalTaskCount) {
+    
+    public void taskCompleted(int benchmarkId, Properties taskProperties) {
         final List<Listener> listeners = this.listeners.get(benchmarkId);
         if (listeners != null) {
            for (Listener eachListener: listeners) {
-                eachListener.onCompletionOfTask(taskId, totalTaskCount); 
+                eachListener.onTaskCompleted(taskProperties); 
             }
         }
     }

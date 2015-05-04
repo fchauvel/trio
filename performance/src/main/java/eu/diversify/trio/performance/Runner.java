@@ -1,5 +1,6 @@
 package eu.diversify.trio.performance;
 
+import eu.diversify.trio.performance.ui.UI;
 import eu.diversify.trio.performance.setup.Setup;
 import eu.diversify.trio.performance.setup.SetupStore;
 import eu.diversify.trio.performance.util.CsvRecorder;
@@ -43,14 +44,15 @@ public class Runner {
 
         final OutputStream outputFile = openOutputFile();
         final CsvRecorder recorder = new CsvRecorder(outputFile);
-
+        
         final MicroBenchmark warmup = setup.warmup();
         EventBroker.instance().subscribe(warmup.id(), ui.warmupView()); 
-        warmup.run(recorder);
+        warmup.run();
         
         final MicroBenchmark benchmark = setup.benchmark();
         EventBroker.instance().subscribe(benchmark.id(), ui.benchmarkView()); 
-        benchmark.run(recorder);
+        EventBroker.instance().subscribe(benchmark.id(), recorder);
+        benchmark.run();
         
         closeOutputFile(outputFile);
         

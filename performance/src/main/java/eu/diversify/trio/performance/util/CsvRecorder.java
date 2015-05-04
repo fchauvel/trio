@@ -5,12 +5,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.util.Map;
+import java.util.Properties;
 
 /**
- * Record benchmark data in a CSV format
+ * Record properties in a CSV format
  */
-public class CsvRecorder implements Recorder {
+public class CsvRecorder implements Listener {
 
     public static final String DEFAULT_FIELD_SEPARATOR = ",";
 
@@ -28,41 +28,45 @@ public class CsvRecorder implements Recorder {
         headerPrinted = false;
     }
 
-    @Override
-    public void record(int runIndex, Task task, Observation performance) {
+    public void record(Properties properties) {
         if (!headerPrinted) {
-            printHeaderLine(task, performance);
+            printHeader(properties);
         }
-        printProperties(runIndex, task, performance);
+        printValues(properties);
     }
 
-    private void printProperties(int runIndex, Task task, Observation performance) {
-        output.print(runIndex);
-        final Map<String, Object> taskProperties = task.getProperties();
-        for (String eachProperty : taskProperties.keySet()) {
-            output.print(fieldSeparator);
-            output.print(taskProperties.get(eachProperty));
-        }
-        final Map<String, Object> performanceProperties = performance.getProperties();
-        for (String eachProperty : performanceProperties.keySet()) {
-            output.print(fieldSeparator);
-            output.print(performanceProperties.get(eachProperty));
+    
+    private void printValues(Properties properties) {
+        int counter = 0;
+        for (Object eachKey : properties.keySet()) {
+            counter++;
+            output.print(properties.get(eachKey));
+            if (counter < properties.size()) {
+                output.print(fieldSeparator);
+            }
         }
         output.println();
     }
 
-    private void printHeaderLine(Task task, Observation performance) {
-        headerPrinted = true;
-        output.print("run");
-        for (String eachProperty : task.getProperties().keySet()) {
-            output.print(fieldSeparator);
-            output.print(eachProperty);
-        }
-        for (String eachProperty : performance.getProperties().keySet()) {
-            output.print(fieldSeparator);
-            output.print(eachProperty);
+    private void printHeader(Properties taskProperties) {
+        assert !headerPrinted : "Header already printed!";
+
+        int counter = 0;
+        for (Object eachKey : taskProperties.keySet()) {
+            counter++;
+            output.print(eachKey);
+            if (counter < taskProperties.size()) {
+                output.print(fieldSeparator);
+            }
         }
         output.println();
+
+        this.headerPrinted = true;
+    }
+
+    @Override
+    public void onTaskCompleted(Properties properties) {
+        record(properties);
     }
 
 }
