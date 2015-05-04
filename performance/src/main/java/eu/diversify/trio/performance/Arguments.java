@@ -1,6 +1,9 @@
-
 package eu.diversify.trio.performance;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +26,34 @@ public class Arguments {
     public Arguments(String setupFile, String outputFile) {
         this.setupFile = setupFile;
         this.outputFileName = outputFile;
+    }
+
+    public OutputStream openOutputFile() throws IllegalArgumentException {
+        OutputStream outputFile = null;
+        try {
+            outputFile = new FileOutputStream(outputFileName);
+
+        } catch (FileNotFoundException error) {
+            final String message
+                    = String.format("Unable to open output file '%s' (%s)",
+                            outputFileName,
+                            error.getMessage());
+            throw new IllegalArgumentException(message, error);
+        }
+        return outputFile;
+    }
+
+    public void closeOutputFile(final OutputStream outputFile) throws IllegalArgumentException {
+        try {
+            outputFile.close();
+
+        } catch (IOException error) {
+            String message
+                    = String.format("Unable to close the selected output '%s' (%s)",
+                            outputFileName,
+                            error.getMessage());
+            throw new IllegalArgumentException(message, error);
+        }
     }
 
     public String getOutputFile() {
