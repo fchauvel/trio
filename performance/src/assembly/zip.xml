@@ -19,7 +19,7 @@
             <directory>src/main/resources</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>regression.R</include>
+                <include>benchmark.R</include>
                 <include>setup.properties</include>
                 <include>logging.properties</include>
             </includes>
