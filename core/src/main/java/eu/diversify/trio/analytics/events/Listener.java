@@ -11,6 +11,6 @@ public interface Listener {
      * @param statistic some metadata describing the statistic being published
      * @param value the value being published
      */
-    void statisticReady(Statistic statistic, double value);
+    void statisticReady(Statistic statistic, Object value);
     
 }

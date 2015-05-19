@@ -7,7 +7,6 @@ import eu.diversify.trio.simulation.events.Channel;
 import eu.diversify.trio.simulation.events.Failure;
 import eu.diversify.trio.simulation.events.SequenceComplete;
 import eu.diversify.trio.simulation.events.SequenceInitiated;
-import eu.diversify.trio.unit.simulation.SimulatorTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,18 +49,18 @@ public class RobustnessTest {
      */
     private class Collector implements Listener {
 
-        private final Map<Statistic, Double> values;
+        private final Map<Statistic, Object> values;
 
         public Collector() {
-            values = new HashMap<Statistic, Double>();
+            values = new HashMap<Statistic, Object>();
         }
 
-        public void statisticReady(Statistic statistic, double value) {
+        public void statisticReady(Statistic statistic, Object value) {
             values.put(statistic, value);
         }
 
         public void assertEquals(int scenarioId, int sequenceId, String statistic, double expected) {
-            final Double robustness = values.get(new Statistic(scenarioId, sequenceId, statistic));
+            final Double robustness = (Double) values.get(new Statistic(scenarioId, sequenceId, statistic));
             assertThat(robustness, is(not(nullValue())));
             assertThat(robustness, equalTo(expected));
         }

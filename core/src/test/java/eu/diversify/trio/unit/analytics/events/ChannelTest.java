@@ -37,7 +37,7 @@ public class ChannelTest {
     private Selection toEverything() {
         return new Selection() {
 
-            public boolean isSatisfiedBy(Statistic statistic, double value) {
+            public boolean isSatisfiedBy(Statistic statistic, Object value) {
                 return true;
             }
 
@@ -66,7 +66,7 @@ public class ChannelTest {
     private Selection toNothing() {
         return new Selection() {
 
-            public boolean isSatisfiedBy(Statistic statistic, double value) {
+            public boolean isSatisfiedBy(Statistic statistic, Object value) {
                 return false;
             }
 
@@ -89,7 +89,7 @@ public class ChannelTest {
     private Listener dummyListener() {
         return new Listener() {
 
-            public void statisticReady(Statistic statistic, double value) {
+            public void statisticReady(Statistic statistic, Object value) {
                 // Does nothing
             }
             

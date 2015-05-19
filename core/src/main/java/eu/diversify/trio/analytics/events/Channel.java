@@ -14,7 +14,7 @@ public class Channel implements Listener, Publisher {
         subscriptions = new ArrayList<Subscription>();
     }
 
-    public void statisticReady(Statistic statistic, double value) {
+    public void statisticReady(Statistic statistic, Object value) {
         for (Subscription eachSubscription : subscriptions) {
             if (eachSubscription.includes(statistic, value)) {
                 eachSubscription.listener.statisticReady(statistic, value);
@@ -51,7 +51,7 @@ public class Channel implements Listener, Publisher {
             this.selection = selection;
         }
 
-        public boolean includes(Statistic statistic, double value) {
+        public boolean includes(Statistic statistic, Object value) {
             return selection.isSatisfiedBy(statistic, value);
         }
 
