@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Dispatch event to all the registered listeners
  */
-public class Channel {
+public class Channel implements Listener {
 
     private final List<Listener> listeners;
 
@@ -31,21 +31,33 @@ public class Channel {
         }
     }
 
-    /**
-     * Publish the given event to all the registered listeners.
-     *
-     * @param event the event to publish
-     */
-    public void publish(Event event) {
-        checkEvent(event);
-        for (Listener eachListener : listeners) {
-            event.sendTo(eachListener);
+    public void simulationInitiated(int simulationId) {
+        for (Listener eachListener: listeners) {
+            eachListener.simulationInitiated(simulationId);
         }
     }
 
-    private void checkEvent(Event event) throws NullPointerException {
-        if (event == null) {
-            throw new NullPointerException("Cannot publish simulation event ('null' found)");
+    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
+        for(Listener eachListener: listeners) {
+            eachListener.sequenceInitiated(simulationId, sequenceId, observed, controlled);
+        }
+    }
+
+    public void failure(int simulationId, int sequenceId, String failedComponent, List<String> impactedComponents) {
+        for(Listener eachListener: listeners) {
+            eachListener.failure(simulationId, sequenceId, failedComponent, impactedComponents);
+        }
+    }
+
+    public void sequenceComplete(int simulationId, int sequenceId) {
+        for(Listener eachListener: listeners) {
+            eachListener.sequenceComplete(simulationId, sequenceId);
+        }
+    }
+
+    public void simulationComplete(int simulationId) {
+        for(Listener eachListener: listeners) {
+            eachListener.simulationComplete(simulationId);
         }
     }
 

@@ -27,7 +27,7 @@ public class SensitivityRanking implements eu.diversify.trio.simulation.events.L
         this.rankings = new HashMap<Integer, Ranking>();
     }
 
-    public void sequenceInititated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
+    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
         if (rankings.containsKey(simulationId)) {
             final String description = String.format("Duplicated simulation ID %d", simulationId);
             throw new IllegalStateException(description);
@@ -47,6 +47,14 @@ public class SensitivityRanking implements eu.diversify.trio.simulation.events.L
     }
 
     public void sequenceComplete(int simulationId, int sequenceId) {
+        // Nothing to be done
+    }
+
+    public void simulationInitiated(int simulationId) {
+        // Nothing to be done
+    }
+
+    public void simulationComplete(int simulationId) {
         final Ranking ranking = rankings.get(simulationId);
         if (ranking == null) {
             final String description = String.format("Unknown simulation ID %d", simulationId);
@@ -56,8 +64,6 @@ public class SensitivityRanking implements eu.diversify.trio.simulation.events.L
         statistics.statisticReady(new Statistic(simulationId, -1, KEY_SENSITIVITY_RANKING), ranking.rank());
     }
 
-    
-    
     private static class Ranking {
 
         private final Map<String, Sensitivity> sensitivities;

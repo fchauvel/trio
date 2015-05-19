@@ -1,17 +1,19 @@
-package eu.diversify.trio.unit.analytics;
 
-import eu.diversify.trio.analytics.robustness.Robustness;
+package eu.diversify.trio.unit.analytics.threats;
+
+import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.analytics.robustness.FailureSequence;
+import eu.diversify.trio.analytics.threats.ThreatRanking;
 import eu.diversify.trio.simulation.events.Channel;
-
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -19,15 +21,20 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 
 /**
- * Specification of the robustness calculator
+ * Specification of the the threat ranking behavior
  */
-public class RobustnessTest {
-
+public class ThreatRankingTest {
+    
     @Test
-    public void shouldComputeTheRobustnessProperly() {
+    public void shouldRankThreatsProperly() {
         final Channel simulation = new Channel();
         final Collector results = new Collector();
-        final Robustness robustness = new Robustness(simulation, results);
+        
+        final eu.diversify.trio.analytics.events.Channel statistics = new eu.diversify.trio.analytics.events.Channel();
+        
+        final Robustness robustness = new Robustness(simulation, statistics);
+        
+        final ThreatRanking threats = new ThreatRanking(simulation, statistics, results);
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C", "D"));
@@ -38,13 +45,14 @@ public class RobustnessTest {
         simulation.sequenceComplete(1, 1);
         simulation.simulationComplete(1);
 
-        results.assertEquals(1, 1, 12, 1D);
-
+        results.verifyThreatOf(1, "[A, B, C, D]", 1, 0D);
+        
     }
 
+   
+    
     /**
-     * A dummy listener which collects the statistics that are published for
-     * later check
+     * A dummy listener which collects the statistics that are published for later check
      */
     private class Collector implements Listener {
 
@@ -58,13 +66,13 @@ public class RobustnessTest {
             values.put(statistic, value);
         }
 
-        public void assertEquals(int scenarioId, int sequenceId, int expected, double normalizedExpected) {
-            final FailureSequence sequence = (FailureSequence) values.get(new Statistic(scenarioId, sequenceId, Robustness.KEY_FAILURE_SEQUENCE));
-            assertThat(sequence, is(not(nullValue())));
-            assertThat(sequence.robustness(), equalTo(expected));
-            assertThat(sequence.normalizedRobustness(), equalTo(normalizedExpected));
+        public void verifyThreatOf(int scenarioId, String threat, int position, double expected) {
+            final List<Threat> threats = (List<Threat>) values.get(new Statistic(scenarioId, -1, ThreatRanking.KEY_THREAT_RANKING));
+            assertThat(threats, is(not(nullValue())));
+            assertThat(threats.get(position-1).failureSequence(), is(equalTo(threat)));
+            assertThat(threats.get(position-1).threatLevel(), is(closeTo(expected, 1e-9)));
         }
 
     }
-
+    
 }

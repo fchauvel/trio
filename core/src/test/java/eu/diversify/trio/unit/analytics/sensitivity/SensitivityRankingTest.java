@@ -5,9 +5,6 @@ import eu.diversify.trio.analytics.events.Listener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.simulation.events.Channel;
-import eu.diversify.trio.simulation.events.Failure;
-import eu.diversify.trio.simulation.events.SequenceComplete;
-import eu.diversify.trio.simulation.events.SequenceInitiated;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
@@ -31,11 +28,13 @@ public class SensitivityRankingTest {
         final Collector results = new Collector();
         final SensitivityRanking ranking = new SensitivityRanking(simulation, results); 
 
-        simulation.publish(new SequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C")));
-        simulation.publish(new Failure(1, 1, "A", new ArrayList<String>()));
-        simulation.publish(new Failure(1, 1, "B", asList("X")));
-        simulation.publish(new Failure(1, 1, "C", asList("Y", "Z")));
-        simulation.publish(new SequenceComplete(1, 1));
+        simulation.simulationInitiated(1);
+        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C"));
+        simulation.failure(1, 1, "A", new ArrayList<String>());
+        simulation.failure(1, 1, "B", asList("X"));
+        simulation.failure(1, 1, "C", asList("Y", "Z"));
+        simulation.sequenceComplete(1, 1);
+        simulation.simulationComplete(1);
 
         results.assertSensitivityOf(1, "C", 1, 2);
         results.assertSensitivityOf(1, "B", 2, 1);

@@ -8,6 +8,13 @@ import java.util.List;
 public interface Listener {
 
     /**
+     * Indicate that a new simulation has been initiated
+     *
+     * @param simulationId the ID of the newly initiated simulation
+     */
+    void simulationInitiated(int simulationId);
+
+    /**
      * Indicate that a new failure sequence is being simulated
      *
      * @param simulationId the unique ID of the simulation
@@ -17,7 +24,7 @@ public interface Listener {
      * @param controlled the unique names of components under observation in the
      * failure sequence
      */
-    void sequenceInititated(int simulationId, int sequenceId, List<String> observed, List<String> controlled);
+    void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled);
 
     /**
      * Indicate that the simulation of a single failure and the observed impact
@@ -39,4 +46,10 @@ public interface Listener {
      */
     void sequenceComplete(int simulationId, int sequenceId);
 
+    /**
+     * Indicate the complete of the simulation whose ID is given
+     *
+     * @param simulationId the ID of the simulation that just terminated
+     */
+    void simulationComplete(int simulationId);
 }
