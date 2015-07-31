@@ -21,14 +21,10 @@ package eu.diversify.trio.ui;
 import eu.diversify.trio.Configuration;
 import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.Trio;
-import eu.diversify.trio.analysis.Analysis;
-import eu.diversify.trio.analysis.Distribution;
-import eu.diversify.trio.analysis.Metric;
-import eu.diversify.trio.codecs.SyntaxError;
+import eu.diversify.trio.core.storage.SyntaxError;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.Inconsistency;
 import eu.diversify.trio.core.validation.InvalidSystemException;
-import eu.diversify.trio.simulation.data.DataSet;
 import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 import eu.diversify.trio.simulation.filter.TaggedAs;
@@ -37,7 +33,6 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The options which can be passed to trio
@@ -86,7 +81,7 @@ public class Command {
             } else if (parameter.startsWith("-")) {
                 parseShortOptions(command, parameter);
 
-            } else {
+            } else { 
                 final String error = String.format("Unknown argument '%s'. Expecting either a path to a TRIO file or an option.", parameter);
                 throw new IllegalArgumentException(error);
             }
@@ -167,18 +162,22 @@ public class Command {
             out.println("Licensed under " + config.license());
             out.println();
 
-            final Assembly system = trio.loadSystemFrom(inputFile);
+            final Assembly assembly = trio.loadSystemFrom(inputFile);
             
-            trio.validate(system);
+            trio.validate(assembly);
             
-            out.println("SYSTEM: " + system.getName());
-            final RandomFailureSequence scenario = new RandomFailureSequence(system, observation(), control());
+            out.println("ASSEMBLY: " + assembly.getName());
+            final RandomFailureSequence scenario = new RandomFailureSequence(1, assembly, observation(), control());
             out.println("SCENARIO: " + this.format(scenario));
 
-            final DataSet data = trio.run(scenario, runCount);
-            trio.saveDataAs(data, outputFile);
-
-            report(trio.analyse(data), out);
+            RobustnessView robustness = new RobustnessView(output, trio.analyses());
+            SensitivityRankingView sensitivity = new SensitivityRankingView(output, trio.analyses());
+            ThreatsRankingView threats = new ThreatsRankingView(output, trio.analyses());
+            
+            trio.run(scenario, runCount);
+            
+            trio.setTraceFile(outputFile);
+            
 
             out.println();
             out.println("That's all folks!");
@@ -225,49 +224,12 @@ public class Command {
         return new TaggedAs(tag);
     }
 
-    private void report(Analysis analyzer, PrintStream out) {
-        out.println("INDICATORS:");
-        out.printf(" + Robustness: %.4f%n", getRobustness(analyzer).distribution().mean());
-        out.println(" + Five most sensitive components:");
-        int counter = 1;
-        for (Map.Entry<String, Double> entry: getLoss(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {
-            out.printf("   %d: %.4e %s%n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
-            if (counter > 5) {
-                break;
-            }
-        }
-        reportHarmfulSequences(out, analyzer);
-    }
-
-    public void reportHarmfulSequences(PrintStream out, Analysis analyzer) {
-        out.println(" + Five most harmful sequences:");
-        int counter = 1;
-        for (Map.Entry<String, Double> entry: getFragility(analyzer).distribution().byDecreasingExpectedValue(Distribution.mean).entrySet()) {
-            out.printf("   %d: %.4e %s%n", counter++, entry.getValue(), entry.getKey().replaceAll("inactivate", ""));
-            if (counter > 5) {
-                break;
-            }
-        }
-    }
-
-    public static Metric getRobustness(Analysis analyzer) {
-        return analyzer.metric("norm. robustness");
-    }
-
-    public static Metric getFragility(Analysis analyzer) {
-        return analyzer.metric("fragility");
-    }
-
-    public static Metric getLoss(Analysis analyzer) {
-        return analyzer.metric("Loss");
-    }
-
     private String format(Scenario scenario) {
-        String observation = String.format("'%s' layer", scenario.getObservation().toString());
+        String observation = String.format("'%s' layer", scenario.observed().toString());
         if (observation.contains("*")) {
             observation = "system";
         }
-        String control = String.format("'%s' layer", scenario.getControl().toString());
+        String control = String.format("'%s' layer", scenario.controlled().toString());
         if (control.contains("*")) {
             control = "system";
         }

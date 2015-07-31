@@ -16,29 +16,29 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.simulation.data.Trace;
-import eu.diversify.trio.simulation.actions.AbstractAction;
+package eu.diversify.trio.core.storage;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Listen changes made on topologies
+ * Raised when some syntax errors are detected while building the system
  */
-public class Listener {
+public class SyntaxError extends Exception {
     
-    private final Trace trace;
+    private static final long serialVersionUID = 1L;
 
-    public Listener(Trace trace) {
-        this.trace = trace;
-    }
-    
-    public void inactivate(String component, Topology topology) {
-        trace.record(AbstractAction.inactivate(component), topology.countActiveAndObserved());
+    private final List<String> errors;
+
+    public SyntaxError(List<String> errors) {
+        this.errors = errors;
     }
 
-    
-    public void activate(String component, Topology topology) {
-        trace.record(AbstractAction.activate(component), topology.countActiveAndObserved());
+    public List<String> getErrors() {
+        return Collections.unmodifiableList(errors);
     }
-        
+    
+    
+    
 }

@@ -17,8 +17,8 @@
  */
 package eu.diversify.trio.unit.core.adapters;
 
-import eu.diversify.trio.codecs.Builder;
-import eu.diversify.trio.codecs.SyntaxError;
+import eu.diversify.trio.core.storage.Builder;
+import eu.diversify.trio.core.storage.SyntaxError;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.adapters.GraphAdapter;

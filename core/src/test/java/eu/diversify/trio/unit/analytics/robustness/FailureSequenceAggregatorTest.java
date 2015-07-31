@@ -1,6 +1,23 @@
-package eu.diversify.trio.unit.analytics;
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.diversify.trio.unit.analytics.robustness;
 
-import eu.diversify.trio.analytics.robustness.Robustness;
+import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.events.Listener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
@@ -21,24 +38,24 @@ import org.junit.Test;
 /**
  * Specification of the robustness calculator
  */
-public class RobustnessTest {
+public class FailureSequenceAggregatorTest {
 
     @Test
     public void shouldComputeTheRobustnessProperly() {
         final Channel simulation = new Channel();
         final Collector results = new Collector();
-        final Robustness robustness = new Robustness(simulation, results);
+        final FailureSequenceAggregator robustness = new FailureSequenceAggregator(simulation, results);
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C", "D"));
-        simulation.failure(1, 1, "A", new ArrayList<String>());
-        simulation.failure(1, 1, "B", new ArrayList<String>());
-        simulation.failure(1, 1, "C", new ArrayList<String>());
-        simulation.failure(1, 1, "D", new ArrayList<String>());
+        simulation.failure(1, 1, "A", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, "B", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, "C", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, "D", asList("X", "Y", "Z"));
         simulation.sequenceComplete(1, 1);
         simulation.simulationComplete(1);
 
-        results.assertEquals(1, 1, 12, 1D);
+        results.assertEquals(1, 1, 15, 1D);
 
     }
 
@@ -59,7 +76,7 @@ public class RobustnessTest {
         }
 
         public void assertEquals(int scenarioId, int sequenceId, int expected, double normalizedExpected) {
-            final FailureSequence sequence = (FailureSequence) values.get(new Statistic(scenarioId, sequenceId, Robustness.KEY_FAILURE_SEQUENCE));
+            final FailureSequence sequence = (FailureSequence) values.get(new Statistic(scenarioId, sequenceId, FailureSequenceAggregator.KEY_FAILURE_SEQUENCE));
             assertThat(sequence, is(not(nullValue())));
             assertThat(sequence.robustness(), equalTo(expected));
             assertThat(sequence.normalizedRobustness(), equalTo(normalizedExpected));

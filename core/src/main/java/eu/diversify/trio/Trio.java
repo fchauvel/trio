@@ -34,33 +34,53 @@
  */
 package eu.diversify.trio;
 
+import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
+import eu.diversify.trio.analytics.robustness.RobustnessAggregator;
+import eu.diversify.trio.analytics.sensitivity.SensitivityRanking;
+import eu.diversify.trio.analytics.threats.ThreatRanking;
 import eu.diversify.trio.simulation.Scenario;
-import eu.diversify.trio.analysis.Analysis;
-import eu.diversify.trio.analysis.Threat;
-import eu.diversify.trio.analysis.Length;
-import eu.diversify.trio.analysis.Loss;
-import eu.diversify.trio.analysis.Probability;
-import eu.diversify.trio.analysis.RelativeRobustness;
-import eu.diversify.trio.analysis.Robustness;
-import eu.diversify.trio.codecs.SyntaxError;
+
+import eu.diversify.trio.core.storage.SyntaxError;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.core.validation.Validator;
-import eu.diversify.trio.simulation.data.CSVFormatter;
-import eu.diversify.trio.simulation.data.DataSet;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
-import static eu.diversify.trio.codecs.Builder.build;
+import static eu.diversify.trio.core.storage.Builder.build;
 import static eu.diversify.trio.core.Evaluation.evaluate;
+import eu.diversify.trio.simulation.events.Channel;
 
 /**
  * The Trio application
  */
 public class Trio {
+
+    private final Channel simulation;
+    private final eu.diversify.trio.analytics.events.Channel analytics;
+    private ThreatRanking threatRanking;
+    private SensitivityRanking sensitivityRanking;
+    private FailureSequenceAggregator failureSequences;
+    private RobustnessAggregator robustness;
+
+public Trio() {
+        this(new Channel(), new eu.diversify.trio.analytics.events.Channel());
+    }
+
+    public Trio(Channel simulation, eu.diversify.trio.analytics.events.Channel analytics) {
+        this.simulation = simulation;
+        this.analytics = analytics;
+        this.failureSequences = new FailureSequenceAggregator(simulation, analytics);
+        this.robustness = new RobustnessAggregator(simulation, analytics, analytics);
+        this.sensitivityRanking = new SensitivityRanking(simulation, analytics);
+        this.threatRanking = new ThreatRanking(simulation, analytics, analytics);
+    }
+    
+    
+    public eu.diversify.trio.analytics.events.Channel analyses() {
+        return analytics;
+    }
 
     public Assembly loadSystemFrom(String path) throws FileNotFoundException, IOException, SyntaxError {
 
@@ -97,56 +117,20 @@ public class Trio {
         validity.check();
     }
 
-    public DataSet run(Scenario scenario, int runCount) {
-        final DataSet dataCollector = new DataSet();
+    public void run(Scenario scenario, int runCount) {
+        simulation.simulationInitiated(scenario.id());
         for (int i = 0; i < runCount; i++) {
-            scenario.run(dataCollector);
+            scenario.run(simulation);
         }
-        return dataCollector;
+        simulation.simulationComplete(scenario.id());
     }
 
-    public DataSet run(Scenario scenario) {
-        final DataSet dataCollector = new DataSet();
-        scenario.run(dataCollector);
-        return dataCollector;
+    public void run(Scenario scenario) {
+        run(scenario, 1);
     }
 
-    public Analysis analyse(DataSet data) {
-        final Analysis analysis = buildAnalysis();
-        data.accept(analysis);
-        return analysis;
-    }
-
-    public void saveDataAs(final DataSet data, String outputFile) {
-        OutputStream output = null;
-        try {
-            output = new FileOutputStream(outputFile);
-            CSVFormatter formatter = new CSVFormatter(output);
-            data.accept(formatter);
-
-        } catch (FileNotFoundException ex) {
-            throw new RuntimeException(ex);
-
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-    }
-
-    private Analysis buildAnalysis() {
-        final Robustness robustness = new Robustness();
-        final RelativeRobustness rRobustness = new RelativeRobustness(robustness);
-        final Probability probability = new Probability();
-        final Length length = new Length();
-        final Loss loss = new Loss();
-        final Threat fragility = new Threat(rRobustness, probability);
-        return new Analysis(robustness, rRobustness, length, loss, probability, fragility);
+    public void setTraceFile(String outputFile) {
+        // TODO: useless method, to be remove (but break a lot of test)
     }
 
 }

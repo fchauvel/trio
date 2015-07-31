@@ -19,7 +19,7 @@ package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.AssemblyPart;
 import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -52,7 +52,7 @@ public class Require extends Requirement {
         return new ArrayList<AssemblyPart>(0);
     }
 
-    public boolean isSatisfiedBy(Topology topology) {
+    public boolean isSatisfiedBy(AssemblyState topology) {
         return topology.isActive(requiredComponent);
     }
 

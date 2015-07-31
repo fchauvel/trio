@@ -34,7 +34,7 @@
  */
 package eu.diversify.trio.simulation.actions;
 
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 
 /**
  * The 'do nothing' action
@@ -57,7 +57,7 @@ public class None extends AbstractAction {
     }
 
     @Override
-    public Topology executeOn(Topology topology) {
+    public AssemblyState executeOn(AssemblyState topology) {
         return topology;
     }
 

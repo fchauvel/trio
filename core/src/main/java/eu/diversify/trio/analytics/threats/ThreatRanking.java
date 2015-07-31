@@ -1,6 +1,23 @@
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.analytics.threats;
 
-import eu.diversify.trio.analytics.robustness.Robustness;
+import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.analytics.events.Listener;
 import eu.diversify.trio.analytics.events.Publisher;
@@ -30,7 +47,7 @@ public class ThreatRanking implements Listener, eu.diversify.trio.simulation.eve
         this.rankings = new HashMap<Integer, Ranking>();
     }
 
-    private final List<String> interests = asList(Robustness.KEY_FAILURE_SEQUENCE);
+    private final List<String> interests = asList(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
 
     private Selection onlyRobustness() {
         return new Selection() {
@@ -42,7 +59,7 @@ public class ThreatRanking implements Listener, eu.diversify.trio.simulation.eve
     }
 
     public void statisticReady(Statistic statistic, Object value) {
-        if (statistic.getName().equals(Robustness.KEY_FAILURE_SEQUENCE)) {
+        if (statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE)) {
             final Ranking ranking = rankings.get(statistic.getScenarioId());
             if (ranking == null) {
                 final String description = String.format("Invalid scenario ID %d", statistic.getScenarioId());
@@ -111,7 +128,7 @@ public class ThreatRanking implements Listener, eu.diversify.trio.simulation.eve
         public List<Threat> rank() {
             final List<Threat> results = new ArrayList<Threat>(threats.values());
             for(Threat eachThreat: results) {
-                eachThreat.setTotal(results.size());
+                eachThreat.setTotal(sequenceCount);
             }
             Collections.sort(results);
             return results;

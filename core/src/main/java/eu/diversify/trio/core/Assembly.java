@@ -18,11 +18,6 @@
 
 package eu.diversify.trio.core;
 
-import eu.diversify.trio.simulation.data.DataSet;
-import eu.diversify.trio.simulation.Listener;
-import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.simulation.data.Trace;
-import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.util.Require;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,16 +154,6 @@ public class Assembly implements AssemblyPart {
 
     public Component getComponent(int index) {
         return components.get(index);
-    }
-
-    public Topology instantiate() {
-        return new Topology(this);
-    }
-
-    public Topology instantiate(DataSet report) {
-        final Trace trace = new Trace(size());
-        report.include(trace);
-        return new Topology(this, All.getInstance(), All.getInstance(), new Listener(trace));
     }
 
     public Component requirementOf(String componentName) {

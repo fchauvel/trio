@@ -17,7 +17,7 @@
  */
 
 
-package eu.diversify.trio.codecs;
+package eu.diversify.trio.core.storage;
 
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.Assembly;

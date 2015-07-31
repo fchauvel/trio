@@ -17,7 +17,7 @@
  */
 package eu.diversify.trio.unit.simulation;
 
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
 
@@ -37,58 +37,43 @@ import static org.hamcrest.Matchers.*;
 @RunWith(JUnit4.class)
 public class TopologyTest extends TestCase {
 
-    @Test
-    public void shouldProvideTheNumberOfSurvivors() {
-        final Assembly system = new Assembly(new Component("A"), new Component("B"));
-        final Topology sut = system.instantiate();
-
-        assertThat("active count", sut.countActiveAndObserved(), is(equalTo(2)));
-    }
+  
 
     @Test
     public void capacityShouldRemainConstantRegardlessOfAction() {
         final Assembly system = new Assembly(new Component("Foo"), new Component("Bar"));
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
 
         sut.inactivate("Foo");
 
         assertThat("Survivor count", sut.getCapacity(), is(equalTo(2)));
     }
 
-    @Test
-    public void shouldSupportDisablingSpecificComponent() {
-        final Assembly system = new Assembly(new Component("Foo"), new Component("Bar"));
-        final Topology sut = system.instantiate();
-        sut.inactivate("Foo");
-
-        assertThat("Survivor count", sut.countActiveAndObserved(), is(equalTo(1)));
-
-    }
-
+  
     @Test
     public void shouldSupportEnablingSpecificComponent() {
         final Assembly system = new Assembly(new Component("Foo"), new Component("Bar"));
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
         sut.inactivate("Foo");
         sut.activate("Foo");
 
-        assertThat("Survivor count", sut.countActiveAndObserved(), is(equalTo(2)));
+        assertThat("Survivor count", sut.activeComponents().size(), is(equalTo(2)));
     }
 
     @Test
     public void shouldSupportDetectingExistenceOfActiveComponents() {
         final Assembly system = new Assembly(new Component("Foo"), new Component("Bar"));
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
 
-        assertThat("should have active components", sut.hasActiveAndObservedComponents());
+        assertThat("should have active components", sut.hasActiveComponents());
     }
 
     @Test
     public void shouldSupportSelectingActiveComponents() {
         final Assembly system = new Assembly(new Component("Foo"), new Component("Bar"));
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
 
-        assertThat("should have active components", sut.activeAndObservedComponents(), contains("Foo", "Bar"));
+        assertThat("should have active components", sut.activeComponents(), contains("Foo", "Bar"));
     }
 
     @Test
@@ -98,7 +83,7 @@ public class TopologyTest extends TestCase {
                 new Component("B"),
                 new Component("C"));
 
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
         sut.inactivate("B");
 
         assertThat("A should be active", sut.isActive("A"));
@@ -111,7 +96,7 @@ public class TopologyTest extends TestCase {
                 new Component("B"),
                 new Component("C"));
 
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
         sut.inactivate("B");
         sut.inactivate("C");
 
@@ -125,7 +110,7 @@ public class TopologyTest extends TestCase {
                 new Component("B"),
                 new Component("C"));
 
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
         sut.inactivate("C");
 
         assertThat("A should not be active", !sut.isActive("A"));
@@ -138,7 +123,7 @@ public class TopologyTest extends TestCase {
                 new Component("B"),
                 new Component("C"));
 
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
         sut.inactivate("C");
         sut.inactivate("B");
 
@@ -152,7 +137,7 @@ public class TopologyTest extends TestCase {
                 new Component("B", require("C")),
                 new Component("C"));
 
-        final Topology sut = system.instantiate();
+        final AssemblyState sut = new AssemblyState(system);
         sut.inactivate("C");
 
         assertThat("A should not be active", !sut.isActive("A"));

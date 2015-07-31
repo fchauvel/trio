@@ -35,7 +35,7 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.AssemblyPart;
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 
 /**
  * Logical expression representing the components whose activity (or inactivity)
@@ -59,7 +59,7 @@ public abstract class Requirement implements AssemblyPart {
         return or(right).and(right.not());
     }
      
-    public abstract boolean isSatisfiedBy(Topology topology);
+    public abstract boolean isSatisfiedBy(AssemblyState topology);
    
     @Override
     public abstract String toString();

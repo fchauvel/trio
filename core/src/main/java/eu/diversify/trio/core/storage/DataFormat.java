@@ -15,33 +15,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
-package eu.diversify.trio.unit.analysis;
 
-import eu.diversify.trio.analysis.Distribution;
-import junit.framework.TestCase;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+package eu.diversify.trio.core.storage;
 
 /**
- *
+ * Behaviour of any data format
  */
-@RunWith(JUnit4.class)
-public class DistributionTest extends TestCase {
+public interface DataFormat {
 
-    @Test
-    public void probabilityOf() {
-        Distribution distribution = new Distribution();
-        distribution.record("s1", 6);
-        distribution.record("s2", 5);
-        distribution.record("s1", 4);
-
-        assertThat(distribution.probabilityOf("s1"), is(closeTo(2D / 3, 1e-6)));
-    }
-
+    String convert(int sequenceIndex, String toString, int disruption, int activity, int loss);
+    
 }

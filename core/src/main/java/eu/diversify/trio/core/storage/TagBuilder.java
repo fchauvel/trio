@@ -15,35 +15,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ */
 
+package eu.diversify.trio.core.storage;
 
-package eu.diversify.trio.analysis;
-
-import eu.diversify.trio.simulation.data.Trace;
+import eu.diversify.trio.core.Tag;
+import eu.diversify.trio.builder.TrioBaseVisitor;
+import eu.diversify.trio.builder.TrioParser;
+import java.util.ArrayList;
+import java.util.List;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Compute statistics about the length of sequences
+ * Traverse the AST and build the tag associated with the system
  */
-public class Length extends Metric {
-    
-    public Length() {
-        super(NAME, "# actions");
-    }
-    public static final String NAME = "Length";
+public class TagBuilder extends TrioBaseVisitor<Tag> {
 
     @Override
-    protected void byDefault() throws UnsupportedOperationException {
+    public Tag visitTag(TrioParser.TagContext ctx) {
+        final List<String> targets = new ArrayList<String>();
+        for (TerminalNode eachTarget: ctx.ID()) {
+            targets.add(eachTarget.getText());
+        }
+        return new Tag(ctx.STRING().getText().replaceAll("[\'\"]", ""), targets);
     }
 
-    @Override
-    public void exitTrace(Trace trace) {
-        distribution().record(trace.label(), trace.length()); 
-    }
-
-   
-
-    
-    
     
     
 }

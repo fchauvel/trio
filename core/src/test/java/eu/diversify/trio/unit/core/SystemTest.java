@@ -34,12 +34,10 @@
  */
 package eu.diversify.trio.unit.core;
 
-import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.Tag;
-import eu.diversify.trio.core.requirements.Require;
 
 import static eu.diversify.trio.core.requirements.Factory.*;
 
@@ -127,19 +125,7 @@ public class SystemTest extends TestCase {
         assertThat(system.indexOf("B"), is(equalTo(1)));
     }
 
-    @Test
-    public void shouldInstantiateNewTopology() {
-        final Assembly system = new Assembly(
-                new Component("Foo", new Require("Bar")),
-                new Component("Bar")
-        );
-
-        final Topology topology = system.instantiate();
-
-        assertThat("", topology.isActive("Foo"));
-        assertThat("", topology.isActive("Bar"));
-    }
-
+  
     @Test
     public void beginShouldTriggerEnterOnTheVisitor() {
         final Mockery context = new JUnit4Mockery();

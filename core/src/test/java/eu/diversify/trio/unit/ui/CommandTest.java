@@ -15,17 +15,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.unit.ui;
 
 import eu.diversify.trio.simulation.Scenario;
 import eu.diversify.trio.Trio;
-import eu.diversify.trio.analysis.Analysis;
-import eu.diversify.trio.analysis.Threat;
-import eu.diversify.trio.analysis.Loss;
-import eu.diversify.trio.analysis.Probability;
-import eu.diversify.trio.analysis.RelativeRobustness;
-import eu.diversify.trio.analysis.Robustness;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.simulation.data.DataSet;
 import eu.diversify.trio.simulation.data.Trace;
@@ -237,21 +247,9 @@ public class CommandTest extends TestCase {
         public String control;
 
         @Override
-        public void saveDataAs(DataSet data, String outputFile) {
-            this.traceFile = outputFile;
-        }
-
-        @Override
-        public Analysis analyse(DataSet data) {
-            final RelativeRobustness relativeRobustness = new RelativeRobustness(new Robustness());
-            final Probability probability = new Probability();
-            return new Analysis(new Loss(), relativeRobustness, new Threat(relativeRobustness, probability));
-        }
-
-        @Override
-        public DataSet run(Scenario scenario, int runCount) {
-            this.observation = scenario.getObservation().toString();
-            this.control = scenario.getControl().toString();
+        public void run(Scenario scenario, int runCount) {
+            this.observation = scenario.observed().toString();
+            this.control = scenario.controlled().toString();
             this.runCount = runCount;
             final DataSet dataSet = new DataSet();
             final Trace trace = new Trace(10);
@@ -259,14 +257,20 @@ public class CommandTest extends TestCase {
             trace.record(AbstractAction.inactivate("Y"), 3);
             trace.record(AbstractAction.inactivate("Z"), 0);
             dataSet.include(trace);
-            return dataSet;
         }
 
         @Override
         public eu.diversify.trio.core.Assembly loadSystemFrom(String path) throws FileNotFoundException, IOException {
             this.inputFile = path;
-            return new eu.diversify.trio.core.Assembly(new Component("A")); 
+            return new eu.diversify.trio.core.Assembly(new Component("A"));
         }
+
+        @Override
+        public void setTraceFile(String outputFile) {
+            this.traceFile = outputFile;
+        }
+        
+        
 
     }
 
@@ -275,7 +279,6 @@ public class CommandTest extends TestCase {
         @Override
         public void write(int b) throws IOException {
         }
-        
-        
+
     }
 }

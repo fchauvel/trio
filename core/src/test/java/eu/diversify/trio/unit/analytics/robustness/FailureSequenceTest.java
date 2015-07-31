@@ -15,39 +15,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- */
+package eu.diversify.trio.unit.analytics.robustness;
 
-package eu.diversify.trio.unit.analysis;
-
-import eu.diversify.trio.analysis.Loss;
-import eu.diversify.trio.simulation.data.Trace;
-import junit.framework.TestCase;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
-import static eu.diversify.trio.simulation.actions.AbstractAction.inactivate;
+import eu.diversify.trio.analytics.robustness.FailureSequence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
+import org.junit.Test;
 
 /**
- *
+ * Failure Sequence test
  */
-@RunWith(JUnit4.class)
-public class LossTest extends TestCase {
+public class FailureSequenceTest {
 
-     @Test
-    public void aConstantLossesShouldHaveAMeanEqualToTheirValue() {
-        Trace trace = new Trace(6);
-        trace.record(inactivate("A"), 4);
-        trace.record(inactivate("B"), 0);
+    @Test
+    public void noImpactShouldLeadToARobustnessOfOne() {
+        FailureSequence sequence = new FailureSequence(1, 5, 5);
+        sequence.record("A", 5);
+        sequence.record("B", 5);
+        sequence.record("C", 5);
+        sequence.record("D", 5);
+        sequence.record("E", 5);
         
-        final Loss loss = new Loss();
-        trace.accept(loss);
-                
-        assertThat(loss.distribution().mean(), is(closeTo(2D, 1e-6)));
+        assertThat(sequence.normalizedRobustness(), is(closeTo(1D, 1e-6)));
     }
+    
+    @Test
+    public void fullImpactShouldLeadToARobustnessOfZero() {
+        FailureSequence sequence = new FailureSequence(1, 5, 5);
+        sequence.record("A", 0);
+        
+        assertThat(sequence.normalizedRobustness(), is(closeTo(0D, 1e-6)));
+    }
+    
     
 }

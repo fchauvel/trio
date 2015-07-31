@@ -1,9 +1,26 @@
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package eu.diversify.trio.unit.analytics.threats;
 
 import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.analytics.events.Listener;
-import eu.diversify.trio.analytics.robustness.Robustness;
+import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.threats.ThreatRanking;
 import eu.diversify.trio.simulation.events.Channel;
@@ -32,16 +49,16 @@ public class ThreatRankingTest {
         
         final eu.diversify.trio.analytics.events.Channel statistics = new eu.diversify.trio.analytics.events.Channel();
         
-        final Robustness robustness = new Robustness(simulation, statistics);
+        final FailureSequenceAggregator robustness = new FailureSequenceAggregator(simulation, statistics);
         
         final ThreatRanking threats = new ThreatRanking(simulation, statistics, results);
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C", "D"));
-        simulation.failure(1, 1, "A", new ArrayList<String>());
-        simulation.failure(1, 1, "B", new ArrayList<String>());
-        simulation.failure(1, 1, "C", new ArrayList<String>());
-        simulation.failure(1, 1, "D", new ArrayList<String>());
+        simulation.failure(1, 1, "A", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, "B", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, "C", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, "D", asList("X", "Y", "Z"));
         simulation.sequenceComplete(1, 1);
         simulation.simulationComplete(1);
 

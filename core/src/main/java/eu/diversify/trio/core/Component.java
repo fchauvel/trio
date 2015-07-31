@@ -35,7 +35,7 @@
 package eu.diversify.trio.core;
 
 import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.util.Require;
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class Component implements AssemblyPart {
         return requirement;
     }
 
-    public boolean isSatisfiedIn(Topology topology) {
+    public boolean isSatisfiedIn(AssemblyState topology) {
         return requirement.isSatisfiedBy(topology);
     }
 

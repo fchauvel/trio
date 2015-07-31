@@ -1,3 +1,20 @@
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TRIO is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.analytics.sensitivity;
 
 import eu.diversify.trio.analytics.events.Listener;
@@ -28,19 +45,13 @@ public class SensitivityRanking implements eu.diversify.trio.simulation.events.L
     }
 
     public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
-        if (rankings.containsKey(simulationId)) {
-            final String description = String.format("Duplicated simulation ID %d", simulationId);
-            throw new IllegalStateException(description);
-        }
-
-        final Ranking newRanking = new Ranking();
-        rankings.put(simulationId, newRanking);
+       // Nothing to be done
     }
 
     public void failure(int simulationId, int sequenceId, String failedComponent, List<String> impactedComponents) {
         final Ranking ranking = rankings.get(simulationId);
         if (ranking == null) {
-            final String description = String.format("Unknown simulation ID %d.", simulationId);
+            final String description = String.format("Unknown simulation ID %d", simulationId);
             throw new IllegalStateException(description);
         }
         ranking.accountFor(failedComponent, impactedComponents.size());
@@ -51,7 +62,13 @@ public class SensitivityRanking implements eu.diversify.trio.simulation.events.L
     }
 
     public void simulationInitiated(int simulationId) {
-        // Nothing to be done
+        if (rankings.containsKey(simulationId)) {
+            final String description = String.format("Duplicated simulation ID %d", simulationId);
+            throw new IllegalStateException(description);
+        }
+
+        final Ranking newRanking = new Ranking();
+        rankings.put(simulationId, newRanking);
     }
 
     public void simulationComplete(int simulationId) {

@@ -16,7 +16,7 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.unit.codecs;
+package eu.diversify.trio.unit.core.codecs;
 
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Requirement;
@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static eu.diversify.trio.codecs.Builder.*;
+import static eu.diversify.trio.core.storage.Builder.*;
 import static eu.diversify.trio.core.requirements.Factory.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;

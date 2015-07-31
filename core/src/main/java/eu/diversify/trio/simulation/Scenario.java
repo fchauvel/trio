@@ -15,13 +15,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.simulation.data.DataSet;
-import eu.diversify.trio.simulation.data.Trace;
+import eu.diversify.trio.simulation.events.Listener;
 import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 
@@ -30,45 +44,55 @@ import eu.diversify.trio.simulation.filter.Filter;
  */
 public abstract class Scenario {
 
-    private final Assembly system;
+    private final int scenarioId;
+    private final Assembly assembly;
     private final Filter observation;
     private final Filter control;
+    private int sequenceId;
 
-    public Scenario(Assembly system) {
-        this(system, All.getInstance(), All.getInstance());
+    public Scenario(int id, Assembly system) {
+        this(id, system, All.getInstance(), All.getInstance());
     }
 
-    public Filter getObservation() {
+    public Scenario(int id, Assembly assembly, Filter observation, Filter control) {
+        this.scenarioId = id;
+        this.assembly = assembly;
+        this.observation = observation;
+        this.control = control;
+        this.sequenceId = 0;
+    }
+
+    public int id() {
+        return this.scenarioId;
+    }
+
+    public Filter observed() {
         return observation;
     }
 
-    public Filter getControl() {
+    public Filter controlled() {
         return control;
     }
 
-    public Scenario(Assembly system, Filter observation, Filter control) {
-        this.system = system;
-        this.observation = observation;
-        this.control = control;
-    }
-    
-
-    public final Topology instantiate(DataSet report) {
-        final Trace trace = new Trace(observation.resolve(system).size(), control.resolve(system).size());
-        report.include(trace);
-        return new Topology(system, observation, control, new Listener(trace));
+    public Assembly assembly() {
+        return assembly;
     }
 
-    public final Topology run() {
-        return run(new DataSet());
+    protected int sequenceId() {
+        return sequenceId;
     }
-    
+
+    protected void nextSequence() {
+        sequenceId++;
+    }
+
     /**
-     * Run this scenario and perform
+     * Run this scenario while publishing events to the given listener
      *
-     * @param collector the dataset where the data must be collected
-     * @return the resulting topology
+     * @param listener the listener which will be notified of progress of the
+     * this scenario
+     * @return the topology at the end of the scenario
      */
-    public abstract Topology run(DataSet collector);
+    public abstract Topology run(Listener listener);
 
 }

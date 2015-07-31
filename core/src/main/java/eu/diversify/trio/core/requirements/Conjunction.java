@@ -35,7 +35,7 @@
 package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import java.util.List;
 
 /**
@@ -59,7 +59,7 @@ public final class Conjunction extends BinaryOperator {
         visitor.exit(this);
     }
 
-    public boolean isSatisfiedBy(Topology topology) {
+    public boolean isSatisfiedBy(AssemblyState topology) {
         for (Requirement anyOperand : getOperands()) {
             if (!anyOperand.isSatisfiedBy(topology)) {
                 return false;

@@ -20,7 +20,7 @@ package eu.diversify.trio.core.requirements;
 import eu.diversify.trio.util.Require;
 import eu.diversify.trio.core.AssemblyPart;
 import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,7 +56,7 @@ public final class Negation extends Requirement {
         return operand;
     }
 
-    public boolean isSatisfiedBy(Topology topology) {
+    public boolean isSatisfiedBy(AssemblyState topology) {
         return !operand.isSatisfiedBy(topology);
     }
 

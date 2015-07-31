@@ -36,7 +36,7 @@ package eu.diversify.trio.core.requirements;
 
 import eu.diversify.trio.core.AssemblyPart;
 import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -70,7 +70,7 @@ public class Nothing extends Requirement {
         return new ArrayList<AssemblyPart>(0);
     }
 
-    public boolean isSatisfiedBy(Topology population) {
+    public boolean isSatisfiedBy(AssemblyState population) {
         return true;
     }
 

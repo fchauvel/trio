@@ -15,16 +15,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.unit.core;
+package eu.diversify.trio.unit.core; 
 
-import eu.diversify.trio.simulation.Topology;
+import eu.diversify.trio.simulation.AssemblyState;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.Component;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.requirements.Nothing;
 import eu.diversify.trio.core.requirements.Require;
 
-import static eu.diversify.trio.core.requirements.Factory.*;
 
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -32,19 +31,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 
 @RunWith(JUnit4.class)
 public class RequirementsTest extends TestCase {
 
-    private Topology sampleTopologyWithAAndB() {
+    private AssemblyState sampleTopologyWithAAndB() {
         final Assembly system = new Assembly(new Component("A"), new Component("B"));
-        return system.instantiate();
+        return new AssemblyState(system);
     }
 
     @Test
     public void shouldDetectSurivor() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         final Require req = new Require("A");
 
         assertThat("should be alive", req.isSatisfiedBy(p));
@@ -52,7 +50,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void shouldDetectSingleDeadComponent() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         p.inactivate("A");
 
         final Require req = new Require("A");
@@ -62,7 +60,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void shouldDetectConjunctionOfSurvivors() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
 
         final Requirement req = new Require("A").and(new Require("B"));
 
@@ -71,7 +69,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void conjunctionShouldNotBeSatisifiedWhenOneEndIsMissing() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         p.inactivate("A");
 
         final Requirement req = new Require("A").and(new Require("B"));
@@ -81,7 +79,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void conjunctionShouldNotBeSatisifiedWhenBothEndsAreMissing() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         p.inactivate("A");
         p.inactivate("B");
 
@@ -92,7 +90,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void disjunctionShouldBeSatisifiedWhenOneEndIsMissing() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         p.inactivate("A");
 
         final Requirement req = new Require("A").or(new Require("B"));
@@ -102,7 +100,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void disjunctionShouldNotBeSatisifiedWhenOneEndIsMissing() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         p.inactivate("A");
         p.inactivate("B");
 
@@ -113,7 +111,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void negationShouldBeSatisfiedWhenOperandIsMissing() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
         p.inactivate("A");
 
         final Requirement req = new Require("A").not();
@@ -123,7 +121,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void negationShouldNotBeSatisfiedWhenOperandExists() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
 
         final Requirement req = new Require("A").not();
 
@@ -132,7 +130,7 @@ public class RequirementsTest extends TestCase {
 
     @Test
     public void nothingShouldBeSatifisfied() {
-        final Topology p = sampleTopologyWithAAndB();
+        final AssemblyState p = sampleTopologyWithAAndB();
 
         final Requirement req = Nothing.getInstance();
 

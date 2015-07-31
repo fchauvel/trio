@@ -15,8 +15,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.unit;
-
 
 import eu.diversify.trio.Samples;
 import static eu.diversify.trio.core.storage.Builder.*;
@@ -45,20 +61,20 @@ import static org.hamcrest.Matchers.not;
  * Check the calculation of robustness, in many different situation
  */
 @RunWith(Parameterized.class)
-public class RobustnessTest {
+public class SensitivityTest {
 
     private final TrioService trio;
     private final String systemText;
     private final String observed;
     private final String controlled;
-    private final double expectedRobustness;
+    private final int controlCount;
 
-    public RobustnessTest(String systemText, String observed, String controlled, double expectedRobustness) {
+    public SensitivityTest(String systemText, String observed, String controlled, int expectedRobustness) {
         this.trio = new TrioService();
         this.systemText = systemText;
         this.observed = observed;
         this.controlled = controlled;
-        this.expectedRobustness = expectedRobustness;
+        this.controlCount = expectedRobustness;
     }
 
     @Test
@@ -72,9 +88,10 @@ public class RobustnessTest {
         final Scenario scenario = new RandomFailureSequence(1, example, new TaggedAs(observed), new TaggedAs(controlled));
         final TrioService.TrioResponse response = trio.run(scenario, 10000);
 
-        assertThat("Wrong robustness",
-                   response.robustness(),
-                   is(closeTo(expectedRobustness, TOLERANCE)));
+        assertThat("Missing sensitivity",
+                response.sensitivities.size(),
+                is(equalTo(controlCount)));
+
     }
 
     private static final double TOLERANCE = 1e-2;
@@ -87,19 +104,19 @@ public class RobustnessTest {
             Samples.oneClientAndOneServer(),
             "internal",
             "external",
-            0D});
-        
+            1});
+
         examples.add(new Object[]{
             Samples.oneClientRequiresServerAndVM(),
             "internal",
             "external",
-            0.125});
+            2});
 
         examples.add(new Object[]{
             Samples.oneClientRequiresClusteredServers(),
             "internal",
             "external",
-            7D/18});
+            3});
 
         return examples;
     }
