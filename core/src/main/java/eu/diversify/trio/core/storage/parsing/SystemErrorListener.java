@@ -16,7 +16,7 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.core.storage;
+package eu.diversify.trio.core.storage.parsing;
 
 import java.util.BitSet;
 import java.util.LinkedList;

@@ -15,35 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
 package eu.diversify.trio.unit.ui;
 
-import eu.diversify.trio.simulation.Scenario;
-import eu.diversify.trio.Trio;
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.simulation.data.DataSet;
-import eu.diversify.trio.simulation.data.Trace;
-import eu.diversify.trio.simulation.actions.AbstractAction;
 import eu.diversify.trio.ui.Command;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +26,7 @@ import org.junit.runners.JUnit4;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static eu.diversify.trio.ui.Command.*;
 
 /**
  * Specification of the Command object
@@ -63,14 +39,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, DEFAULT_RUN_COUNT, DEFAULT_OBSERVATION, DEFAULT_CONTROL);
     }
 
     @Test
@@ -78,14 +47,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "-t out.csv myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo("out.csv")));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", "out.csv", DEFAULT_RUN_COUNT, DEFAULT_OBSERVATION, DEFAULT_CONTROL);
     }
 
     @Test
@@ -93,14 +55,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "--trace=out.csv myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo("out.csv")));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", "out.csv", DEFAULT_RUN_COUNT, DEFAULT_OBSERVATION, DEFAULT_CONTROL);
     }
 
     @Test
@@ -108,14 +63,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "-r 1234 myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(1234)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, 1234, DEFAULT_OBSERVATION, DEFAULT_CONTROL);
     }
 
     @Test
@@ -123,14 +71,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "--runs=1234 myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(1234)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, 1234, DEFAULT_OBSERVATION, DEFAULT_CONTROL);
     }
 
     @Test
@@ -138,14 +79,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "-o platform myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo("platform")));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, DEFAULT_RUN_COUNT, "platform", DEFAULT_CONTROL);
     }
 
     @Test
@@ -153,14 +87,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "--observe=platform myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo("platform")));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, DEFAULT_RUN_COUNT, "platform", DEFAULT_CONTROL);
     }
 
     @Test
@@ -168,14 +95,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "-c infra myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo("infra")));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, DEFAULT_RUN_COUNT, DEFAULT_OBSERVATION, "infra");
     }
 
     @Test
@@ -183,14 +103,7 @@ public class CommandTest extends TestCase {
         final String commandLine = "--control=infra myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
-
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo(Command.DEFAULT_OUTPUT_FILE)));
-        assertThat(spy.runCount, is(equalTo(Command.DEFAULT_RUN_COUNT)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo("infra")));
+        verifyCommand(command, "myfile.trio", DEFAULT_OUTPUT_FILE, DEFAULT_RUN_COUNT, DEFAULT_OBSERVATION, "infra");
     }
 
     @Test
@@ -198,14 +111,15 @@ public class CommandTest extends TestCase {
         final String commandLine = "-t output.csv --runs=1234 myfile.trio";
         Command command = Command.from(commandLine);
 
-        final TrioSpy spy = new TrioSpy();
-        command.execute(spy, new NullOutputStream());
+        verifyCommand(command, "myfile.trio", "output.csv", 1234, DEFAULT_OBSERVATION, DEFAULT_CONTROL);
+    }
 
-        assertThat(spy.inputFile, is(equalTo("myfile.trio")));
-        assertThat(spy.traceFile, is(equalTo("output.csv")));
-        assertThat(spy.runCount, is(equalTo(1234)));
-        assertThat(spy.observation, is(equalTo(Command.DEFAULT_OBSERVATION)));
-        assertThat(spy.control, is(equalTo(Command.DEFAULT_CONTROL)));
+    private void verifyCommand(Command command, String input, String output, int runCount, String observed, String controlled) {
+        assertThat(command.getInput(), is(equalTo(input)));
+        assertThat(command.getTraceFile(), is(equalTo(output)));
+        assertThat(command.getRunCount(), is(equalTo(runCount)));
+        assertThat(command.getObservation(), is(equalTo(observed)));
+        assertThat(command.getControl(), is(equalTo(controlled)));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -238,47 +152,4 @@ public class CommandTest extends TestCase {
         Command.from(commandLine);
     }
 
-    private static class TrioSpy extends Trio {
-
-        public String observation;
-        public String inputFile;
-        public String traceFile;
-        public int runCount;
-        public String control;
-
-        @Override
-        public void run(Scenario scenario, int runCount) {
-            this.observation = scenario.observed().toString();
-            this.control = scenario.controlled().toString();
-            this.runCount = runCount;
-            final DataSet dataSet = new DataSet();
-            final Trace trace = new Trace(10);
-            trace.record(AbstractAction.inactivate("X"), 4);
-            trace.record(AbstractAction.inactivate("Y"), 3);
-            trace.record(AbstractAction.inactivate("Z"), 0);
-            dataSet.include(trace);
-        }
-
-        @Override
-        public eu.diversify.trio.core.Assembly loadSystemFrom(String path) throws FileNotFoundException, IOException {
-            this.inputFile = path;
-            return new eu.diversify.trio.core.Assembly(new Component("A"));
-        }
-
-        @Override
-        public void setTraceFile(String outputFile) {
-            this.traceFile = outputFile;
-        }
-        
-        
-
-    }
-
-    private class NullOutputStream extends OutputStream {
-
-        @Override
-        public void write(int b) throws IOException {
-        }
-
-    }
 }

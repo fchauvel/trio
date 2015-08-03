@@ -16,31 +16,40 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.core.validation;
 
-import java.io.Serializable;
+package eu.diversify.trio.core.storage.parsing;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Capture a component name that is not correct
+ * Raised when some syntax errors are detected while building the system
  */
-public class Inconsistency implements Serializable {
+public class SyntaxError extends Exception {
     
     private static final long serialVersionUID = 1L;
 
-    private final String description;
+    private final List<String> errors;
 
-    public Inconsistency(String description) {
-        this.description = description;
+    public SyntaxError(List<String> errors) {
+        this.errors = errors;
     }
 
-    public String getDescription() {
-        return description;
+    public List<String> getErrors() {
+        return Collections.unmodifiableList(errors);
     }
 
     @Override
     public String toString() {
-        return description;
+        final StringBuilder buffer = new StringBuilder(CAPACITY);
+        buffer.append("Invalid model: ").append(getMessage()).append(System.lineSeparator());
+        for(String eachError: getErrors()) {
+            buffer.append(" - ").append(eachError).append(System.lineSeparator());
+        }
+        return buffer.toString();
     }
+    
+    public static final int CAPACITY = 200;
     
     
     

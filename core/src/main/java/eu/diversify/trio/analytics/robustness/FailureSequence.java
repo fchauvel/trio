@@ -29,7 +29,6 @@ public class FailureSequence {
     private final int id;
     private final int min;
     private final int max;
-    private int alive;
     private int robustness;
     private final List<String> sequence;
 

@@ -37,5 +37,19 @@ public class InvalidSystemException extends Exception {
     public List<Inconsistency> getErrors() {
         return Collections.unmodifiableList(errors);
     }
+    
+    @Override
+    public String toString() {
+        final StringBuilder buffer = new StringBuilder(CAPACITY);
+         
+        buffer.append("Invalid model: ").append(System.lineSeparator());
+        for(Inconsistency each: getErrors()) {
+            buffer.append(" - ").append(each).append(System.lineSeparator());
+        }
+        
+        return buffer.toString();
+    }
+    
+    public static final int CAPACITY = 200;
 
 }

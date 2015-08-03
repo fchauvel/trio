@@ -74,7 +74,7 @@ public class ThreatRanking implements Listener, eu.diversify.trio.simulation.eve
             final String description = String.format("Duplicated scenario ID %d", simulationId);
             throw new IllegalStateException(description);
         }
-        final Ranking ranking = new Ranking(simulationId);
+        final Ranking ranking = new Ranking();
         rankings.put(simulationId, ranking);
     }
 
@@ -104,12 +104,10 @@ public class ThreatRanking implements Listener, eu.diversify.trio.simulation.eve
     
     private static class Ranking {
 
-        private final int scenarioId;
         private final Map<String, Threat> threats;
         private int sequenceCount;
 
-        public Ranking(int scenarioId) {
-            this.scenarioId = scenarioId;
+        public Ranking() {
             this.threats = new HashMap<String, Threat>();
             this.sequenceCount = 0;
         }

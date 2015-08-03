@@ -28,7 +28,7 @@ import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.validation.Validator;
 
 import static eu.diversify.trio.core.Evaluation.*;
-import static eu.diversify.trio.core.storage.Builder.build;
+import static eu.diversify.trio.core.storage.parsing.Builder.build;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

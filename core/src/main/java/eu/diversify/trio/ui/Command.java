@@ -15,21 +15,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.ui;
 
-import eu.diversify.trio.Configuration;
 import eu.diversify.trio.simulation.RandomFailureSequence;
-import eu.diversify.trio.Trio;
-import eu.diversify.trio.core.storage.SyntaxError;
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.validation.Inconsistency;
-import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 import eu.diversify.trio.simulation.filter.TaggedAs;
-import eu.diversify.trio.simulation.Scenario;
-import java.io.*;
+import eu.diversify.trio.simulation.Simulation;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -81,7 +90,7 @@ public class Command {
             } else if (parameter.startsWith("-")) {
                 parseShortOptions(command, parameter);
 
-            } else { 
+            } else {
                 final String error = String.format("Unknown argument '%s'. Expecting either a path to a TRIO file or an option.", parameter);
                 throw new IllegalArgumentException(error);
             }
@@ -148,66 +157,30 @@ public class Command {
 
         }
     }
-
-    public void execute(Trio trio, OutputStream output) throws IOException {
-        final Configuration config = Configuration.forProduction();
-
-        PrintStream out = null;
-
-        try {
-            out = new PrintStream(output, AUTO_FLUSH, UTF_8);
-
-            out.println(config.version() + " -- " + config.description());
-            out.println(config.copyright());
-            out.println("Licensed under " + config.license());
-            out.println();
-
-            final Assembly assembly = trio.loadSystemFrom(inputFile);
-            
-            trio.validate(assembly);
-            
-            out.println("ASSEMBLY: " + assembly.getName());
-            final RandomFailureSequence scenario = new RandomFailureSequence(1, assembly, observation(), control());
-            out.println("SCENARIO: " + this.format(scenario));
-
-            RobustnessView robustness = new RobustnessView(output, trio.analyses());
-            SensitivityRankingView sensitivity = new SensitivityRankingView(output, trio.analyses());
-            ThreatsRankingView threats = new ThreatsRankingView(output, trio.analyses());
-            
-            trio.run(scenario, runCount);
-            
-            trio.setTraceFile(outputFile);
-            
-
-            out.println();
-            out.println("That's all folks!");
-            
-        } catch (FileNotFoundException ex) {
-            out.println("Error: Unable to open '" + inputFile + "'");
-            
-        } catch (IOException ex) {
-            throw new RuntimeException("Unable to write on the given output stream", ex);
-
-        } catch (InvalidSystemException ex) {
-            out.println("Invalid model:");
-            for(Inconsistency each: ex.getErrors()) {
-                out.println(" - " + each.getDescription());
-            }
-                    
-        } catch (SyntaxError ex) {
-            out.println("Invalid model:");
-            for(String eachError: ex.getErrors()) {
-                out.println(" - " + eachError);
-            }
-        
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
+    
+    public String getInput() {
+        return this.inputFile;
     }
-    private static final boolean AUTO_FLUSH = true;
-    private static final String UTF_8 = "UTF-8";
+    
+    public String getObservation() {
+        return this.observation;
+    }
+    
+    public String getControl() {
+        return this.control;
+    }
+    
+    public int getRunCount() {
+        return this.runCount;
+    } 
+    
+    public String getTraceFile() {
+        return this.outputFile;
+    }
+
+    public Simulation getSimulation() {
+        return new RandomFailureSequence(runCount, observation(), control());
+    }
 
     private Filter observation() {
         return parseTag(observation);
@@ -222,29 +195,6 @@ public class Command {
             return All.getInstance();
         }
         return new TaggedAs(tag);
-    }
-
-    private String format(Scenario scenario) {
-        String observation = String.format("'%s' layer", scenario.observed().toString());
-        if (observation.contains("*")) {
-            observation = "system";
-        }
-        String control = String.format("'%s' layer", scenario.controlled().toString());
-        if (control.contains("*")) {
-            control = "system";
-        }
-        return String.format("Robustness of the %s to failure in the %s", observation, control);
-    }
-
-    public static String usage() {
-        final String EOL = java.lang.System.lineSeparator();
-        return "Usage: trio [options] input.trio" + EOL
-                + "where 'options' are:" + EOL
-                + "  -o, --observe=TAG  the tag of the components whose activity shall be observed" + EOL
-                + "  -c, --control=TAG  the tag of the components whose activity shall be controlled" + EOL
-                + "  -r, --runs=INTEGER the number of sample for statistical evidence" + EOL
-                + "  -t, --trace=FILE   the file where the generated data shall be stored" + EOL
-                + "Example: trio -o result.csv --run=10000 system.trio";
     }
 
 }

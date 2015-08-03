@@ -82,7 +82,7 @@ public class Statistic {
         if (this.sequenceId != other.sequenceId) {
             return false;
         }
-        return !((this.name == null) ? (other.name != null) : !this.name.equals(other.name));
+        return ! ((this.name == null) ? other.name != null : !this.name.equals(other.name));
     }
         
     @Override

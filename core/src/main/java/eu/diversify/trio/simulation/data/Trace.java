@@ -19,7 +19,7 @@
 
 package eu.diversify.trio.simulation.data;
 
-import eu.diversify.trio.core.storage.DataFormat;
+import eu.diversify.trio.core.storage.parsing.DataFormat;
 import eu.diversify.trio.simulation.Action;
 import java.util.ArrayList;
 import java.util.List;

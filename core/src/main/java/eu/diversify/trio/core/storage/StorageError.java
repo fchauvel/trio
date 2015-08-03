@@ -16,30 +16,30 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.core.validation;
-
-import java.io.Serializable;
+package eu.diversify.trio.core.storage;
 
 /**
- * Capture a component name that is not correct
+ * Error raised when unable to load or write in the storage
  */
-public class Inconsistency implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
+public class StorageError extends Exception {
 
-    private final String description;
-
-    public Inconsistency(String description) {
-        this.description = description;
+    public StorageError(String message) {
+        super(message);
     }
 
-    public String getDescription() {
-        return description;
+    public StorageError(String message, Throwable cause) {
+        super(message, cause);
     }
 
     @Override
     public String toString() {
-        return description;
+        StringBuilder builder = new StringBuilder();
+        builder.append("Error: ").append(getMessage());
+        if (getCause() != null) {
+            builder.append(System.lineSeparator());
+            builder.append(getCause().toString());
+        }
+        return builder.toString();
     }
     
     

@@ -18,17 +18,15 @@
 package eu.diversify.trio.simulation.actions;
 
 import eu.diversify.trio.simulation.Action;
-import eu.diversify.trio.simulation.AssemblyState;
 
 /**
  * Generalise the behaviour of action and their comparison
  */
 public abstract class AbstractAction implements Action {
 
-    public abstract AssemblyState executeOn(AssemblyState topology);
-
+    
     @Override
-    public final boolean equals(Object object) {
+    public final boolean equals(Object object) {  
         if (object == null) {
             return false;
         }

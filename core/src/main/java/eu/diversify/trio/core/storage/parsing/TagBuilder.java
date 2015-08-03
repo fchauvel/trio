@@ -15,29 +15,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ */
 
+package eu.diversify.trio.core.storage.parsing;
 
-package eu.diversify.trio.core.storage;
-
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.requirements.Requirement;
+import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.builder.TrioBaseVisitor;
 import eu.diversify.trio.builder.TrioParser;
-import eu.diversify.trio.core.requirements.Nothing;
+import java.util.ArrayList;
+import java.util.List;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Build a component from the AST
+ * Traverse the AST and build the tag associated with the system
  */
-public class ComponentBuilder extends TrioBaseVisitor<Component> {
+public class TagBuilder extends TrioBaseVisitor<Tag> {
 
     @Override
-    public Component visitComponent(TrioParser.ComponentContext ctx) {
-        Requirement requirement = Nothing.getInstance();
-        if (ctx.requirements() != null) {
-            requirement = ctx.requirements().accept(new ExpressionBuilder());
+    public Tag visitTag(TrioParser.TagContext ctx) {
+        final List<String> targets = new ArrayList<String>();
+        for (TerminalNode eachTarget: ctx.ID()) {
+            targets.add(eachTarget.getText());
         }
-        return new Component(ctx.ID().getText(), requirement);
+        return new Tag(ctx.STRING().getText().replaceAll("[\'\"]", ""), targets);
     }
+
     
     
 }

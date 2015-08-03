@@ -34,103 +34,80 @@
  */
 package eu.diversify.trio;
 
+import eu.diversify.trio.analytics.events.Selection;
+import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
+import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.analytics.robustness.RobustnessAggregator;
+import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.analytics.sensitivity.SensitivityRanking;
+import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.analytics.threats.ThreatRanking;
-import eu.diversify.trio.simulation.Scenario;
+import eu.diversify.trio.simulation.Simulation;
 
-import eu.diversify.trio.core.storage.SyntaxError;
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.validation.InvalidSystemException;
-import eu.diversify.trio.core.validation.Validator;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import static eu.diversify.trio.core.storage.Builder.build;
-import static eu.diversify.trio.core.Evaluation.evaluate;
+import eu.diversify.trio.core.storage.Storage;
+import eu.diversify.trio.core.storage.StorageError;
 import eu.diversify.trio.simulation.events.Channel;
+import java.util.List;
 
 /**
  * The Trio application
  */
 public class Trio {
 
-    private final Channel simulation;
+    private Storage storage;
+    private final Channel simulationListeners;
     private final eu.diversify.trio.analytics.events.Channel analytics;
     private ThreatRanking threatRanking;
     private SensitivityRanking sensitivityRanking;
     private FailureSequenceAggregator failureSequences;
     private RobustnessAggregator robustness;
 
-public Trio() {
-        this(new Channel(), new eu.diversify.trio.analytics.events.Channel());
+    public Trio(Storage storage) {
+        this(storage, new Channel(), new eu.diversify.trio.analytics.events.Channel());
     }
 
-    public Trio(Channel simulation, eu.diversify.trio.analytics.events.Channel analytics) {
-        this.simulation = simulation;
+    public Trio(Storage storage, Channel simulation, eu.diversify.trio.analytics.events.Channel analytics) {
+        this.storage = storage;
+        this.simulationListeners = simulation;
         this.analytics = analytics;
         this.failureSequences = new FailureSequenceAggregator(simulation, analytics);
         this.robustness = new RobustnessAggregator(simulation, analytics, analytics);
         this.sensitivityRanking = new SensitivityRanking(simulation, analytics);
         this.threatRanking = new ThreatRanking(simulation, analytics, analytics);
     }
-    
-    
-    public eu.diversify.trio.analytics.events.Channel analyses() {
-        return analytics;
+
+    public void run(Simulation simulation, final TrioListener listener) throws StorageError {
+        subscribe(listener);
+
+        final Assembly assembly = storage.first();
+        simulation.run(assembly, simulationListeners);
     }
 
-    public Assembly loadSystemFrom(String path) throws FileNotFoundException, IOException, SyntaxError {
+    private void subscribe(final TrioListener listener) {
+        analytics.subscribe(new eu.diversify.trio.analytics.events.Listener() {
 
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(path);
-            return build().systemFrom(fileInputStream);
+            public void statisticReady(Statistic statistic, Object value) {
+                if (statistic.getName().equals(RobustnessAggregator.KEY_ROBUSTNESS)) {
+                    listener.onRobustness((Robustness) value);
 
-        } catch (IOException ex) {
-            throw new RuntimeException("Unable to open the stream from '" + path + "'", ex);
+                } else if (statistic.getName().equals(SensitivityRanking.KEY_SENSITIVITY_RANKING)) {
+                    listener.onSensitivityRanking((List<Sensitivity>) value);
 
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
+                } else if (statistic.getName().equals(ThreatRanking.KEY_THREAT_RANKING)) {
+                    listener.onThreatRanking((List<Threat>) value);
 
-                } catch (IOException ex) {
-                    throw new RuntimeException("Unable to close the stream from '" + path + "'", ex);
                 }
             }
-        }
-    }
 
-    /**
-     * Validate the consistency of the given model.
-     *
-     * @param system the system whose validity is unsure
-     * @throws InvalidSystemException if there are some inconsistencies in the
-     * model
-     */
-    public void validate(Assembly system) throws InvalidSystemException {
-        Validator validity = new Validator();
-        evaluate(validity).on(system);
-        validity.check();
-    }
+        }, new Selection() {
 
-    public void run(Scenario scenario, int runCount) {
-        simulation.simulationInitiated(scenario.id());
-        for (int i = 0; i < runCount; i++) {
-            scenario.run(simulation);
-        }
-        simulation.simulationComplete(scenario.id());
-    }
+            public boolean isSatisfiedBy(Statistic statistic, Object value) {
+                return true;
+            }
 
-    public void run(Scenario scenario) {
-        run(scenario, 1);
-    }
-
-    public void setTraceFile(String outputFile) {
-        // TODO: useless method, to be remove (but break a lot of test)
+        });
     }
 
 }

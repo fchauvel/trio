@@ -18,7 +18,7 @@
 
 package eu.diversify.trio.simulation.actions;
 
-import eu.diversify.trio.simulation.AssemblyState;
+import eu.diversify.trio.simulation.Topology;
 
 /**
  * Inactivate the selected component
@@ -31,7 +31,7 @@ public class Inactivate extends AbstractAction {
         this.target = target;
     }
 
-    public AssemblyState executeOn(AssemblyState topology) {
+    public Topology executeOn(Topology topology) { 
         topology.inactivate(target);
         return topology;
     }

@@ -20,7 +20,7 @@
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
-import eu.diversify.trio.core.storage.SyntaxError;
+import eu.diversify.trio.core.storage.parsing.SyntaxError;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.core.statistics.Statistics;
@@ -88,7 +88,7 @@ public class PerformanceIT {
         final Generator generate = new Generator();
         final Assembly system = generate.assembly(SYSTEM_SIZE, Distribution.uniform(0, SYSTEM_SIZE));
 
-        final Scenario scenario = new RandomFailureSequence(system);
+        final Simulation scenario = new RandomFailureSequence(system);
         long duration = durationOf(scenario);
 
         java.lang.System.out.printf("Simulating failure sequences on a system with %d component(s) in %d ms\n", SYSTEM_SIZE, duration);
@@ -113,7 +113,7 @@ public class PerformanceIT {
             final double mean = meanValenceDistribution.sample();
             final Distribution density = Distribution.normal(mean, mean / 4);
             final Assembly system = generate.assembly(size, density);
-            final Scenario scenario = new RandomFailureSequence(system);
+            final Simulation scenario = new RandomFailureSequence(system);
             double duration = durationOf(scenario);
 
             final Statistics stats = new Statistics();
@@ -129,7 +129,7 @@ public class PerformanceIT {
         log.close();
     }
 
-    public double averageDurationOf(Scenario scenario, int runCount) {
+    public double averageDurationOf(Simulation scenario, int runCount) {
         long total = 0L;
         for (int i = 0; i < runCount; i++) {
             total += durationOf(scenario);
@@ -137,7 +137,7 @@ public class PerformanceIT {
         return total * (1D / runCount);
     }
 
-    public long durationOf(Scenario scenario) {
+    public long durationOf(Simulation scenario) {
         long start = java.lang.System.currentTimeMillis();
         trio.run(scenario, 1);
         long end = java.lang.System.currentTimeMillis();

@@ -17,7 +17,7 @@
  */
 
 
-package eu.diversify.trio.core.storage;
+package eu.diversify.trio.core.storage.parsing;
 
 /**
  * Behaviour of any data format

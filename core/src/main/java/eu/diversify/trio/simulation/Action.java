@@ -30,7 +30,7 @@ public interface Action {
      * @param topology the topology on which this action shall be performed
      * @return the topology once the action is performed
      */
-    AssemblyState executeOn(AssemblyState topology);
+    Topology executeOn(Topology topology);
 
     
     /**

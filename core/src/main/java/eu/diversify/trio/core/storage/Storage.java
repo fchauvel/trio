@@ -16,29 +16,20 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package eu.diversify.trio.core.storage;
 
-import java.util.Collections;
-import java.util.List;
+import eu.diversify.trio.core.Assembly;
 
 /**
- * Raised when some syntax errors are detected while building the system
+ * Abstract storage for service architecture
  */
-public class SyntaxError extends Exception {
+public interface Storage {
     
-    private static final long serialVersionUID = 1L;
-
-    private final List<String> errors;
-
-    public SyntaxError(List<String> errors) {
-        this.errors = errors;
-    }
-
-    public List<String> getErrors() {
-        return Collections.unmodifiableList(errors);
-    }
-    
+    /**
+     * Load the first architecture available
+     * @return the associated architecture
+     */
+    Assembly first() throws StorageError; 
     
     
 }

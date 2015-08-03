@@ -18,11 +18,11 @@
 package eu.diversify.trio.acceptance;
 
 import eu.diversify.trio.Trio;
-import eu.diversify.trio.core.storage.SyntaxError;
+import eu.diversify.trio.core.storage.parsing.SyntaxError;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.simulation.RandomFailureSequence;
-import eu.diversify.trio.simulation.Scenario;
+import eu.diversify.trio.simulation.Simulation;
 import eu.diversify.trio.util.random.Distribution;
 import java.io.IOException;
 import java.util.BitSet;
@@ -49,7 +49,7 @@ public class SandBoxIT {
     public void onOneLargeModel() {
         final Generator aRandom = new Generator();
         final Assembly assembly = aRandom.assembly(5000, Distribution.uniform(0D, 10000D));
-        final Scenario scenario = new RandomFailureSequence(assembly);
+        final Simulation scenario = new RandomFailureSequence(assembly);
         long duration = 0;
         final int RUN_COUNT = 10;
         for (int i = 0; i < RUN_COUNT; i++) {
@@ -59,7 +59,7 @@ public class SandBoxIT {
         java.lang.System.out.printf("\nDuration: %.3f ms\n", ((double) duration) / RUN_COUNT);
     }
 
-    public long durationOf(Scenario scenario) {
+    public long durationOf(Simulation scenario) {
         long start = java.lang.System.currentTimeMillis();
         trio.run(scenario, 1);
         long end = java.lang.System.currentTimeMillis();
@@ -67,7 +67,7 @@ public class SandBoxIT {
         return duration;
     }
 
-    public double averageDurationOf(Scenario scenario, int runCount) {
+    public double averageDurationOf(Simulation scenario, int runCount) {
         long total = 0L;
         for (int i = 0; i < runCount; i++) {
             total += durationOf(scenario);

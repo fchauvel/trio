@@ -19,12 +19,12 @@
  */
 package eu.diversify.trio.simulation.actions;
 
-import eu.diversify.trio.simulation.AssemblyState;
+import eu.diversify.trio.simulation.Topology;
 
 /**
  * Activate a given component
  */
-public class Activate extends AbstractAction {
+public class Activate extends AbstractAction { 
 
     private final String target;
 
@@ -32,7 +32,7 @@ public class Activate extends AbstractAction {
         this.target = target;
     }
 
-    public AssemblyState executeOn(AssemblyState topology) {
+    public Topology executeOn(Topology topology)   { 
         topology.activate(target); 
         return topology;
     }
@@ -41,5 +41,6 @@ public class Activate extends AbstractAction {
     public String toString() {
         return String.format("activate %s", target);
     }
+
 
 }

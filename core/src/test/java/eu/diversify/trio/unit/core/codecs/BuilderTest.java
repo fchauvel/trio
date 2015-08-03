@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static eu.diversify.trio.core.storage.Builder.*;
+import static eu.diversify.trio.core.storage.parsing.Builder.*;
 import static eu.diversify.trio.core.requirements.Factory.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
