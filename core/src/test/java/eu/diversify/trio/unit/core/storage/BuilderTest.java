@@ -16,7 +16,7 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.diversify.trio.unit.core.codecs;
+package eu.diversify.trio.unit.core.storage;
 
 import eu.diversify.trio.core.Tag;
 import eu.diversify.trio.core.requirements.Requirement;
@@ -74,6 +74,14 @@ public class BuilderTest extends TestCase {
         final Component component = build().componentFrom(text);
 
         assertThat(component, is(equalTo(new Component("AA"))));
+    }
+    
+    @Test
+    public void shouldBuildCOmponentWithMTTF() {
+        final String text = "AA [0.34]";
+        final Component component = build().componentFrom(text);
+
+        assertThat(component, is(equalTo(new Component("AA", 0.34))));
     }
 
     @Test

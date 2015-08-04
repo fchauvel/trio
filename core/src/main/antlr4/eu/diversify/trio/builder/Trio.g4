@@ -13,11 +13,11 @@ description
     ;
 
 component
-    :    ('-')? ID strength? requirements?
+    :    ('-')? ID mttf? requirements?
     ;
 
-strength
-    :   INTEGER
+mttf
+    :   '[' REAL ']'
     ;
 
 requirements
@@ -41,6 +41,10 @@ tag
 
 DIGIT
     :   [0-9]
+    ;
+
+REAL
+    :   DIGIT+ '.' DIGIT*
     ;
 
 INTEGER

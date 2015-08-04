@@ -48,7 +48,10 @@ import java.util.List;
  */
 public class Component implements AssemblyPart {
 
+    public static final double DEFAULT_MTTF = 1D;
+
     private final String name;
+    private final double mttf;
     private final Requirement requirement;
 
     public Component(String name) {
@@ -56,8 +59,18 @@ public class Component implements AssemblyPart {
     }
 
     public Component(String name, Requirement requirement) {
+        this(name, DEFAULT_MTTF, requirement);
+    }
+
+    public Component(String name, double mttf) {
+        this(name, mttf, Nothing.getInstance());
+    }
+
+    public Component(String name, double mttf, Requirement requirement) {
         Require.notNull(name, "Illegal 'null' value given as name");
         this.name = name;
+
+        this.mttf = checkMTTF(mttf);
 
         Require.notNull(requirement, "Illegal 'null' value given as requirement");
         this.requirement = requirement;
@@ -67,6 +80,22 @@ public class Component implements AssemblyPart {
         final List<AssemblyPart> subparts = new ArrayList<AssemblyPart>(1);
         subparts.add(requirement);
         return subparts;
+    }
+
+    private double checkMTTF(double mttf) {
+        if (mttf <= 0) {
+            final String error = String.format("MTTF must be positive (found %f)", mttf);
+            throw new IllegalArgumentException(error);
+        }
+        if (Double.isNaN(mttf)) {
+            final String error = "MTTF must be positive (found NaN)";
+            throw new IllegalArgumentException(error);
+        }
+        return mttf;
+    }
+
+    public double meanTimeToFailure() {
+        return mttf;
     }
 
     public void begin(AssemblyVisitor visitor) {
@@ -94,8 +123,10 @@ public class Component implements AssemblyPart {
             return false;
         }
         final Component other = (Component) obj;
-        return other.name.equals(name) && other.requirement.equals(requirement);
+        return other.name.equals(name) && other.requirement.equals(requirement) && Math.abs(mttf - other.mttf) < TOLERANCE;
     }
+    
+    private static final double TOLERANCE = 1e-9;
 
     public String getName() {
         return name;
@@ -111,7 +142,7 @@ public class Component implements AssemblyPart {
 
     @Override
     public String toString() {
-        return String.format("%s: %s", name, requirement.toString());
+        return String.format("%s [%f]: %s", name, mttf, requirement.toString());
     }
 
 }

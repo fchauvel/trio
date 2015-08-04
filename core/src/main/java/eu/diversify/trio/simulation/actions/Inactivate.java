@@ -41,4 +41,5 @@ public class Inactivate extends AbstractAction {
         return String.format("inactivate %s", target);
     }
 
+
 }

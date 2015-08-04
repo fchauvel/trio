@@ -40,5 +40,5 @@ public interface Action {
      */
     @Override
     boolean equals(Object object);
-    
+
 }

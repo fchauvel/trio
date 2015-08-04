@@ -32,11 +32,15 @@ public class ComponentBuilder extends TrioBaseVisitor<Component> {
 
     @Override
     public Component visitComponent(TrioParser.ComponentContext ctx) {
+        double mttf = Component.DEFAULT_MTTF;
         Requirement requirement = Nothing.getInstance();
+        if (ctx.mttf() != null) {
+            mttf = Double.parseDouble(ctx.mttf().REAL().getText());
+        }
         if (ctx.requirements() != null) {
             requirement = ctx.requirements().accept(new ExpressionBuilder());
         }
-        return new Component(ctx.ID().getText(), requirement);
+        return new Component(ctx.ID().getText(), mttf, requirement);
     }
     
     

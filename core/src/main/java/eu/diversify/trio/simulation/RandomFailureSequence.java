@@ -75,4 +75,5 @@ public class RandomFailureSequence extends Simulation {
         return candidateList.get(new Random().nextInt(candidateList.size()));
     }
 
+
 }

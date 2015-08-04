@@ -33,6 +33,11 @@ public class FixedFailureSequence extends Simulation {
         super();
         this.actions = Arrays.asList(actions);
     }
+    
+    public FixedFailureSequence(int runCount, Action... actions) {
+        super(runCount);
+        this.actions = Arrays.asList(actions);
+    }
 
     public FixedFailureSequence(int runCount, Filter observation, Filter control, Action... actions) {
         super(runCount, observation, control);
@@ -55,5 +60,6 @@ public class FixedFailureSequence extends Simulation {
 
         return topology;
     }
+
 
 }

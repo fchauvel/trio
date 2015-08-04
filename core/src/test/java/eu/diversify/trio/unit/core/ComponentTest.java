@@ -32,10 +32,26 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.unit.core;
 
 import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultAssemblyVisitor;
 import eu.diversify.trio.core.AssemblyVisitor;
 import eu.diversify.trio.core.requirements.Requirement;
 import eu.diversify.trio.core.requirements.Require;
@@ -75,7 +91,25 @@ public class ComponentTest extends TestCase {
     }
 
     @Test
-    public void shouldProvideAccessToItsRequirement() {
+    public void shouldExposeItsMTTF() {
+        final double mttf = 43.5;
+        final Component component = new Component("Foo", mttf);
+
+        assertThat(component.meanTimeToFailure(), is(equalTo(mttf)));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectNegativeMTTF() {
+        new Component("Foo", -3.4);
+    }
+    
+     @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectNaNAsMTTF() {
+        new Component("Foo", Double.NaN);
+    }
+
+    @Test
+    public void shouldExposeItsRequirement() {
         final Component component = new Component("Foo", new Require("Bar"));
         final Requirement expected = new Require("Bar");
 
@@ -119,11 +153,11 @@ public class ComponentTest extends TestCase {
 
         context.assertIsSatisfied();
     }
-    
+
     @Test
     public void subPartShouldNeverBeEmpty() {
         final Component component = new Component("A");
-        
+
         assertThat("has sub parts", component.subParts(), is(not(empty())));
     }
 

@@ -80,11 +80,6 @@ public class Trio {
     private final Channel simulationListeners;
     private final eu.diversify.trio.analytics.events.Channel analytics;
 
-//    private ThreatRanking threatRanking;
-//    private SensitivityRanking sensitivityRanking;
-//    private FailureSequenceAggregator failureSequences;
-//    private RobustnessAggregator robustness;
-
     public Trio(Storage storage) {
         this(storage, new Channel(), new eu.diversify.trio.analytics.events.Channel());
     }
