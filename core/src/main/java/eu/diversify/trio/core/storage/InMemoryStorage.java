@@ -23,24 +23,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Hold a collection of assemblies in memory, indexed by name
+ */
 public class InMemoryStorage implements Storage {
 
-    private Map<String, Assembly> samples;
+    private Map<String, Assembly> assemblies;
 
     public InMemoryStorage() {
-        this.samples = new HashMap<String, Assembly>();
+        this.assemblies = new HashMap<String, Assembly>();
+    }
+    
+    public InMemoryStorage(Assembly single) {
+        this.assemblies = new HashMap<String, Assembly>();
+        this.assemblies.put("single", single);
     }
 
     public InMemoryStorage(Map<String, Assembly> assemblies) {
-        this.samples = new HashMap<String, Assembly>(assemblies);
+        this.assemblies = new HashMap<String, Assembly>(assemblies);
     }
 
     public Assembly first() throws StorageError {
-        final List<String> keys = new ArrayList<String>(this.samples.keySet());
+        final List<String> keys = new ArrayList<String>(this.assemblies.keySet());
         if (keys.isEmpty()) {
             throw new StorageError("Empty storage");
         } else {
-            return this.samples.get(keys.get(0));
+            return this.assemblies.get(keys.get(0));
         }
     }
 

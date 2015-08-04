@@ -33,19 +33,9 @@ public class RobustnessAggregator {
 
     public RobustnessAggregator(Channel simulation, Publisher statistics, Listener results) {
         simulation.subscribe(new SimulationHandler());
-        statistics.subscribe(new StatisticHandler(), onlyFailureSequences());
+        statistics.subscribe(new StatisticHandler(), new OnlyFailureSequences());
         this.results = results;
         this.robustnesses = new HashMap<Integer, Robustness>();
-    }
-
-    private Selection onlyFailureSequences() {
-        return new Selection() {
-
-            public boolean isSatisfiedBy(Statistic statistic, Object value) {
-                return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
-            }
-
-        };
     }
 
     private Robustness robustnessOf(int scenarioId) {
@@ -100,5 +90,12 @@ public class RobustnessAggregator {
     }
 
     public static final String KEY_ROBUSTNESS = "overall robustness";
+
+    private static class OnlyFailureSequences implements Selection {
+
+        public boolean isSatisfiedBy(Statistic statistic, Object value) {
+            return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
+        }
+    }
 
 }

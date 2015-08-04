@@ -34,6 +34,10 @@ public class RandomFailureSequence extends Simulation {
         super();
     }
 
+    public RandomFailureSequence(int runCount) {
+        super(runCount);
+    }
+    
     public RandomFailureSequence(int runCount, Filter observation, Filter control) {
         super(runCount, observation, control);
     }

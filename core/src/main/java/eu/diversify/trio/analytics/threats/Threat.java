@@ -53,6 +53,27 @@ public class Threat implements Comparable<Threat> {
         return probability() * (1D - robustness);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + (this.failureSequence != null ? this.failureSequence.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Threat other = (Threat) obj;
+        return !((this.failureSequence == null) ? other.failureSequence != null : !this.failureSequence.equals(other.failureSequence));
+    }
+    
+    
+
     public int compareTo(Threat o) {
         return -1 * Double.compare(threatLevel(), o.threatLevel());
     }

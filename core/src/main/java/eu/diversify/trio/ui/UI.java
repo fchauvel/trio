@@ -27,6 +27,7 @@ import eu.diversify.trio.simulation.RandomFailureSequence;
 import eu.diversify.trio.simulation.Simulation;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,13 @@ public class UI {
     private final PrintStream out;
 
     public UI(OutputStream out) {
-        this.out = new PrintStream(out);
+        try {
+            this.out = new PrintStream(out, true, "UTF-8");
+        
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException("Unable to use UTF-8", ex);
+        
+        }
     }
 
     public void showOpening(final Configuration config) {
@@ -87,21 +94,21 @@ public class UI {
         return new TrioListener() {
 
             public void onRobustness(Robustness indicator) {
-                out.printf("Robustness: %.4f \n", indicator.average());
+                out.printf("Robustness: %.4f %n", indicator.average());
             }
 
             public void onSensitivityRanking(List<Sensitivity> sensitivities) {
-                out.printf(" + Most sensitive components: \n");
+                out.printf(" + Most sensitive components: %n");
                 for (Sensitivity eachSensitivity : topN(sensitivities, 5)) {
-                    out.printf("   - %7.2f -- %s \n", eachSensitivity.averageImpact(), eachSensitivity.component());
+                    out.printf("   - %7.2f -- %s %n", eachSensitivity.averageImpact(), eachSensitivity.component());
                 }
             }
 
             public void onThreatRanking(List<Threat> threats) {
-                out.printf(" + Most threatening failure sequences: \n");
+                out.printf(" + Most threatening failure sequences: %n");
 
                 for (Threat eachThreat : topN(threats, 5)) {
-                    out.printf("   - %7.4f -- %s%n", eachThreat.threatLevel(), eachThreat.failureSequence());
+                    out.printf("   - %7.4f -- %s %n", eachThreat.threatLevel(), eachThreat.failureSequence());
                 }
             }
 
