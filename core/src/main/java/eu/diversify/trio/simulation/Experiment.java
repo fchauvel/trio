@@ -40,16 +40,16 @@ import eu.diversify.trio.simulation.events.Listener;
 public class Experiment {
 
     private final int id;
-    private final int replicaCount;
-    private int replica;
+    private final int runCount;
+    private int currentRun;
     private final Simulation simulation;
     private final Assembly subject;
     private final Listener listener;
 
-    public Experiment(int id, Simulation simulation, Assembly subject, int replicaCount, Listener listener) {
+    public Experiment(int id, Simulation simulation, Assembly subject, int runCount, Listener listener) {
         this.id = id;
-        this.replicaCount = replicaCount;
-        this.replica = 0;
+        this.runCount = runCount;
+        this.currentRun = 0;
         this.simulation = simulation;
         this.subject = subject;
         this.listener = listener;
@@ -57,7 +57,7 @@ public class Experiment {
 
     public void execute() {
         listener.simulationInitiated(id);
-        while (replica < replicaCount) {
+        while (currentRun < runCount) {
             replicate();
         }
         listener.simulationComplete(id);
@@ -69,31 +69,33 @@ public class Experiment {
      * @param index the id of the execution
      */
     private void replicate() {
-        newReplica();
-        Controller controller = simulation.prepareController();
-        Topology state = new MonitoredTopology(new AssemblyState(subject));
-        listener.sequenceInitiated(id, replica, simulation.observed(state).activeComponents(), simulation.controlled(state).activeComponents());
+        currentRun++;
+        final Controller controller = simulation.prepareController();
+        final Topology state = new MonitoredTopology(new AssemblyState(subject));
+        final Topology observed = simulation.observed(state);
+        final Topology controlled = simulation.controlled(state);
+        listener.sequenceInitiated(id, currentRun, observed.activeComponents(), controlled.activeComponents());
         while (controller.hasMoreAction(state)) {
             final Action action = controller.nextAction(state);
             action.executeOn(state);
         }
-        listener.sequenceComplete(id, replica);
+        listener.sequenceComplete(id, currentRun);
     }
 
-    private int newReplica() {
-        return replica++;
-    }
-
+    
     private class MonitoredTopology extends TopologyDecorator {
+
+        private final Topology observed;
 
         public MonitoredTopology(Topology topology) {
             super(topology);        
+            observed = simulation.observed(getTopology());
         }
 
         @Override
         public void inactivate(String component) {
             super.inactivate(component);
-            listener.failure(id, replica, component, simulation.observed(getTopology()).activeComponents());
+            listener.failure(id, currentRun, component, observed.activeComponents());
         }
     }
 

@@ -46,9 +46,7 @@ import java.util.Random;
  */
 public class RandomFailureSequence extends Simulation {
 
-    public RandomFailureSequence() {
-    }
-
+  
     public RandomFailureSequence(Filter observation, Filter control) {
         super(observation, control);
     }

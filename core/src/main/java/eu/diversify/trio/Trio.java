@@ -15,7 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio;
 
 import eu.diversify.trio.analytics.events.Listener;
@@ -60,13 +76,21 @@ public class Trio {
     }
 
     public void run(Simulation simulation, int runCount, final TrioListener listener) throws StorageError {
-        subscribe(listener);
-        Experiment experiment = new Experiment(1, simulation, storage.first(), runCount, simulationListeners);
+        final int id = nextId();
+        subscribe(listener, id);
+        Experiment experiment = new Experiment(id, simulation, storage.first(), runCount, simulationListeners);
         experiment.execute();
     }
 
-    private void subscribe(final TrioListener listener) {
-        analytics.subscribe(new Dispatcher(listener), new AllStatistics());
+    private static int nextId() {
+        runCounter += 1;
+        return runCounter;
+    }
+    
+    private static int runCounter = 0;
+
+    private void subscribe(final TrioListener listener, int id) {
+        analytics.subscribe(new Dispatcher(listener), new AllStatistics(id));
     }
 
     private static class Dispatcher implements Listener {
@@ -93,9 +117,16 @@ public class Trio {
 
     private static class AllStatistics implements Selection {
 
-        public boolean isSatisfiedBy(Statistic statistic, Object value) {
-            return true;
+        private final int id;
+
+        public AllStatistics(int id) {
+            this.id = id;
         }
+
+        public boolean isSatisfiedBy(Statistic statistic, Object value) {
+            return statistic.getScenarioId() == id;
+        }
+
     }
 
 }

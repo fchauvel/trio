@@ -38,7 +38,7 @@ import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 
 /**
- * The scenario taken as input by Trio
+ * The simulation scenario taken as input by Trio
  */
 public abstract class Simulation {
 
