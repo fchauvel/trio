@@ -179,7 +179,7 @@ public class Command {
     }
 
     public Simulation getSimulation() {
-        return new RandomFailureSequence(runCount, observation(), control());
+        return new RandomFailureSequence(observation(), control());
     }
 
     private Filter observation() {

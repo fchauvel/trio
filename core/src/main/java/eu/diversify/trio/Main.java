@@ -41,7 +41,7 @@ public class Main {
             ui.showOpening(config);
             try {
                 final Simulation simulation = command.getSimulation();
-                trio.run(simulation, ui.getListener());
+                trio.run(simulation, command.getRunCount(), ui.getListener());
 
             } catch (StorageError ex) {
                 ui.showError(ex);

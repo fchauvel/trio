@@ -35,8 +35,6 @@
 package eu.diversify.trio.unit;
 
 import eu.diversify.trio.Samples;
-import static eu.diversify.trio.Samples.ABC_with_linear_dependencies;
-import static eu.diversify.trio.Samples.A_require_B_or_C;
 import eu.diversify.trio.Trio;
 import eu.diversify.trio.core.storage.Storage;
 import eu.diversify.trio.core.storage.StorageError;
@@ -78,10 +76,10 @@ public class RobustnessTest {
     @Test
     public void test() throws InvalidSystemException, StorageError {
 
-        final Simulation scenario = new RandomFailureSequence(10000, observed, controlled);
+        final Simulation scenario = new RandomFailureSequence(observed, controlled);
 
         final TrioResponse response = new TrioResponse();
-        trio.run(scenario, response);
+        trio.run(scenario, 10000, response);
 
         assertThat("Wrong robustness",
                 response.robustness(),

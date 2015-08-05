@@ -70,9 +70,9 @@ public class SimulationFactory implements TaskStore {
 
         @Override
         public void execute() {
-            final RandomFailureSequence simulation = new RandomFailureSequence(RUN_COUNT, All.getInstance(), All.getInstance());
+            final RandomFailureSequence simulation = new RandomFailureSequence(All.getInstance(), All.getInstance());
             try {
-                trio.run(simulation, listener());
+                trio.run(simulation, RUN_COUNT, listener());
             
             } catch (StorageError ex) {
                 throw new RuntimeException("Unable to access storage", ex);
