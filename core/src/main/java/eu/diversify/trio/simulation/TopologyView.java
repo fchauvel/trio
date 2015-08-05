@@ -17,80 +17,52 @@
  */
 package eu.diversify.trio.simulation;
 
-import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.simulation.filter.Filter;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * A view of a specific subset of a topology.
  */
-public class TopologyView implements Topology {
+public class TopologyView extends TopologyDecorator {
 
-    private final Assembly assembly;
-    private final Topology topology;
-    private final BitSet selection;
+    private final Set<String> selection;
 
-    TopologyView(Assembly assembly, Topology subject, BitSet bitset) {
-        this.topology = subject;
-        this.selection = bitset;
-        this.assembly = assembly;
+    TopologyView(Topology subject, Set<String> selection) {
+        super(subject);
+        this.selection = selection;
+    }
+    
+    @Override
+    public int size() {
+        return selection.size();
     }
 
-    public int getCapacity() {
-        return selection.cardinality();
-    }
-
-    public void activate(String component) {
-        topology.activate(component);
-    }
-
-    public void inactivate(String component) {
-        topology.inactivate(component);
-    }
-
-    public boolean isActive(String componentName) {
-        return topology.isActive(componentName);
-    }
-
-    public boolean isInactive(String componentName) {
-        return topology.isInactive(componentName);
-    }
-
-    public boolean contains(String componentName) {
-        return selection.get(assembly.indexOf(componentName));
-    }
-
+    @Override
     public boolean hasActiveComponents() {
-        return !asBitSet().isEmpty();
+        for (String eachName: selection) {
+            if (getTopology().isActive(eachName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    @Override
     public List<String> activeComponents() {
-        final List<String> activeComponents = new ArrayList<String>(getCapacity());
-        for (String eachComponent : topology.activeComponents()) {
-            if (contains(eachComponent)) {
-                activeComponents.add(eachComponent);
+        final List<String> activeComponents = new ArrayList<String>(size());
+        for (String each : selection) {
+            if (getTopology().isActive(each)) {
+                activeComponents.add(each);
             }
         }
         return activeComponents;
     }
 
-    public BitSet asBitSet() {
-        BitSet states = topology.asBitSet();
-        states.and(selection);
-        return states;
-    }
-
+    @Override
     public Topology select(Filter selector) {
-        final Set<String> selection = selector.resolve(assembly);
-        final BitSet bitset = new BitSet(assembly.size());
-        for (String eachComponent : selection) {
-            bitset.set(assembly.indexOf(eachComponent));
-        }
-        bitset.and(asBitSet());
-        return new TopologyView(assembly, this, bitset);
+        return new TopologyView(this, selector.resolve(architecture()));
     }
 
 }

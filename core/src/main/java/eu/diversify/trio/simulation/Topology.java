@@ -15,11 +15,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.simulation;
 
-
+import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.simulation.filter.Filter;
-import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -28,9 +44,20 @@ import java.util.List;
 public interface Topology {
 
     /**
+     * @return the architecture associated with this topology
+     */
+    Assembly architecture();
+
+    /**
      * @return the number of component in the topology
      */
-    int getCapacity();
+    int size();
+
+    /**
+     * @return true if the topology contains a component with the given name
+     * @param componentName the name of component of interest
+     */
+    boolean contains(String componentName);
 
     /**
      * Activate the component whose name is given
@@ -67,12 +94,6 @@ public interface Topology {
      * @return the names of component that are active
      */
     List<String> activeComponents();
-
-    /**
-     * @return the topology as a bit set, where each bit indicate the status of
-     * one component
-     */
-    BitSet asBitSet();
 
     /**
      * Create a view of some specific component, match the given selection

@@ -46,7 +46,7 @@ public class TopologyTest extends TestCase {
 
         sut.inactivate("Foo");
 
-        assertThat("Survivor count", sut.getCapacity(), is(equalTo(2)));
+        assertThat("Survivor count", sut.size(), is(equalTo(2)));
     }
 
   

@@ -23,7 +23,6 @@ import eu.diversify.trio.simulation.filter.Filter;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * One particular configuration of the system
@@ -33,23 +32,32 @@ public class AssemblyState implements Topology {
     public static final boolean ACTIVE = true;
     public static final boolean INACTIVE = !ACTIVE;
 
-    private final Assembly system;
+    private final Assembly architecture;
     private final BitSet isActive;
 
     public AssemblyState(Assembly system) {
-        this.system = system;
+        this.architecture = system;
         this.isActive = new BitSet(system.size());
         this.isActive.set(0, system.size(), true);
     }
 
+    public Assembly architecture() {
+        return architecture;
+    }
+    
+    
     @Override
-    public int getCapacity() {
-        return system.size();
+    public int size() {
+        return architecture.size();
+    }
+
+    public boolean contains(String componentName) {
+        return this.architecture.hasComponentNamed(componentName);
     }
 
     @Override
     public boolean isActive(String componentName) {
-        return isActive.get(system.indexOf(componentName));
+        return isActive.get(architecture.indexOf(componentName));
     }
 
     @Override
@@ -58,7 +66,7 @@ public class AssemblyState implements Topology {
     }
 
     public void setStatusOf(String component, boolean isActive) {
-        this.isActive.set(system.indexOf(component), isActive);
+        this.isActive.set(architecture.indexOf(component), isActive);
     }
 
     @Override
@@ -77,11 +85,11 @@ public class AssemblyState implements Topology {
         boolean updated = true;
         while (updated) {
             updated = false;
-            final BitSet remainActive = new BitSet(system.size());
+            final BitSet remainActive = new BitSet(architecture.size());
             for (int i = isActive.nextSetBit(0);
                     i >= 0;
                     i = isActive.nextSetBit(i + 1)) {
-                remainActive.set(i, isActive.get(i) && system.getComponent(i).isSatisfiedIn(this));
+                remainActive.set(i, isActive.get(i) && architecture.getComponent(i).isSatisfiedIn(this));
                 updated |= isActive.get(i) != remainActive.get(i);
             }
             this.isActive.and(remainActive);
@@ -89,12 +97,7 @@ public class AssemblyState implements Topology {
     }
     
     public Topology select(Filter selector) {
-        final Set<String> selection = selector.resolve(system);
-        final BitSet bitset = new BitSet(system.size());
-        for(String eachComponent: selection) {
-            bitset.set(system.indexOf(eachComponent));
-        }
-        return new TopologyView(system, this, bitset);
+        return new TopologyView(this, selector.resolve(architecture));
     }
 
     public boolean hasActiveComponents() {
@@ -102,18 +105,13 @@ public class AssemblyState implements Topology {
     }
 
     public List<String> activeComponents() {
-        final List<String> activeComponents = new ArrayList<String>(system.size());
+        final List<String> activeComponents = new ArrayList<String>(architecture.size());
         for (int index = isActive.nextSetBit(0);
                 index >= 0;
                 index = isActive.nextSetBit(index + 1)) {
-            activeComponents.add(system.getComponent(index).getName());
+            activeComponents.add(architecture.getComponent(index).getName());
         }
         return activeComponents;
     }
-
-    public BitSet asBitSet() {
-        return (BitSet) this.isActive.clone();
-    }
-
 
 }
