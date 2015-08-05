@@ -15,27 +15,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.unit.simulation.filters;
 
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.*;
+import eu.diversify.trio.simulation.AssemblyState;
+import eu.diversify.trio.simulation.Topology;
 import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 import eu.diversify.trio.simulation.filter.TaggedAs;
@@ -57,20 +43,20 @@ public class FiltersTest extends TestCase {
     @Test
     public void filtersShouldBeEffective() {
 
-        Assembly system = systemWithABC(defaultTags());
+        Topology system = systemWithABC(defaultTags());
 
         Filter filter = new TaggedAs("X").or(new TaggedAs("Y").and(new TaggedAs("Z").not()));
-        Set<String> result = filter.resolve(system);
+        Set<String> result = filter.evaluate(system);
 
         assertThat(result, containsInAnyOrder("A", "C"));
     }
 
     @Test
     public void allShouldSelectAllComponents() {
-        Assembly system = systemWithABC(defaultTags());
+        Topology system = systemWithABC(defaultTags());
 
         Filter filter = All.getInstance();
-        Set<String> result = filter.resolve(system);
+        Set<String> result = filter.evaluate(system);
 
         assertThat(result, containsInAnyOrder("A", "B", "C"));
     }
@@ -118,13 +104,13 @@ public class FiltersTest extends TestCase {
         return tags;
     }
 
-    protected Assembly systemWithABC(List<Tag> tags) {
+    protected Topology systemWithABC(List<Tag> tags) {
         List<Component> components = new ArrayList<Component>();
         components.add(new Component("A"));
         components.add(new Component("B"));
         components.add(new Component("C"));
         Assembly system = new Assembly("test", components, tags);
-        return system;
+        return new AssemblyState(system);
     }
 
 }

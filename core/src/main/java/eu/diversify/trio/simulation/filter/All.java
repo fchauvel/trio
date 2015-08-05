@@ -18,7 +18,7 @@
 
 package eu.diversify.trio.simulation.filter;
 
-import eu.diversify.trio.core.Assembly;
+import eu.diversify.trio.simulation.Topology;
 import java.util.Set;
 
 /**
@@ -44,10 +44,11 @@ public class All extends Filter {
     }
 
     ;
-    
+   
+
     @Override
-    public Set<String> resolve(Assembly system) {
-        return system.getComponentNames();
+    public Set<String> evaluate(Topology topology) {
+        return topology.architecture().getComponentNames();
     }
 
     @Override

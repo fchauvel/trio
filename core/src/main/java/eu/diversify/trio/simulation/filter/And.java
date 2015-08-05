@@ -17,7 +17,7 @@
  */
 package eu.diversify.trio.simulation.filter;
 
-import eu.diversify.trio.core.Assembly;
+import eu.diversify.trio.simulation.Topology;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,13 +34,16 @@ public class And extends Filter {
         this.right = right;
     }
 
+
     @Override
-    public Set<String> resolve(Assembly system) {
+    public Set<String> evaluate(Topology topology) {
         final Set<String> results = new HashSet<String>();
-        results.addAll(left.resolve(system));
-        results.retainAll(right.resolve(system));
+        results.addAll(left.evaluate(topology));
+        results.retainAll(right.evaluate(topology));
         return results;
     }
+    
+    
 
     @Override
     public String toString() {

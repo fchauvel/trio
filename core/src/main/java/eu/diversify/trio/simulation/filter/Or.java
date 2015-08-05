@@ -15,9 +15,26 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.simulation.filter;
 
-import eu.diversify.trio.core.Assembly;
+import eu.diversify.trio.simulation.Topology;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,10 +52,10 @@ public class Or extends Filter {
     }
 
     @Override
-    public Set<String> resolve(Assembly system) {
+    public Set<String> evaluate(Topology topology) {
         final Set<String> results = new HashSet<String>();
-        results.addAll(left.resolve(system));
-        results.addAll(right.resolve(system));
+        results.addAll(left.evaluate(topology));
+        results.addAll(right.evaluate(topology));
         return results;
     }
 
@@ -47,6 +64,4 @@ public class Or extends Filter {
         return String.format("(%s or %s)", left.toString(), right.toString());
     }
 
-    
-    
 }

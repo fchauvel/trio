@@ -62,7 +62,7 @@ public class TopologyView extends TopologyDecorator {
 
     @Override
     public Topology select(Filter selector) {
-        return new TopologyView(this, selector.resolve(architecture()));
+        return new TopologyView(this, selector.evaluate(this)); 
     }
 
 }
