@@ -13,7 +13,7 @@ import eu.diversify.trio.generator.Generator2;
 import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskStore;
-import eu.diversify.trio.simulation.RandomFailureSequence;
+import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.filter.All;
 import java.io.IOException;
 import java.util.List;
@@ -70,7 +70,7 @@ public class SimulationFactory implements TaskStore {
 
         @Override
         public void execute() {
-            final RandomFailureSequence simulation = new RandomFailureSequence(All.getInstance(), All.getInstance());
+            final RandomSimulation simulation = new RandomSimulation(All.getInstance(), All.getInstance());
             try {
                 trio.run(simulation, RUN_COUNT, listener());
             

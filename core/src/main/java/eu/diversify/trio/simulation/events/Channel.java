@@ -54,15 +54,15 @@ public class Channel implements Listener {
         }
     }
 
-    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
+    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
         for(Listener eachListener: listeners) {
-            eachListener.sequenceInitiated(simulationId, sequenceId, observed, controlled);
+            eachListener.sequenceInitiated(simulationId, sequenceId, observed, duration);
         }
     }
 
-    public void failure(int simulationId, int sequenceId, String failedComponent, List<String> impactedComponents) {
+    public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> impactedComponents) {
         for(Listener eachListener: listeners) {
-            eachListener.failure(simulationId, sequenceId, failedComponent, impactedComponents);
+            eachListener.failure(simulationId, sequenceId, time, failedComponent, impactedComponents);
         }
     }
 

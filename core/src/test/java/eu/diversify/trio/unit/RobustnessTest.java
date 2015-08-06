@@ -42,8 +42,9 @@ import eu.diversify.trio.core.storage.StorageError;
 import org.junit.Test;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.simulation.filter.TaggedAs;
-import eu.diversify.trio.simulation.RandomFailureSequence;
+import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.Simulation;
+import eu.diversify.trio.simulation.TimedSimulation;
 import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 import java.util.Collection;
@@ -62,83 +63,76 @@ import static org.hamcrest.Matchers.is;
 public class RobustnessTest {
 
     private final Trio trio;
-    private final Filter observed;
-    private final Filter controlled;
+    private final Simulation simulation;
     private final double expectedRobustness;
 
-    public RobustnessTest(Storage storage, Filter observed, Filter controlled, double expectedRobustness) {
+    public RobustnessTest(Storage storage, Simulation simulation, double expectedRobustness) {
         this.trio = new Trio(storage);
-        this.observed = observed;
-        this.controlled = controlled;
+        this.simulation = simulation;
         this.expectedRobustness = expectedRobustness;
     }
 
     @Test
     public void test() throws InvalidSystemException, StorageError {
 
-        final Simulation scenario = new RandomFailureSequence(observed, controlled);
-
         final TrioResponse response = new TrioResponse();
-        trio.run(scenario, 10000, response);
+        trio.run(simulation, 100000, response);
 
         assertThat("Wrong robustness",
                 response.robustness(),
                 is(closeTo(expectedRobustness, TOLERANCE)));
     }
 
-    
-    private static final double TOLERANCE = 1e-2;
+    private static final double TOLERANCE = 1e-3;
 
-    
     @Parameterized.Parameters
     public static Collection<Object[]> makeExamples() {
         final Collection<Object[]> examples = new LinkedList<Object[]>();
 
         examples.add(new Object[]{
             Samples.A_require_B_or_C(),
-            All.getInstance(),
-            All.getInstance(),
+            new RandomSimulation(),
             (3D / 9) * (4D / 6) + (2D / 9) * (2D / 6)
         });
 
         examples.add(new Object[]{
             Samples.A_require_B_and_C(),
-            All.getInstance(),
-            All.getInstance(),
+            new RandomSimulation(),
             (2D / 3) * (1D / 9) + (1D / 3) * (3D / 9)
         });
 
         examples.add(new Object[]{
             Samples.ABC_with_circular_dependencies(),
-            All.getInstance(),
-            All.getInstance(),
+            new RandomSimulation(),
             0D
         });
 
         examples.add(new Object[]{
             Samples.ABC_with_linear_dependencies(),
-            All.getInstance(),
-            All.getInstance(),
+            new RandomSimulation(),
             (1D / 6) * (3D / 9) + (1D / 6) * (2D / 9) + (1D / 3) * (1D / 9)
         });
 
         examples.add(new Object[]{
             Samples.oneClientAndOneServer(),
-            new TaggedAs("internal"),
-            new TaggedAs("external"),
+            new RandomSimulation(new TaggedAs("internal"), new TaggedAs("external")),
             0D});
 
         examples.add(new Object[]{
             Samples.oneClientRequiresServerAndVM(),
-            new TaggedAs("internal"),
-            new TaggedAs("external"),
+            new RandomSimulation(new TaggedAs("internal"), new TaggedAs("external")),
             0.125});
 
         examples.add(new Object[]{
             Samples.oneClientRequiresClusteredServers(),
-            new TaggedAs("internal"),
-            new TaggedAs("external"),
+            new RandomSimulation(new TaggedAs("internal"), new TaggedAs("external")),
             7D / 18});
+        
+        examples.add(new Object[]{
+            Samples.A_requires_B_and_C_with_MTTF(),
+            new TimedSimulation(new TaggedAs("service"), new TaggedAs("resource")),
+            3D / 8
+        });
 
         return examples;
     }

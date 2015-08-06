@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -48,26 +49,28 @@ public class RobustnessAggregatorTest {
         final int scenarioId = 1;
 
         simulation.simulationInitiated(scenarioId);
-        statistics.statisticReady(failureSequence(scenarioId), failureSequenceA());
-        statistics.statisticReady(failureSequence(scenarioId), failureSequenceB());
+        statistics.statisticReady(failureSequence(scenarioId), noImpactSequence());
+        statistics.statisticReady(failureSequence(scenarioId), oneKillAllSequence());
         simulation.simulationComplete(scenarioId);
 
         results.verifyRobustness(scenarioId, 0.5D);
     }
 
-    private static FailureSequence failureSequenceB() {
-        final FailureSequence failureSequence = new FailureSequence(2, 4, 4);
-        failureSequence.record("X", 0);
-        return failureSequence;
+    private static FailureSequence oneKillAllSequence() {
+        final FailureSequence sequence = new FailureSequence(2, 4, 5);
+        sequence.record("X", 1D, 0);        
+        assertThat(sequence.normalizedRobustness(), is(equalTo(0D)));
+        return sequence;
     }
 
-    private static FailureSequence failureSequenceA() {
-        final FailureSequence failureSequence = new FailureSequence(1, 4, 4);
-        failureSequence.record("W", 4);
-        failureSequence.record("X", 4);
-        failureSequence.record("Y", 4);
-        failureSequence.record("Z", 4);
-        return failureSequence;
+    private static FailureSequence noImpactSequence() {
+        final FailureSequence sequence = new FailureSequence(1, 4, 5);
+        sequence.record("W", 1D, 4);
+        sequence.record("X", 2D, 4);
+        sequence.record("Y", 3D, 4);
+        sequence.record("Z", 4D, 4);
+        assertThat(sequence.normalizedRobustness(), is(equalTo(1D)));
+        return sequence;
     }
 
     private static Statistic failureSequence(final int scenarioId) {
@@ -81,7 +84,6 @@ public class RobustnessAggregatorTest {
         public Collector() {
             results = new HashMap<Statistic, Robustness>();
         }
-                
         
         public void statisticReady(Statistic statistic, Object value) {
             results.put(statistic, (Robustness) value);

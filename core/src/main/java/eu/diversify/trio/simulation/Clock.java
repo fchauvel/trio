@@ -15,35 +15,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.diversify.trio.simulation;
 
 /**
- * Drive the execution of a simulation (iterator of action)
+ * The time in the simulation
  */
-public abstract class Controller {
+public class Clock {
+    
+    private double time;
 
-    protected final Topology state;
-    protected final Clock clock;
-
-    public Controller(Topology state, Clock clock) {
-        this.state = state;
-        this.clock = clock;
+    public Clock() {
+        time = 0;
     }
     
-    /**
-     * @return true if there are more action to perform,
-     * false otherwise.
-     */
-    public abstract boolean hasMoreAction();
-
-    /**
-     * @return the next action to apply on this state
-     */
-    public abstract Action nextAction();
+    public double getTime() {
+        return this.time;
+    }
     
-    /**
-     * @return the maximum duration of a simulation
-     */
-    public abstract double duration();
-
+    public void setTime(double time) {
+        assert time > this.time: "Time is moving backward (now: " + this.time + " ; next: " + time +")";
+        this.time = time;
+    }
+    
+    public void increment(double lap) {
+        assert lap > 0: "Time cannot move back ( adding " + lap + ")";
+        this.time += lap;
+    }
+    
 }

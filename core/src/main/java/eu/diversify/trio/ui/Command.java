@@ -34,7 +34,7 @@
  */
 package eu.diversify.trio.ui;
 
-import eu.diversify.trio.simulation.RandomFailureSequence;
+import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.filter.All;
 import eu.diversify.trio.simulation.filter.Filter;
 import eu.diversify.trio.simulation.filter.TaggedAs;
@@ -179,7 +179,7 @@ public class Command {
     }
 
     public Simulation getSimulation() {
-        return new RandomFailureSequence(observation(), control());
+        return new RandomSimulation(observation(), control());
     }
 
     private Filter observation() {

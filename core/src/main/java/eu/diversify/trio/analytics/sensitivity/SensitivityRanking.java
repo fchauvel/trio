@@ -44,11 +44,11 @@ public class SensitivityRanking implements eu.diversify.trio.simulation.events.L
         this.rankings = new HashMap<Integer, Ranking>();
     }
 
-    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
+    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
        // Nothing to be done
     }
 
-    public void failure(int simulationId, int sequenceId, String failedComponent, List<String> impactedComponents) {
+    public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> impactedComponents) {
         final Ranking ranking = rankings.get(simulationId);
         if (ranking == null) {
             final String description = String.format("Unknown simulation ID %d", simulationId);

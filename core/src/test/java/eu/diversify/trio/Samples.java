@@ -15,40 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio;
 
 import eu.diversify.trio.core.Assembly;
@@ -165,7 +132,8 @@ public class Samples {
     }
 
     public static Storage oneClientRequiresClusteredServers() {
-        final String text = "components: "
+        final String text 
+                = "components: "
                 + " - Client requires Server and VM_Client "
                 + " - Server requires VM_Server1 or VM_Server2"
                 + " - VM_Server1"
@@ -175,6 +143,20 @@ public class Samples {
                 + " - 'internal' on Client, Server"
                 + " - 'external' on VM_Client, VM_Server1, VM_Server2";
         return storageWith(fromText(text));
+    }
+    
+    public static Storage A_requires_B_and_C_with_MTTF() {
+        final String text 
+                = "components: "
+                + " - SA requires RA"
+                + " - SB requires RB"
+                + " - RA [4.5]"
+                + " - RB [1.5]"
+                + "tags:"
+                + " - 'service' on SA, SB"
+                + " - 'resource' on RA, RB";
+        return storageWith(fromText(text));
+                
     }
 
 }

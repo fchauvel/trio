@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.Assembly;
@@ -70,13 +54,13 @@ public class Experiment {
      */
     private void replicate() {
         currentRun++;
-        final Controller controller = simulation.prepareController();
-        final Topology state = new MonitoredTopology(new AssemblyState(subject));
+        final Clock clock = new Clock();
+        final Topology state = new MonitoredTopology(new AssemblyState(subject), clock);
+        final Controller controller = simulation.prepareController(state, clock);
         final Topology observed = simulation.observed(state);
-        final Topology controlled = simulation.controlled(state);
-        listener.sequenceInitiated(id, currentRun, observed.activeComponents(), controlled.activeComponents());
-        while (controller.hasMoreAction(state)) {
-            final Action action = controller.nextAction(state);
+        listener.sequenceInitiated(id, currentRun, observed.activeComponents(), controller.duration()); 
+        while (controller.hasMoreAction()) {
+            final Action action = controller.nextAction();
             action.executeOn(state);
         }
         listener.sequenceComplete(id, currentRun);
@@ -86,16 +70,18 @@ public class Experiment {
     private class MonitoredTopology extends TopologyDecorator {
 
         private final Topology observed;
+        private final Clock clock;
 
-        public MonitoredTopology(Topology topology) {
+        public MonitoredTopology(Topology topology, Clock clock) {
             super(topology);        
             observed = simulation.observed(getTopology());
+            this.clock = clock;
         }
 
         @Override
         public void inactivate(String component) {
             super.inactivate(component);
-            listener.failure(id, currentRun, component, observed.activeComponents());
+            listener.failure(id, currentRun, clock.getTime(), component, observed.activeComponents());
         }
     }
 

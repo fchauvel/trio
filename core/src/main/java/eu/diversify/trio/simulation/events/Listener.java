@@ -41,7 +41,7 @@ public interface Listener {
      * @param controlled the unique names of components under observation in the
      * failure sequence
      */
-    void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled);
+    void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration);
 
     /**
      * Indicate that the simulation of a single failure and the observed impact
@@ -49,11 +49,12 @@ public interface Listener {
      *
      * @param simulationId the unique ID of the simulation
      * @param sequenceId the unique ID of the on going failure sequence
+     * @param time the time when the failure occurred
      * @param failedComponent the unique name of the failed components
      * @param impactedComponents the unique names of all component that where
      * impacted by the failure
      */
-    void failure(int simulationId, int sequenceId, String failedComponent, List<String> impactedComponents);
+    void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> impactedComponents);
 
     /**
      * Indicate that the simulation of a failure sequence is complete.

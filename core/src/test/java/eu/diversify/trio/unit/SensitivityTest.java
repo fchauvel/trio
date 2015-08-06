@@ -24,7 +24,7 @@ import eu.diversify.trio.Trio;
 import org.junit.Test;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.simulation.filter.TaggedAs;
-import eu.diversify.trio.simulation.RandomFailureSequence;
+import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.Simulation;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -59,7 +59,7 @@ public class SensitivityTest {
     @Test
     public void testExample() throws InvalidSystemException, StorageError {
 
-        final Simulation scenario = new RandomFailureSequence(observed, controlled);
+        final Simulation scenario = new RandomSimulation(observed, controlled);
 
         final TrioResponse response = new TrioResponse();
         trio.run(scenario, 10000, response);

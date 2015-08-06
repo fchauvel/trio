@@ -24,7 +24,6 @@ import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.threats.ThreatRanking;
 import eu.diversify.trio.simulation.events.Channel;
-import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +53,11 @@ public class ThreatRankingTest {
         final ThreatRanking threats = new ThreatRanking(simulation, statistics, results);
 
         simulation.simulationInitiated(1);
-        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C", "D"));
-        simulation.failure(1, 1, "A", asList("X", "Y", "Z"));
-        simulation.failure(1, 1, "B", asList("X", "Y", "Z"));
-        simulation.failure(1, 1, "C", asList("X", "Y", "Z"));
-        simulation.failure(1, 1, "D", asList("X", "Y", "Z"));
+        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 5);
+        simulation.failure(1, 1, 1D, "A", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, 2D, "B", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, 3D, "C", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, 4D, "D", asList("X", "Y", "Z"));
         simulation.sequenceComplete(1, 1);
         simulation.simulationComplete(1);
 

@@ -62,14 +62,14 @@ public class FailureSequenceAggregator {
 
     private class Subscription implements Listener {
 
-        public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
+        public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
             checkSequenceId(sequenceId);
-            sequences.put(sequenceId, new FailureSequence(sequenceId, observed.size(), controlled.size()));
+            sequences.put(sequenceId, new FailureSequence(sequenceId, observed.size(), duration));
         }
 
-        public void failure(int simulationId, int sequenceId, String failedComponent, List<String> survivors) {
+        public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> survivors) {
             FailureSequence sequence = sequenceWithId(sequenceId);
-            sequence.record(failedComponent, survivors.size());
+            sequence.record(failedComponent, time, survivors.size());
         }
 
         public void sequenceComplete(int simulationId, int sequenceId) {

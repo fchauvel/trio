@@ -155,6 +155,10 @@ public class Assembly implements AssemblyPart {
     public Component getComponent(int index) {
         return components.get(index);
     }
+    
+    public Component getComponent(String name) {
+        return getComponent(indexOf(name));
+    }
 
     public Component requirementOf(String componentName) {
         return getComponent(indexOf(componentName));

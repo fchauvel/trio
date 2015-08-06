@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.simulation.filter.Filter;
@@ -26,47 +25,59 @@ import java.util.List;
 /**
  * A predefined sequence of failure
  */
-public class FixedFailureSequence extends Simulation {
+@SuppressWarnings("PMD.UnusedPrivateField")
+public class FixedSimulation extends Simulation {
 
     private final List<Action> actions;
 
-    public FixedFailureSequence(Action... actions) {
+    public FixedSimulation(Action... actions) {
         super();
         this.actions = Arrays.asList(actions);
     }
 
-    public FixedFailureSequence(Filter observation, Filter control, Action... actions) {
+    public FixedSimulation(Filter observation, Filter control, Action... actions) {
         super(observation, control);
         this.actions = Arrays.asList(actions);
     }
 
     @Override
-    Controller prepareController() {
-        return new IterationController();
+    Controller prepareController(Topology state, Clock clock) {
+        return new IterationController(this, state, clock);
     }
 
     /**
      * Control the iteration on list of predefined actions
      */
-    private class IterationController implements Controller {
+    private static class IterationController extends Controller {
 
         private final Iterator<Action> actions;
+        private final Topology controlled;
+        private final Topology observed;
 
-        public IterationController() {
-            this.actions = FixedFailureSequence.this.actions.iterator();
+        public IterationController(FixedSimulation simulation, Topology state, Clock clock) {
+            super(state, clock);
+            controlled = simulation.controlled(state);
+            observed = simulation.observed(state);
+            this.actions = simulation.actions.iterator();
         }
 
-        public boolean hasMoreAction(Topology state) {
+        public boolean hasMoreAction() {
             return actions.hasNext()
-                    && observed(state).hasActiveComponents()
-                    && controlled(state).hasActiveComponents();
+                    && observed.hasActiveComponents()
+                    && controlled.hasActiveComponents();
         }
 
-        public Action nextAction(Topology state) {
-            if (!hasMoreAction(state)) {
+        public Action nextAction() {
+            if (!hasMoreAction()) {
                 throw new IllegalStateException("No more action");
             }
+            clock.increment(1);
             return actions.next();
+        }
+
+        @Override
+        public double duration() {
+            return controlled.size() + 1;
         }
     }
 

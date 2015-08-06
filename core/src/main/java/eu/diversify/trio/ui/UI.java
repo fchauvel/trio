@@ -23,7 +23,7 @@ import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.simulation.RandomFailureSequence;
+import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.Simulation;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -52,7 +52,7 @@ public class UI {
         out.println();
     }
 
-    public void showSimulation(final Assembly assembly, final RandomFailureSequence scenario) {
+    public void showSimulation(final Assembly assembly, final RandomSimulation scenario) {
         out.println("ASSEMBLY: " + assembly.getName());
         out.println("SCENARIO: " + this.format(scenario));
     }

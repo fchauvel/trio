@@ -46,10 +46,10 @@ public class SensitivityRankingTest {
         final SensitivityRanking ranking = new SensitivityRanking(simulation, results); 
 
         simulation.simulationInitiated(1);
-        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C"));
-        simulation.failure(1, 1, "A", new ArrayList<String>());
-        simulation.failure(1, 1, "B", asList("X"));
-        simulation.failure(1, 1, "C", asList("Y", "Z"));
+        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 4);
+        simulation.failure(1, 1, 1D, "A", new ArrayList<String>());
+        simulation.failure(1, 1, 2D, "B", asList("X"));
+        simulation.failure(1, 1, 3D, "C", asList("Y", "Z"));
         simulation.sequenceComplete(1, 1);
         simulation.simulationComplete(1);
 

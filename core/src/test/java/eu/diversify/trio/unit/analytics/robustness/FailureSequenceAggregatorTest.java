@@ -23,13 +23,12 @@ import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.simulation.events.Channel;
 
-import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -44,14 +43,14 @@ public class FailureSequenceAggregatorTest {
     public void shouldComputeTheRobustnessProperly() {
         final Channel simulation = new Channel();
         final Collector results = new Collector();
-        final FailureSequenceAggregator robustness = new FailureSequenceAggregator(simulation, results);
+        new FailureSequenceAggregator(simulation, results);
 
         simulation.simulationInitiated(1);
-        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), asList("A", "B", "C", "D"));
-        simulation.failure(1, 1, "A", asList("X", "Y", "Z"));
-        simulation.failure(1, 1, "B", asList("X", "Y", "Z"));
-        simulation.failure(1, 1, "C", asList("X", "Y", "Z"));
-        simulation.failure(1, 1, "D", asList("X", "Y", "Z"));
+        simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 5);
+        simulation.failure(1, 1, 1D, "A", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, 2D, "B", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, 3D, "C", asList("X", "Y", "Z"));
+        simulation.failure(1, 1, 4D, "D", asList("X", "Y", "Z"));
         simulation.sequenceComplete(1, 1);
         simulation.simulationComplete(1);
 
@@ -78,8 +77,8 @@ public class FailureSequenceAggregatorTest {
         public void assertEquals(int scenarioId, int sequenceId, int expected, double normalizedExpected) {
             final FailureSequence sequence = (FailureSequence) values.get(new Statistic(scenarioId, sequenceId, FailureSequenceAggregator.KEY_FAILURE_SEQUENCE));
             assertThat(sequence, is(not(nullValue())));
-            assertThat(sequence.robustness(), equalTo(expected));
-            assertThat(sequence.normalizedRobustness(), equalTo(normalizedExpected));
+            assertThat(sequence.robustness(), is(closeTo(expected, 1e-6)));
+            assertThat(sequence.normalizedRobustness(), is(closeTo(normalizedExpected, 1e-6)));
         }
 
     }

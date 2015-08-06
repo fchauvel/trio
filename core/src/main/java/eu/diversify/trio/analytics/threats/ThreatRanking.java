@@ -78,11 +78,11 @@ public class ThreatRanking implements Listener, eu.diversify.trio.simulation.eve
         rankings.put(simulationId, ranking);
     }
 
-    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, List<String> controlled) {
+    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
         // Nothing to be done
     }
 
-    public void failure(int simulationId, int sequenceId, String failedComponent, List<String> impactedComponents) {
+    public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> impactedComponents) {
         // Nothing to be done
     }
 

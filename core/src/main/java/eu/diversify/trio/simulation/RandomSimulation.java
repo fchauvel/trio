@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.simulation.actions.Inactivate;
@@ -44,16 +28,18 @@ import java.util.Random;
 /**
  * Random sequence of failure
  */
-public class RandomFailureSequence extends Simulation {
+public class RandomSimulation extends Simulation {
 
-  
-    public RandomFailureSequence(Filter observation, Filter control) {
+    public RandomSimulation() {
+    }
+
+    public RandomSimulation(Filter observation, Filter control) {
         super(observation, control);
     }
 
     @Override
-    Controller prepareController() {
-        return new SimulationController();
+    Controller prepareController(Topology state, Clock clock) {
+        return new SimulationController(this, state, clock);
     }
 
     /**
@@ -62,15 +48,25 @@ public class RandomFailureSequence extends Simulation {
      * Select randomly a component to fail, amongst the one under control that
      * are active.
      */
-    private class SimulationController implements Controller {
+    private static class SimulationController extends Controller {
 
-        public boolean hasMoreAction(Topology state) {
-            return observed(state).hasActiveComponents()
-                    && controlled(state).hasActiveComponents();
+        private final Topology controlled;
+        private final Topology observed;
+
+        public SimulationController(RandomSimulation simulation, Topology state, Clock clock) {
+            super(state, clock); 
+            controlled = simulation.controlled(state);
+            observed = simulation.observed(state);
         }
 
-        public Action nextAction(Topology state) {
-            final String selection = chooseAny(controlled(state).activeComponents());
+        public boolean hasMoreAction() {
+            return observed.hasActiveComponents()
+                    && controlled.hasActiveComponents();
+        }
+
+        public Action nextAction() {
+            final String selection = chooseAny(controlled.activeComponents());
+            clock.increment(1);
             return new Inactivate(selection);
         }
 
@@ -82,9 +78,16 @@ public class RandomFailureSequence extends Simulation {
             if (candidateList.size() == 1) {
                 return candidateList.get(0);
             }
-            return candidateList.get(new Random().nextInt(candidateList.size()));
+            return candidateList.get(RANDOM.nextInt(candidateList.size()));
+        }
+
+        @Override
+        public double duration() {
+            return controlled.size() + 1;
         }
 
     }
+    
+    private static final Random RANDOM = new Random();
 
 }
