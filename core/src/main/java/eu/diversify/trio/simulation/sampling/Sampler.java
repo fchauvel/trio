@@ -15,33 +15,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.simulation;
+
+package eu.diversify.trio.simulation.sampling;
+
+import eu.diversify.trio.simulation.Topology;
+import java.util.Random;
 
 /**
- * Drive the execution of a simulation (iterator of action)
+ * Choose one element in the given topology;
  */
-public abstract class Controller {
+public abstract class Sampler {
+    
+    final Topology topology;
 
-    protected final Clock clock;
-
-    public Controller(Clock clock) {
-        this.clock = clock;
+    public Sampler(Topology topology) {
+        this.topology = topology;
     }
     
-    /**
-     * @return true if there are more action to perform,
-     * false otherwise.
-     */
-    public abstract boolean hasMoreAction();
-
-    /**
-     * @return the next action to apply on this state
-     */
-    public abstract Action nextAction();
+    public abstract String pick();
     
-    /**
-     * @return the maximum duration of a simulation
-     */
-    public abstract double duration();
-
+    protected Random random() {
+        return RANDOM;
+    }
+    
+    private static final Random RANDOM = new Random();
 }

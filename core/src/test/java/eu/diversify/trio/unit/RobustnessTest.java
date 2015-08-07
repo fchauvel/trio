@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.unit;
 
 import eu.diversify.trio.Samples;
@@ -44,9 +28,7 @@ import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.simulation.filter.TaggedAs;
 import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.Simulation;
-import eu.diversify.trio.simulation.TimedSimulation;
-import eu.diversify.trio.simulation.filter.All;
-import eu.diversify.trio.simulation.filter.Filter;
+import eu.diversify.trio.simulation.RandomSimulation;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.junit.runner.RunWith;
@@ -130,8 +112,8 @@ public class RobustnessTest {
         
         examples.add(new Object[]{
             Samples.A_requires_B_and_C_with_MTTF(),
-            new TimedSimulation(new TaggedAs("service"), new TaggedAs("resource")),
-            3D / 8
+            new RandomSimulation(new TaggedAs("service"), new TaggedAs("resource")),
+            0.25
         });
 
         return examples;

@@ -51,7 +51,7 @@ public class Component implements AssemblyPart {
     public static final double DEFAULT_MTTF = 1D;
 
     private final String name;
-    private final double mttf;
+    private double mttf; // Must be final
     private final Requirement requirement;
 
     public Component(String name) {
@@ -96,6 +96,10 @@ public class Component implements AssemblyPart {
 
     public double meanTimeToFailure() {
         return mttf;
+    }
+    
+    public void setMeanTimeToFailure(double mttf) {
+        this.mttf = mttf;
     }
 
     public void begin(AssemblyVisitor visitor) {

@@ -150,8 +150,8 @@ public class Samples {
                 = "components: "
                 + " - SA requires RA"
                 + " - SB requires RB"
-                + " - RA [4.5]"
-                + " - RB [1.5]"
+                + " - RA [2.]"
+                + " - RB [3.]"
                 + "tags:"
                 + " - 'service' on SA, SB"
                 + " - 'resource' on RA, RB";

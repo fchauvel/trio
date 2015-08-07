@@ -20,10 +20,8 @@ package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.simulation.actions.Inactivate;
 import eu.diversify.trio.simulation.filter.Filter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import eu.diversify.trio.simulation.sampling.ProportionalSampling;
+import eu.diversify.trio.simulation.sampling.Sampler;
 
 /**
  * Random sequence of failure
@@ -50,13 +48,15 @@ public class RandomSimulation extends Simulation {
      */
     private static class SimulationController extends Controller {
 
+        private final Sampler sampler;
         private final Topology controlled;
         private final Topology observed;
 
         public SimulationController(RandomSimulation simulation, Topology state, Clock clock) {
-            super(state, clock); 
+            super(clock); 
             controlled = simulation.controlled(state);
             observed = simulation.observed(state);
+            sampler = new ProportionalSampling(controlled);
         }
 
         public boolean hasMoreAction() {
@@ -65,20 +65,9 @@ public class RandomSimulation extends Simulation {
         }
 
         public Action nextAction() {
-            final String selection = chooseAny(controlled.activeComponents());
+            final String selection = sampler.pick();
             clock.increment(1);
             return new Inactivate(selection);
-        }
-
-        private String chooseAny(Collection<String> candidates) {
-            if (candidates.isEmpty()) {
-                throw new IllegalArgumentException("Unable to choose from an empty collection!");
-            }
-            final List<String> candidateList = new ArrayList<String>(candidates);
-            if (candidateList.size() == 1) {
-                return candidateList.get(0);
-            }
-            return candidateList.get(RANDOM.nextInt(candidateList.size()));
         }
 
         @Override
@@ -88,6 +77,4 @@ public class RandomSimulation extends Simulation {
 
     }
     
-    private static final Random RANDOM = new Random();
-
 }

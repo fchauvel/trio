@@ -55,7 +55,7 @@ public class FixedSimulation extends Simulation {
         private final Topology observed;
 
         public IterationController(FixedSimulation simulation, Topology state, Clock clock) {
-            super(state, clock);
+            super(clock);
             controlled = simulation.controlled(state);
             observed = simulation.observed(state);
             this.actions = simulation.actions.iterator();
