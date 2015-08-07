@@ -8,8 +8,7 @@ import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.storage.InMemoryStorage;
 import eu.diversify.trio.core.storage.StorageError;
-import eu.diversify.trio.simulation.data.DataSet;
-import eu.diversify.trio.generator.Generator2;
+import eu.diversify.trio.generator.Generator;
 import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.performance.util.Task;
 import eu.diversify.trio.performance.util.TaskStore;
@@ -24,11 +23,11 @@ import java.util.Properties;
  */
 public class SimulationFactory implements TaskStore {
 
-    private final Generator2 generator;
+    private final Generator generator;
     private final GraphStore graphs;
 
     public SimulationFactory(GraphStore graphs) {
-        this.generator = new Generator2();
+        this.generator = new Generator();
         this.graphs = graphs;
     }
 
@@ -38,7 +37,7 @@ public class SimulationFactory implements TaskStore {
             final Graph data = graphs.fetch(id);
             final Assembly assembly = generator.nextAssembly(data);
             final Trio trio = new Trio(new InMemoryStorage(assembly));
-            return new SimulationTask(id, trio, assembly);
+            return new SimulationTask(id, trio);
 
         } catch (IOException ex) {
             throw new IllegalArgumentException("Unknown task ID " + id, ex);
@@ -52,14 +51,11 @@ public class SimulationFactory implements TaskStore {
 
         private final int id;
         private final Trio trio;
-        private final Assembly assembly;
         private final Properties properties;
-        private DataSet result;
-
-        public SimulationTask(int id, Trio trio, Assembly assembly) {
+ 
+        public SimulationTask(int id, Trio trio) {
             this.id = id;
             this.trio = trio;
-            this.assembly = assembly;
             this.properties = new Properties();
         }
 
