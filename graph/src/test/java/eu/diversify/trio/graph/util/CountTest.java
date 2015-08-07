@@ -1,4 +1,4 @@
-package eu.diversify.trio.utility;
+package eu.diversify.trio.graph.util;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -7,7 +7,7 @@ package eu.diversify.trio.utility;
  */
 
 
-import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.graph.util.Count;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;

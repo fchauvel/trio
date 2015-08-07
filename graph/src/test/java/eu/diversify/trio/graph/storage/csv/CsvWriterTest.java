@@ -1,9 +1,8 @@
 package eu.diversify.trio.graph.storage.csv;
 
-import eu.diversify.trio.graph.generator.GraphFactory;
-import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import static eu.diversify.trio.graph.GraphFactory.graphFactory;
 import eu.diversify.trio.graph.model.Graph;
-import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.graph.util.Count;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import static org.hamcrest.CoreMatchers.equalTo;

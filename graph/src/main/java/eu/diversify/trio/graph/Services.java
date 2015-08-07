@@ -2,7 +2,6 @@
 package eu.diversify.trio.graph;
 
 import eu.diversify.trio.graph.events.Dispatcher;
-import eu.diversify.trio.graph.generator.GraphFactory;
 
 /**
  * The service registry

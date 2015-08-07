@@ -1,9 +1,8 @@
 package eu.diversify.trio.graph;
 
-import eu.diversify.trio.graph.generator.GraphFactory;
-import static eu.diversify.trio.graph.generator.GraphFactory.graphFactory;
+import static eu.diversify.trio.graph.GraphFactory.graphFactory;
 import eu.diversify.trio.graph.model.Graph;
-import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.graph.util.Count;
 
 /**
  * Defines various graphs for testing purpose

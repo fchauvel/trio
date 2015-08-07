@@ -1,9 +1,7 @@
 package eu.diversify.trio.graph.storage.csv;
 
-import eu.diversify.trio.graph.Services;
 import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.graph.model.Vertex;
-import eu.diversify.trio.utility.Count;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +15,7 @@ import java.util.Map;
 public class CsvReader {
 
     public Graph read(InputStream in) throws IOException {
-        final Graph graph = Services.registry().factory().emptyGraph(new Count(0));
+        final Graph graph = new Graph();
 
         Map<Integer, Vertex> vertexes = new HashMap<>();
 

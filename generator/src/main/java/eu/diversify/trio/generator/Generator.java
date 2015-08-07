@@ -10,7 +10,6 @@ import eu.diversify.trio.generator.requirements.CachedLiteralFactory;
 import eu.diversify.trio.generator.requirements.FixedSizeBuilder;
 import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.graph.model.Vertex;
-import eu.diversify.trio.graph.generator.GraphGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,27 +23,12 @@ public class Generator {
     public static final String DEFAULT_ASSEMBLY_NAME = "randomly generated";
     public static final int DEFAULT_LITERAL_COUNT = 10000;
 
-    private final Setup setup;
     private final RequirementFactory factory;
     private final Random random;
 
     public Generator() {
-        this(new Setup());
-    }
-
-    public Generator(Setup setup) {
-        this.setup = setup;
         this.random = new Random();
         this.factory = new CachedLiteralFactory(DEFAULT_LITERAL_COUNT);
-    }
-
-    public Graph nextGraph(AssemblyKind kind) {
-        GraphGenerator graphs = setup.generatorFor(kind);
-        return graphs.nextGraph();
-    }
-
-    public Assembly nextAssembly(AssemblyKind kind) {
-        return nextAssembly(nextGraph(kind));
     }
 
     /**

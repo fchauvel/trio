@@ -1,8 +1,8 @@
-package eu.diversify.trio.graph.generator;
+package eu.diversify.trio.graph;
 
 import eu.diversify.trio.graph.model.Graph;
 import eu.diversify.trio.graph.model.Vertex;
-import eu.diversify.trio.utility.Count;
+import eu.diversify.trio.graph.util.Count;
 
 /**
  * Create various types of graphs
@@ -46,10 +46,6 @@ public class GraphFactory {
     private long nextGraphId() {
         graphId += 1;
         return graphId;
-    }
-
-    public Graph regularRingLattice(Count vertexes, Count neighborhood) {
-        return new RingLatticeGenerator(vertexes, neighborhood).nextGraph();
     }
 
     public Graph meshedGraph(Count vertexes) {
