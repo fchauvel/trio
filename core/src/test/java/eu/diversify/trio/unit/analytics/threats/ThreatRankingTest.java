@@ -53,7 +53,7 @@ public class ThreatRankingTest {
         
         final ThreatRanking threats = new ThreatRanking(results);
         simulation.register(threats.getSimulationHandler());
-        statistics.register(threats.getStatisticHandler(), threats.selection());
+        statistics.register(threats.getStatisticHandler());
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 5);
@@ -90,6 +90,10 @@ public class ThreatRankingTest {
             assertThat(threats, is(not(nullValue())));
             assertThat(threats.get(position-1).failureSequence(), is(equalTo(threat)));
             assertThat(threats.get(position-1).threatLevel(), is(closeTo(expected, 1e-9)));
+        }
+
+        public boolean accept(Statistic statistic) {
+            return true;
         }
 
     }

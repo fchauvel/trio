@@ -19,7 +19,6 @@ package eu.diversify.trio.unit.analytics.events;
 
 import eu.diversify.trio.StatisticDispatcher;
 import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -38,10 +37,11 @@ public class ChannelTest {
         final StatisticListener listener = context.mock(StatisticListener.class);
         final Statistic statistic = new Statistic(1, 1, "x");
 
-        channel.register(listener, toEverything());
+        channel.register(listener);
 
         context.checking(new Expectations() {
             {
+                oneOf(listener).accept(statistic); will(returnValue(true));
                 oneOf(listener).statisticReady(statistic, 14);
             }
         });
@@ -51,26 +51,17 @@ public class ChannelTest {
         context.assertIsSatisfied();
     }
 
-    private Selection toEverything() {
-        return new Selection() {
-
-            public boolean isSatisfiedBy(Statistic statistic, Object value) {
-                return true;
-            }
-
-        };
-    }
-
     @Test
     public void shouldNotConveyMessageToIrrelevantListeners() {
         final StatisticDispatcher channel = new StatisticDispatcher();
         final StatisticListener listener = context.mock(StatisticListener.class);
         final Statistic statistic = new Statistic(1, 1, "x");
 
-        channel.register(listener, toNothing());
+        channel.register(listener);
 
         context.checking(new Expectations() {
             {
+                oneOf(listener).accept(statistic); will(returnValue(false));
                 never(listener).statisticReady(statistic, 14);
             }
         });
@@ -80,37 +71,10 @@ public class ChannelTest {
         context.assertIsSatisfied();
     }
 
-    private Selection toNothing() {
-        return new Selection() {
-
-            public boolean isSatisfiedBy(Statistic statistic, Object value) {
-                return false;
-            }
-
-        };
-    }
-
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullListeners() {
         StatisticDispatcher channel = new StatisticDispatcher();
-        channel.register(null, toEverything());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void shouldRejectNullSelectors() {
-        StatisticDispatcher channel = new StatisticDispatcher();
-
-        channel.register(dummyListener(), null);
-    }
-
-    private StatisticListener dummyListener() {
-        return new StatisticListener() {
-
-            public void statisticReady(Statistic statistic, Object value) {
-                // Does nothing
-            }
-            
-        };
+        channel.register(null);
     }
 
 }

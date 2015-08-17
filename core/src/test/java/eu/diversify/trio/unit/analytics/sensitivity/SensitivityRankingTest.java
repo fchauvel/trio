@@ -84,6 +84,10 @@ public class SensitivityRankingTest {
             assertThat(value.get(position-1).averageImpact(), is(closeTo(meanImpact, 1e-9)));
         }
 
+        public boolean accept(Statistic statistic) {
+            return true;
+        }
+
     }
 
 }

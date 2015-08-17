@@ -17,7 +17,6 @@
  */
 package eu.diversify.trio;
 
-import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.events.StatisticListener;
 import java.util.ArrayList;
@@ -28,31 +27,24 @@ import java.util.List;
  */
 public class StatisticDispatcher implements StatisticListener {
 
-    private final List<Subscription> subscriptions;
+    private final List<StatisticListener> subscriptions;
 
     public StatisticDispatcher() {
-        subscriptions = new ArrayList<Subscription>();
+        subscriptions = new ArrayList<StatisticListener>();
     }
 
     public void statisticReady(Statistic statistic, Object value) {
-        for (Subscription eachSubscription : subscriptions) {
-            if (eachSubscription.includes(statistic, value)) {
-                eachSubscription.listener.statisticReady(statistic, value);
+        for (StatisticListener eachListener : subscriptions) {
+            if (eachListener.accept(statistic)) {
+                eachListener.statisticReady(statistic, value);
             }
         }
     }
 
-    public void register(StatisticListener listener, Selection selection) {
-        final Subscription newSubscription = new Subscription(checkListener(listener), checkSelection(selection));
-        this.subscriptions.add(newSubscription);
+    public void register(StatisticListener listener) {
+        this.subscriptions.add(checkListener(listener));
     }
-    
-    private Selection checkSelection(Selection selection) {
-        if (selection == null) {
-            throw new NullPointerException("Invalid selection ('null' found)");
-        }
-        return selection;
-    }
+
     
     private StatisticListener checkListener(StatisticListener listener) {
         if (listener == null) {
@@ -61,20 +53,9 @@ public class StatisticDispatcher implements StatisticListener {
         return listener;
     }
 
-    private static class Subscription {
-
-        private final StatisticListener listener;
-        private final Selection selection;
-
-        public Subscription(StatisticListener listener, Selection selection) {
-            this.listener = listener;
-            this.selection = selection;
-        }
-
-        public boolean includes(Statistic statistic, Object value) {
-            return selection.isSatisfiedBy(statistic, value);
-        }
-
+    public boolean accept(Statistic statistic) {
+        return true;
     }
+
 
 }

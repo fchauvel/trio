@@ -19,7 +19,6 @@
 package eu.diversify.trio;
 
 import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.robustness.Robustness;
@@ -66,13 +65,13 @@ public class Trio {
     private void wireThreatRanking() {
         ThreatRanking threats = new ThreatRanking(statistics);
         simulation.register(threats.getSimulationHandler());
-        statistics.register(threats.getStatisticHandler(), threats.selection());
+        statistics.register(threats.getStatisticHandler());
     }
 
     private void wireRobustnessAggregator() {
         RobustnessAggregator robustness = new RobustnessAggregator(statistics);
         simulation.register(robustness.getSimulationHandler());
-        statistics.register(robustness.getStatisticsHandler(), robustness.getStatistics());
+        statistics.register(robustness.getStatisticsHandler());
     }
 
     private void wireFailureSequenceAggregator() {
@@ -95,15 +94,17 @@ public class Trio {
     private static int runCounter = 0;
 
     private void subscribe(final TrioListener listener, int id) {
-        statistics.register(new Dispatcher(listener), new AllStatistics(id));
+        statistics.register(new Dispatcher(listener, id));
     }
 
     private static class Dispatcher implements StatisticListener {
 
         private final TrioListener listener;
+        private final int id;
 
-        public Dispatcher(TrioListener listener) {
+        public Dispatcher(TrioListener listener, int id) {
             this.listener = listener;
+            this.id = id;
         }
 
         public void statisticReady(Statistic statistic, Object value) {
@@ -118,20 +119,10 @@ public class Trio {
 
             }
         }
-    }
 
-    private static class AllStatistics implements Selection {
-
-        private final int id;
-
-        public AllStatistics(int id) {
-            this.id = id;
+        public boolean accept(Statistic statistic) {
+             return statistic.getScenarioId() == id;
         }
-
-        public boolean isSatisfiedBy(Statistic statistic, Object value) {
-            return statistic.getScenarioId() == id;
-        }
-
     }
 
 }

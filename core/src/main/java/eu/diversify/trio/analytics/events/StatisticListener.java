@@ -19,15 +19,25 @@
 package eu.diversify.trio.analytics.events;
 
 /**
- * 
+ * Events for the publication of new statistics
  */
 public interface StatisticListener {
 
     /**
+     * Check whether this listener accepts the given statistic.
+     *
+     * @param statistic the statistics being published
+     * @return true if this listener is interested in the given statistic, false
+     * otherwise.
+     */
+    boolean accept(Statistic statistic);
+
+    /**
      * Handle the publication of a new statistic
+     *
      * @param statistic some metadata describing the statistic being published
      * @param value the value being published
      */
     void statisticReady(Statistic statistic, Object value);
-    
+
 }

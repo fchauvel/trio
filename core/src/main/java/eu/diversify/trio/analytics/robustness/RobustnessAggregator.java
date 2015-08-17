@@ -18,7 +18,6 @@
 package eu.diversify.trio.analytics.robustness;
 
 import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.simulation.events.IdleSimulationListener;
 import java.util.HashMap;
@@ -45,10 +44,6 @@ public class RobustnessAggregator {
     public StatisticListener getStatisticsHandler() {
         return this.statisticsHandler;
     }
-    
-    public Selection getStatistics() {
-        return new OnlyFailureSequences();
-    }
 
     private Robustness robustnessOf(int scenarioId) {
         final Robustness robustness = robustnesses.get(scenarioId);
@@ -70,6 +65,10 @@ public class RobustnessAggregator {
             final FailureSequence sequence = (FailureSequence) value;
             final Robustness robustness = robustnessOf(statistic.getScenarioId());
             robustness.record(sequence.normalizedRobustness());
+        }
+
+        public boolean accept(Statistic statistic) {
+              return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
         }
 
     }
@@ -95,12 +94,4 @@ public class RobustnessAggregator {
     }
 
     public static final String KEY_ROBUSTNESS = "overall robustness";
-
-    private static class OnlyFailureSequences implements Selection {
-
-        public boolean isSatisfiedBy(Statistic statistic, Object value) {
-            return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
-        }
-    }
-
 }

@@ -47,7 +47,7 @@ public class RobustnessAggregatorTest {
         Collector results = new Collector();
         RobustnessAggregator robustness = new RobustnessAggregator(results);
         simulation.register(robustness.getSimulationHandler());
-        statistics.register(robustness.getStatisticsHandler(), robustness.getStatistics());
+        statistics.register(robustness.getStatisticsHandler());
         final int scenarioId = 1;
 
         simulation.simulationInitiated(scenarioId);
@@ -96,6 +96,10 @@ public class RobustnessAggregatorTest {
             
             assertThat(robustness, is(not(nullValue())));
             assertThat(robustness.average(), is(closeTo(expectedRobustness, 1e-6))); 
+        }
+
+        public boolean accept(Statistic statistic) {
+            return true;
         }
 
     }

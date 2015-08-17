@@ -37,7 +37,6 @@ package eu.diversify.trio.analytics.threats;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.simulation.events.IdleSimulationListener;
 import eu.diversify.trio.simulation.events.SimulationListener;
@@ -74,6 +73,10 @@ public class ThreatRanking implements StatisticListener {
         return this;
     }
 
+    public boolean accept(Statistic statistic) {
+        return interests.contains(statistic.getName());
+    }
+
     /**
      * Handle specific simulation events
      */
@@ -98,15 +101,6 @@ public class ThreatRanking implements StatisticListener {
             }
             results.statisticReady(new Statistic(simulationId, -1, KEY_THREAT_RANKING), ranking.rank());
         }
-    }
-
-    public Selection selection() {
-        return new Selection() {
-
-            public boolean isSatisfiedBy(Statistic statistic, Object value) {
-                return interests.contains(statistic.getName());
-            }
-        };
     }
 
     public void statisticReady(Statistic statistic, Object value) {

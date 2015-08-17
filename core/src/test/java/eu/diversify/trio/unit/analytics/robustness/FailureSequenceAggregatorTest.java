@@ -82,6 +82,10 @@ public class FailureSequenceAggregatorTest {
             assertThat(sequence.normalizedRobustness(), is(closeTo(normalizedExpected, 1e-6)));
         }
 
+        public boolean accept(Statistic statistic) {
+            return true;
+        }
+
     }
 
 }
