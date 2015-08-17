@@ -18,14 +18,13 @@
 
 package eu.diversify.trio.analytics.threats;
 
-import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.simulation.events.IdleSimulationListener;
 import eu.diversify.trio.simulation.events.SimulationListener;
 import java.util.ArrayList;
-import static java.util.Arrays.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -62,23 +61,16 @@ public class ThreatRanking {
     /**
      * Handle the publication of statistics
      */
-    private class StatisticHandler implements StatisticListener {
+    private class StatisticHandler extends IdleStatisticListener {
 
-        private final List<String> interests = asList(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
-
-        public boolean accept(Statistic statistic) {
-            return interests.contains(statistic.getName());
-        }
-
-        public void statisticReady(Statistic statistic, Object value) {
-            if (statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE)) {
-                final Ranking ranking = rankings.get(statistic.getScenarioId());
-                if (ranking == null) {
-                    final String description = String.format("Invalid scenario ID %d", statistic.getScenarioId());
-                    throw new IllegalStateException(description);
-                }
-                ranking.record((FailureSequence) value);
+        @Override
+        public void onFailureSequence(Statistic context, FailureSequence sequence) {
+            final Ranking ranking = rankings.get(context.getScenarioId());
+            if (ranking == null) {
+                final String description = String.format("Invalid scenario ID %d", context.getScenarioId());
+                throw new IllegalStateException(description);
             }
+            ranking.record(sequence);
         }
 
     }
@@ -105,7 +97,7 @@ public class ThreatRanking {
                 final String description = String.format("Unknown simulation ID %d", simulationId);
                 throw new IllegalStateException(description);
             }
-            results.statisticReady(new Statistic(simulationId, -1, KEY_THREAT_RANKING), ranking.rank());
+            results.onThreatRanking(new Statistic(simulationId, -1, KEY_THREAT_RANKING), ranking.rank());
         }
     }
 

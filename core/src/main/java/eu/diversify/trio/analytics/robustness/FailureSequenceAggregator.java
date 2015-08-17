@@ -77,7 +77,7 @@ public class FailureSequenceAggregator {
         @Override
         public void sequenceComplete(int simulationId, int sequenceId) {
             FailureSequence sequence = sequences.remove(sequenceId);
-            statistics.statisticReady(new Statistic(simulationId, sequenceId, KEY_FAILURE_SEQUENCE), sequence);
+            statistics.onFailureSequence(new Statistic(simulationId, sequenceId, KEY_FAILURE_SEQUENCE), sequence);
         }
     }
     

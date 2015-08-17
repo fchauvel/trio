@@ -22,6 +22,7 @@ import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.SimulationDispatcher;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
 
 import static java.util.Arrays.asList;
 import java.util.HashMap;
@@ -63,27 +64,22 @@ public class FailureSequenceAggregatorTest {
      * A dummy listener which collects the statistics that are published for
      * later check
      */
-    private class Collector implements StatisticListener {
+    private class Collector extends IdleStatisticListener {
  
-        private final Map<Statistic, Object> values;
+        private FailureSequence sequence;
 
         public Collector() {
-            values = new HashMap<Statistic, Object>();
         }
 
-        public void statisticReady(Statistic statistic, Object value) {
-            values.put(statistic, value);
+        @Override
+        public void onFailureSequence(Statistic context, FailureSequence sequence) {
+            this.sequence = sequence;
         }
-
+        
         public void assertEquals(int scenarioId, int sequenceId, int expected, double normalizedExpected) {
-            final FailureSequence sequence = (FailureSequence) values.get(new Statistic(scenarioId, sequenceId, FailureSequenceAggregator.KEY_FAILURE_SEQUENCE));
             assertThat(sequence, is(not(nullValue())));
             assertThat(sequence.robustness(), is(closeTo(expected, 1e-6)));
             assertThat(sequence.normalizedRobustness(), is(closeTo(normalizedExpected, 1e-6)));
-        }
-
-        public boolean accept(Statistic statistic) {
-            return true;
         }
 
     }

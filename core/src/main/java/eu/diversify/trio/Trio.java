@@ -19,20 +19,15 @@
 package eu.diversify.trio;
 
 import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
-import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.analytics.robustness.RobustnessAggregator;
-import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.analytics.sensitivity.SensitivityRanking;
-import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.analytics.threats.ThreatRanking;
 import eu.diversify.trio.simulation.Simulation;
 
 import eu.diversify.trio.core.storage.Storage;
 import eu.diversify.trio.core.storage.StorageError;
 import eu.diversify.trio.simulation.Experiment;
-import java.util.List;
 
 /**
  * The Trio application
@@ -79,9 +74,9 @@ public class Trio {
         this.simulation.register(failureSequences.getSimulationListener());
     }
 
-    public void run(Simulation simulation, int runCount, final TrioListener listener) throws StorageError {
+    public void run(Simulation simulation, int runCount, final StatisticListener listener) throws StorageError {
         final int id = nextId();
-        subscribe(listener, id);
+        statistics.register(listener);
         Experiment experiment = new Experiment(id, simulation, storage.first(), runCount, this.simulation);
         experiment.execute();
     }
@@ -93,36 +88,5 @@ public class Trio {
     
     private static int runCounter = 0;
 
-    private void subscribe(final TrioListener listener, int id) {
-        statistics.register(new Dispatcher(listener, id));
-    }
-
-    private static class Dispatcher implements StatisticListener {
-
-        private final TrioListener listener;
-        private final int id;
-
-        public Dispatcher(TrioListener listener, int id) {
-            this.listener = listener;
-            this.id = id;
-        }
-
-        public void statisticReady(Statistic statistic, Object value) {
-            if (statistic.getName().equals(RobustnessAggregator.KEY_ROBUSTNESS)) {
-                listener.onRobustness((Robustness) value);
-
-            } else if (statistic.getName().equals(SensitivityRanking.KEY_SENSITIVITY_RANKING)) {
-                listener.onSensitivityRanking((List<Sensitivity>) value);
-
-            } else if (statistic.getName().equals(ThreatRanking.KEY_THREAT_RANKING)) {
-                listener.onThreatRanking((List<Threat>) value);
-
-            }
-        }
-
-        public boolean accept(Statistic statistic) {
-             return statistic.getScenarioId() == id;
-        }
-    }
 
 }

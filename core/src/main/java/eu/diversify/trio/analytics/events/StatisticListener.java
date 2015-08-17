@@ -15,8 +15,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.analytics.events;
+
+import eu.diversify.trio.analytics.robustness.FailureSequence;
+import eu.diversify.trio.analytics.robustness.Robustness;
+import eu.diversify.trio.analytics.sensitivity.Sensitivity;
+import eu.diversify.trio.analytics.threats.Threat;
+import java.util.List;
 
 /**
  * Events for the publication of new statistics
@@ -24,20 +46,35 @@ package eu.diversify.trio.analytics.events;
 public interface StatisticListener {
 
     /**
-     * Check whether this listener accepts the given statistic.
+     * Triggered when a failure sequence is computed
      *
-     * @param statistic the statistics being published
-     * @return true if this listener is interested in the given statistic, false
-     * otherwise.
+     * @param context the correlation context
+     * @param sequence the computed failure sequence
      */
-    boolean accept(Statistic statistic);
+    void onFailureSequence(Statistic context, FailureSequence sequence);
 
     /**
-     * Handle the publication of a new statistic
+     * Triggered when the overall robustness is available
      *
-     * @param statistic some metadata describing the statistic being published
-     * @param value the value being published
+     * @param context the correlation context
+     * @param indicator the overall robustness
      */
-    void statisticReady(Statistic statistic, Object value);
+    void onRobustness(Statistic context, Robustness indicator);
+
+    /**
+     * Triggered when the ranking of all components is available
+     *
+     * @param context the correlation context
+     * @param indicator the ranking of component according to their sensitivity
+     */
+    void onSensitivityRanking(Statistic context, List<Sensitivity> indicator);
+
+    /**
+     * Triggered when the threat ranking is published
+     *
+     * @param context the correlation context
+     * @param indicator the ranking of all possible threats
+     */
+    void onThreatRanking(Statistic context, List<Threat> indicator);
 
 }

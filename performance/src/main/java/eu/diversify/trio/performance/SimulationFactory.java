@@ -1,10 +1,10 @@
 package eu.diversify.trio.performance;
 
 import eu.diversify.trio.Trio;
-import eu.diversify.trio.TrioListener;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import eu.diversify.trio.analytics.events.Statistic;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.robustness.Robustness;
-import eu.diversify.trio.analytics.sensitivity.Sensitivity;
-import eu.diversify.trio.analytics.threats.Threat;
 import eu.diversify.trio.core.Assembly;
 import eu.diversify.trio.core.storage.InMemoryStorage;
 import eu.diversify.trio.core.storage.StorageError;
@@ -15,7 +15,6 @@ import eu.diversify.trio.performance.util.TaskStore;
 import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.filter.All;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -76,21 +75,14 @@ public class SimulationFactory implements TaskStore {
             }
         }
 
-        public TrioListener listener() {
-            return new TrioListener() {
+        public StatisticListener listener() {
+            return new IdleStatisticListener() {
                 
                 @Override
-                public void onRobustness(Robustness indicator) {
+                public void onRobustness(Statistic context, Robustness indicator) {
                     properties.put(ROBUSTNESS_KEY, indicator.average());
                 }
 
-                @Override
-                public void onSensitivityRanking(List<Sensitivity> indicator) {
-                }
-
-                @Override
-                public void onThreatRanking(List<Threat> indicator) {
-                }
             };
         }
 

@@ -32,8 +32,26 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.analytics.robustness;
 
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
 import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.simulation.events.IdleSimulationListener;
@@ -73,21 +91,12 @@ public class RobustnessAggregator {
         return robustness;
     }
 
-    private class StatisticHandler implements StatisticListener {
+    private class StatisticHandler extends IdleStatisticListener {
 
-        public void statisticReady(Statistic statistic, Object value) {
-            if (!statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE)) {
-                final String description = String.format("Excepted statistic %s but provided with %s", FailureSequenceAggregator.KEY_FAILURE_SEQUENCE, statistic.getName());
-                throw new IllegalArgumentException(description);
-            }
-
-            final FailureSequence sequence = (FailureSequence) value;
-            final Robustness robustness = robustnessOf(statistic.getScenarioId());
+        @Override
+        public void onFailureSequence(Statistic context, FailureSequence sequence) {
+            final Robustness robustness = robustnessOf(context.getScenarioId());
             robustness.record(sequence.normalizedRobustness());
-        }
-
-        public boolean accept(Statistic statistic) {
-            return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
         }
 
     }
@@ -106,7 +115,7 @@ public class RobustnessAggregator {
         @Override
         public void simulationComplete(int simulationId) {
             final Robustness robustness = robustnessOf(simulationId);
-            results.statisticReady(new Statistic(simulationId, -1, KEY_ROBUSTNESS), robustness);
+            results.onRobustness(new Statistic(simulationId, -1, KEY_ROBUSTNESS), robustness);
             robustnesses.remove(simulationId);
         }
 

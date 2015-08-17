@@ -18,7 +18,8 @@
 
 package eu.diversify.trio.unit;
 
-import eu.diversify.trio.TrioListener;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.analytics.threats.Threat;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Capture the responses sent by Trio
  */
-public class TrioResponse implements TrioListener {
+public class TrioResponse extends  IdleStatisticListener {
     private Robustness robustness;
     private List<Sensitivity> sensitivities;
     private List<Threat> threats;
@@ -38,15 +39,18 @@ public class TrioResponse implements TrioListener {
         threats = null;
     }
 
-    public void onRobustness(Robustness indicator) {
+    @Override
+    public void onRobustness(Statistic context, Robustness indicator) {
         this.robustness = indicator;
     }
 
-    public void onSensitivityRanking(List<Sensitivity> indicator) {
+    @Override
+    public void onSensitivityRanking(Statistic context, List<Sensitivity> indicator) {
         this.sensitivities = indicator;
     }
 
-    public void onThreatRanking(List<Threat> indicator) {
+    @Override
+    public void onThreatRanking(Statistic context, List<Threat> indicator) {
         this.threats = indicator;
     }
   

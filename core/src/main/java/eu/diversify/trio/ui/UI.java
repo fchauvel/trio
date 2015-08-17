@@ -18,7 +18,9 @@
 package eu.diversify.trio.ui;
 
 import eu.diversify.trio.Configuration;
-import eu.diversify.trio.TrioListener;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import eu.diversify.trio.analytics.events.Statistic;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.analytics.threats.Threat;
@@ -89,28 +91,32 @@ public class UI {
                 + "Example: trio -o result.csv --run=10000 system.trio";
     }
 
-    public TrioListener getListener() {
+    public StatisticListener getListener() {
 
-        return new TrioListener() {
+        return new IdleStatisticListener() {
 
-            public void onRobustness(Robustness indicator) {
-                out.printf("Robustness: %.4f %n", indicator.average());
+            @Override
+            public void onThreatRanking(Statistic context, List<Threat> indicator) {
+                out.printf(" + Most threatening failure sequences: %n");
+
+                for (Threat eachThreat : topN(indicator, 5)) {
+                    out.printf("   - %7.4f -- %s %n", eachThreat.threatLevel(), eachThreat.failureSequence());
+                }
             }
 
-            public void onSensitivityRanking(List<Sensitivity> sensitivities) {
+            @Override
+            public void onSensitivityRanking(Statistic context, List<Sensitivity> indicator) {
                 out.printf(" + Most sensitive components: %n");
-                for (Sensitivity eachSensitivity : topN(sensitivities, 5)) {
+                for (Sensitivity eachSensitivity : topN(indicator, 5)) {
                     out.printf("   - %7.2f -- %s %n", eachSensitivity.averageImpact(), eachSensitivity.component());
                 }
             }
 
-            public void onThreatRanking(List<Threat> threats) {
-                out.printf(" + Most threatening failure sequences: %n");
-
-                for (Threat eachThreat : topN(threats, 5)) {
-                    out.printf("   - %7.4f -- %s %n", eachThreat.threatLevel(), eachThreat.failureSequence());
-                }
+            @Override
+            public void onRobustness(Statistic context, Robustness indicator) {
+                out.printf("Robustness: %.4f %n", indicator.average());
             }
+
 
             private <T> List<T> topN(List<T> source, int n) {
                 final ArrayList<T> selection = new ArrayList<T>();

@@ -85,7 +85,7 @@ public class SensitivityRanking {
                 throw new IllegalStateException(description);
             }
 
-            statistics.statisticReady(new Statistic(simulationId, -1, KEY_SENSITIVITY_RANKING), ranking.rank());
+            statistics.onSensitivityRanking(new Statistic(simulationId, -1, KEY_SENSITIVITY_RANKING), ranking.rank());
         }
 
     }

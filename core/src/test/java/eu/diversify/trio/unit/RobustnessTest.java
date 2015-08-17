@@ -26,7 +26,6 @@ import eu.diversify.trio.core.storage.StorageError;
 import org.junit.Test;
 import eu.diversify.trio.core.validation.InvalidSystemException;
 import eu.diversify.trio.simulation.filter.TaggedAs;
-import eu.diversify.trio.simulation.RandomSimulation;
 import eu.diversify.trio.simulation.Simulation;
 import eu.diversify.trio.simulation.RandomSimulation;
 import java.util.Collection;

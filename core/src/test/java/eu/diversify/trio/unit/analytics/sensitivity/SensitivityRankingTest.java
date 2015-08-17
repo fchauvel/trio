@@ -22,6 +22,7 @@ import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.sensitivity.Sensitivity;
 import eu.diversify.trio.SimulationDispatcher;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
@@ -65,29 +66,23 @@ public class SensitivityRankingTest {
      * A dummy listener which collects the statistics that are published for
      * later check
      */
-    private class Collector implements StatisticListener {
+    private class Collector extends IdleStatisticListener {
 
-        private final Map<Statistic, Object> values;
-
+        private List<Sensitivity> value;
+        
         public Collector() {
-            values = new HashMap<Statistic, Object>();
         }
 
-        public void statisticReady(Statistic statistic, Object value) {
-            values.put(statistic, value);
+        @Override
+        public void onSensitivityRanking(Statistic context, List<Sensitivity> indicator) {
+            value = indicator;
         }
-
+        
         public void assertSensitivityOf(int scenarioId, String component, int position, double meanImpact) {
-            List<Sensitivity> value = (List<Sensitivity>) values.get(new Statistic(scenarioId, -1, SensitivityRanking.KEY_SENSITIVITY_RANKING));
             assertThat(value, is(not(nullValue())));  
             assertThat(value.isEmpty(), is(false));
             assertThat(value.get(position-1).averageImpact(), is(closeTo(meanImpact, 1e-9)));
         }
-
-        public boolean accept(Statistic statistic) {
-            return true;
-        }
-
     }
 
 }

@@ -15,6 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.unit.analytics.robustness;
 
 import eu.diversify.trio.analytics.events.StatisticListener;
@@ -24,6 +41,7 @@ import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.robustness.Robustness;
 import eu.diversify.trio.SimulationDispatcher;
+import eu.diversify.trio.analytics.events.IdleStatisticListener;
 import java.util.HashMap;
 import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,8 +69,8 @@ public class RobustnessAggregatorTest {
         final int scenarioId = 1;
 
         simulation.simulationInitiated(scenarioId);
-        statistics.statisticReady(failureSequence(scenarioId), noImpactSequence());
-        statistics.statisticReady(failureSequence(scenarioId), oneKillAllSequence());
+        statistics.onFailureSequence(failureSequence(scenarioId), noImpactSequence());
+        statistics.onFailureSequence(failureSequence(scenarioId), oneKillAllSequence());
         simulation.simulationComplete(scenarioId);
 
         results.verifyRobustness(scenarioId, 0.5D);
@@ -60,7 +78,7 @@ public class RobustnessAggregatorTest {
 
     private static FailureSequence oneKillAllSequence() {
         final FailureSequence sequence = new FailureSequence(2, 4, 5);
-        sequence.record("X", 1D, 0);        
+        sequence.record("X", 1D, 0);
         assertThat(sequence.normalizedRobustness(), is(equalTo(0D)));
         return sequence;
     }
@@ -79,27 +97,21 @@ public class RobustnessAggregatorTest {
         return new Statistic(scenarioId, -1, FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
     }
 
-    private static class Collector implements StatisticListener {
+    private static class Collector extends IdleStatisticListener {
 
-        private final Map<Statistic, Robustness> results;
+        private Robustness robustness;
 
         public Collector() {
-            results = new HashMap<Statistic, Robustness>();
-        }
-        
-        public void statisticReady(Statistic statistic, Object value) {
-            results.put(statistic, (Robustness) value);
-        }
-        
-        public void verifyRobustness(int scenarioId, double expectedRobustness) {
-            Robustness robustness = results.get(new Statistic(scenarioId, -1, RobustnessAggregator.KEY_ROBUSTNESS));
-            
-            assertThat(robustness, is(not(nullValue())));
-            assertThat(robustness.average(), is(closeTo(expectedRobustness, 1e-6))); 
         }
 
-        public boolean accept(Statistic statistic) {
-            return true;
+        @Override
+        public void onRobustness(Statistic context, Robustness indicator) {
+            robustness = indicator;
+        }
+
+        public void verifyRobustness(int scenarioId, double expectedRobustness) {
+            assertThat(robustness, is(not(nullValue())));
+            assertThat(robustness.average(), is(closeTo(expectedRobustness, 1e-6)));
         }
 
     }
