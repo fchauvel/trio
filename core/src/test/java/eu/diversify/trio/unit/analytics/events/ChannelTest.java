@@ -17,8 +17,8 @@
  */
 package eu.diversify.trio.unit.analytics.events;
 
-import eu.diversify.trio.analytics.events.Channel;
-import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.StatisticDispatcher;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
 import org.jmock.Expectations;
@@ -34,11 +34,11 @@ public class ChannelTest {
 
     @Test
     public void shouldConveyMessageToInterestedListeners() {
-        final Channel channel = new Channel();
-        final Listener listener = context.mock(Listener.class);
+        final StatisticDispatcher channel = new StatisticDispatcher();
+        final StatisticListener listener = context.mock(StatisticListener.class);
         final Statistic statistic = new Statistic(1, 1, "x");
 
-        channel.subscribe(listener, toEverything());
+        channel.register(listener, toEverything());
 
         context.checking(new Expectations() {
             {
@@ -63,11 +63,11 @@ public class ChannelTest {
 
     @Test
     public void shouldNotConveyMessageToIrrelevantListeners() {
-        final Channel channel = new Channel();
-        final Listener listener = context.mock(Listener.class);
+        final StatisticDispatcher channel = new StatisticDispatcher();
+        final StatisticListener listener = context.mock(StatisticListener.class);
         final Statistic statistic = new Statistic(1, 1, "x");
 
-        channel.subscribe(listener, toNothing());
+        channel.register(listener, toNothing());
 
         context.checking(new Expectations() {
             {
@@ -92,19 +92,19 @@ public class ChannelTest {
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullListeners() {
-        Channel channel = new Channel();
-        channel.subscribe(null, toEverything());
+        StatisticDispatcher channel = new StatisticDispatcher();
+        channel.register(null, toEverything());
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullSelectors() {
-        Channel channel = new Channel();
+        StatisticDispatcher channel = new StatisticDispatcher();
 
-        channel.subscribe(dummyListener(), null);
+        channel.register(dummyListener(), null);
     }
 
-    private Listener dummyListener() {
-        return new Listener() {
+    private StatisticListener dummyListener() {
+        return new StatisticListener() {
 
             public void statisticReady(Statistic statistic, Object value) {
                 // Does nothing

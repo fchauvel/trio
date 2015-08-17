@@ -18,10 +18,10 @@
 package eu.diversify.trio.unit.analytics.sensitivity;
 
 import eu.diversify.trio.analytics.sensitivity.SensitivityRanking;
-import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.sensitivity.Sensitivity;
-import eu.diversify.trio.simulation.events.Channel;
+import eu.diversify.trio.SimulationDispatcher;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
@@ -41,9 +41,10 @@ public class SensitivityRankingTest {
 
     @Test
     public void shouldRankComponentsAccordingToTheirSensitivity() {
-        final Channel simulation = new Channel();
+        final SimulationDispatcher simulation = new SimulationDispatcher();
         final Collector results = new Collector();
-        final SensitivityRanking ranking = new SensitivityRanking(simulation, results); 
+        final SensitivityRanking ranking = new SensitivityRanking(results); 
+        simulation.register(ranking.getSimulationHandler());
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 4);
@@ -64,7 +65,7 @@ public class SensitivityRankingTest {
      * A dummy listener which collects the statistics that are published for
      * later check
      */
-    private class Collector implements Listener {
+    private class Collector implements StatisticListener {
 
         private final Map<Statistic, Object> values;
 

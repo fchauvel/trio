@@ -19,11 +19,10 @@ package eu.diversify.trio.analytics.threats;
 
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
-import eu.diversify.trio.analytics.events.Listener;
-import eu.diversify.trio.analytics.events.Publisher;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.simulation.events.Channel;
+import eu.diversify.trio.simulation.events.SimulationListener;
 import java.util.ArrayList;
 import static java.util.Arrays.*;
 import java.util.Collections;
@@ -35,21 +34,27 @@ import java.util.Map;
  * Listen to the simulation and to the statistics that are published, and ranks
  * failure sequences with respect to their threat level.
  */
-public class ThreatRanking implements Listener, eu.diversify.trio.simulation.events.Listener {
+public class ThreatRanking implements StatisticListener, SimulationListener {
 
-    private final Listener results;
+    private final StatisticListener results;
     private final Map<Integer, Ranking> rankings;
 
-    public ThreatRanking(Channel simulation, Publisher statistics, Listener results) {
-        simulation.subscribe(this);
-        statistics.subscribe(this, onlyRobustness());
-        this.results = results;
+    public ThreatRanking(StatisticListener results) {
+        this.results = results; 
         this.rankings = new HashMap<Integer, Ranking>();
     }
 
     private final List<String> interests = asList(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
 
-    private Selection onlyRobustness() {
+    public SimulationListener getSimulationHandler() {
+        return this;
+    }
+    
+    public StatisticListener getStatisticHandler() {
+        return this;
+    }
+    
+    public Selection selection() {
         return new Selection() {
 
             public boolean isSatisfiedBy(Statistic statistic, Object value) {

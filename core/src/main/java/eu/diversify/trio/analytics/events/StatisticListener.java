@@ -16,29 +16,18 @@
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package eu.diversify.trio.analytics.events;
 
-package eu.diversify.trio.simulation;
- 
 /**
- * Action which can be performed on topologies
+ * 
  */
-public interface Action {
+public interface StatisticListener {
 
     /**
-     * Execute this action on the given topology
-     *
-     * @param topology the topology on which this action shall be performed
-     * @return the topology once the action is performed
+     * Handle the publication of a new statistic
+     * @param statistic some metadata describing the statistic being published
+     * @param value the value being published
      */
-    Topology executeOn(Topology topology);
-
+    void statisticReady(Statistic statistic, Object value);
     
-    /**
-     * Compare this action with another object
-     * @param object the object to compare with
-     * @return  true if the given object is equivalent to this action
-     */
-    @Override
-    boolean equals(Object object);
-
 }

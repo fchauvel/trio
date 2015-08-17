@@ -19,11 +19,11 @@
 package eu.diversify.trio.unit.analytics.threats;
 
 import eu.diversify.trio.analytics.threats.Threat;
-import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.threats.ThreatRanking;
-import eu.diversify.trio.simulation.events.Channel;
+import eu.diversify.trio.SimulationDispatcher;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,14 +43,17 @@ public class ThreatRankingTest {
     
     @Test
     public void shouldRankThreatsProperly() {
-        final Channel simulation = new Channel();
+        final SimulationDispatcher simulation = new SimulationDispatcher();
         final Collector results = new Collector();
         
-        final eu.diversify.trio.analytics.events.Channel statistics = new eu.diversify.trio.analytics.events.Channel();
+        final eu.diversify.trio.StatisticDispatcher statistics = new eu.diversify.trio.StatisticDispatcher();
         
-        final FailureSequenceAggregator robustness = new FailureSequenceAggregator(simulation, statistics);
+        final FailureSequenceAggregator robustness = new FailureSequenceAggregator(statistics);
+        simulation.register(robustness.getSimulationListener());
         
-        final ThreatRanking threats = new ThreatRanking(simulation, statistics, results);
+        final ThreatRanking threats = new ThreatRanking(results);
+        simulation.register(threats);
+        statistics.register(threats.getStatisticHandler(), threats.selection());
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 5);
@@ -70,7 +73,7 @@ public class ThreatRankingTest {
     /**
      * A dummy listener which collects the statistics that are published for later check
      */
-    private class Collector implements Listener {
+    private class Collector implements StatisticListener {
 
         private final Map<Statistic, Object> values;
 

@@ -17,25 +17,37 @@
  */
 package eu.diversify.trio.analytics.robustness;
 
-import eu.diversify.trio.analytics.events.Listener;
-import eu.diversify.trio.analytics.events.Publisher;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.simulation.events.Channel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RobustnessAggregator {
 
-    private final Listener results;
+    private final eu.diversify.trio.simulation.events.SimulationListener simulationListener;
+    private final StatisticListener statisticsHandler;
+    private final StatisticListener results;
     private final Map<Integer, Robustness> robustnesses;
 
-    public RobustnessAggregator(Channel simulation, Publisher statistics, Listener results) {
-        simulation.subscribe(new SimulationHandler());
-        statistics.subscribe(new StatisticHandler(), new OnlyFailureSequences());
+    public RobustnessAggregator(StatisticListener results) {
+        this.simulationListener = new SimulationHandler();
+        this.statisticsHandler = new StatisticHandler();
         this.results = results;
         this.robustnesses = new HashMap<Integer, Robustness>();
+    }
+    
+    public eu.diversify.trio.simulation.events.SimulationListener getSimulationHandler() {
+        return this.simulationListener;
+    }
+    
+    public StatisticListener getStatisticsHandler() {
+        return this.statisticsHandler;
+    }
+    
+    public Selection getStatistics() {
+        return new OnlyFailureSequences();
     }
 
     private Robustness robustnessOf(int scenarioId) {
@@ -47,7 +59,7 @@ public class RobustnessAggregator {
         return robustness;
     }
 
-    private class StatisticHandler implements Listener {
+    private class StatisticHandler implements StatisticListener {
 
         public void statisticReady(Statistic statistic, Object value) {
             if (!statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE)) {
@@ -62,7 +74,7 @@ public class RobustnessAggregator {
 
     }
 
-    private class SimulationHandler implements eu.diversify.trio.simulation.events.Listener {
+    private class SimulationHandler implements eu.diversify.trio.simulation.events.SimulationListener {
 
         public void simulationInitiated(int simulationId) {
             if (robustnesses.containsKey(simulationId)) {

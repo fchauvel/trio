@@ -17,9 +17,9 @@
  */
 package eu.diversify.trio.analytics.sensitivity;
 
-import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.simulation.events.Channel;
+import eu.diversify.trio.simulation.events.SimulationListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,17 +31,20 @@ import java.util.Map;
  * according to their mean impact (the number of components that depend on
  * them).
  */
-public class SensitivityRanking implements eu.diversify.trio.simulation.events.Listener {
+public class SensitivityRanking implements SimulationListener {
 
     public static final String KEY_SENSITIVITY_RANKING = "sensitivity ranking";
 
-    private final Listener statistics;
+    private final StatisticListener statistics;
     private final Map<Integer, Ranking> rankings;
 
-    public SensitivityRanking(Channel simulation, Listener statistics) {
-        simulation.subscribe(this);
+    public SensitivityRanking(StatisticListener statistics) {
         this.statistics = statistics;
         this.rankings = new HashMap<Integer, Ranking>();
+    }
+    
+    public SimulationListener getSimulationHandler() {
+        return this;
     }
 
     public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {

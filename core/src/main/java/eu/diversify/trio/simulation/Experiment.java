@@ -19,7 +19,7 @@
 package eu.diversify.trio.simulation;
 
 import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.simulation.events.Listener;
+import eu.diversify.trio.simulation.events.SimulationListener;
 
 public class Experiment {
 
@@ -28,9 +28,9 @@ public class Experiment {
     private int currentRun;
     private final Simulation simulation;
     private final Assembly subject;
-    private final Listener listener;
+    private final SimulationListener listener;
 
-    public Experiment(int id, Simulation simulation, Assembly subject, int runCount, Listener listener) {
+    public Experiment(int id, Simulation simulation, Assembly subject, int runCount, SimulationListener listener) {
         this.id = id;
         this.runCount = runCount;
         this.currentRun = 0;

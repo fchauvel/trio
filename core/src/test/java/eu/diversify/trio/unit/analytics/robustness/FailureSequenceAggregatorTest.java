@@ -18,10 +18,10 @@
 package eu.diversify.trio.unit.analytics.robustness;
 
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
-import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
-import eu.diversify.trio.simulation.events.Channel;
+import eu.diversify.trio.SimulationDispatcher;
 
 import static java.util.Arrays.asList;
 import java.util.HashMap;
@@ -41,9 +41,10 @@ public class FailureSequenceAggregatorTest {
 
     @Test
     public void shouldComputeTheRobustnessProperly() {
-        final Channel simulation = new Channel();
+        final SimulationDispatcher simulation = new SimulationDispatcher();
         final Collector results = new Collector();
-        new FailureSequenceAggregator(simulation, results);
+        final FailureSequenceAggregator aggregator = new FailureSequenceAggregator(results);
+        simulation.register(aggregator.getSimulationListener());
 
         simulation.simulationInitiated(1);
         simulation.sequenceInitiated(1, 1, asList("X", "Y", "Z"), 5);
@@ -62,8 +63,8 @@ public class FailureSequenceAggregatorTest {
      * A dummy listener which collects the statistics that are published for
      * later check
      */
-    private class Collector implements Listener {
-
+    private class Collector implements StatisticListener {
+ 
         private final Map<Statistic, Object> values;
 
         public Collector() {

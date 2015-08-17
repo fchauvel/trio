@@ -18,8 +18,7 @@
 package eu.diversify.trio.analytics.robustness;
 
 import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.simulation.events.Channel;
-import eu.diversify.trio.simulation.events.Listener;
+import eu.diversify.trio.simulation.events.SimulationListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,18 +29,18 @@ import java.util.Map;
  */
 public class FailureSequenceAggregator {
 
-    private final Channel simulation;
-    private final eu.diversify.trio.analytics.events.Listener statistics;
+    private final eu.diversify.trio.analytics.events.StatisticListener statistics;
     private final Map<Integer, FailureSequence> sequences;
-
-    public FailureSequenceAggregator(
-            Channel simulation,
-            eu.diversify.trio.analytics.events.Listener statistics) {
-        this.simulation = simulation;
-        this.simulation.subscribe(new Subscription());
-
+    private final SimulationHandler listener;
+    
+    public FailureSequenceAggregator(eu.diversify.trio.analytics.events.StatisticListener statistics) {
+        this.listener = new SimulationHandler();
         this.statistics = statistics;
         this.sequences = new HashMap<Integer, FailureSequence>();
+    }
+    
+    public SimulationListener getSimulationListener() {
+        return this.listener;
     }
 
     private FailureSequence sequenceWithId(int sequenceId) throws IllegalStateException {
@@ -60,7 +59,7 @@ public class FailureSequenceAggregator {
         }
     }
 
-    private class Subscription implements Listener {
+    private class SimulationHandler implements SimulationListener {
 
         public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
             checkSequenceId(sequenceId);

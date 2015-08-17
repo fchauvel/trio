@@ -17,13 +17,13 @@
  */
 package eu.diversify.trio.unit.analytics.robustness;
 
-import eu.diversify.trio.analytics.events.Listener;
+import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Statistic;
 import eu.diversify.trio.analytics.robustness.RobustnessAggregator;
 import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
 import eu.diversify.trio.analytics.robustness.Robustness;
-import eu.diversify.trio.simulation.events.Channel;
+import eu.diversify.trio.SimulationDispatcher;
 import java.util.HashMap;
 import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,11 +41,13 @@ public class RobustnessAggregatorTest {
 
     @Test
     public void shouldComputeAverageRobustnessProperly() {
-        Channel simulation = new Channel();
-        eu.diversify.trio.analytics.events.Channel statistics = new eu.diversify.trio.analytics.events.Channel();
+        SimulationDispatcher simulation = new SimulationDispatcher();
+        eu.diversify.trio.StatisticDispatcher statistics = new eu.diversify.trio.StatisticDispatcher();
 
         Collector results = new Collector();
-        RobustnessAggregator robustness = new RobustnessAggregator(simulation, statistics, results);
+        RobustnessAggregator robustness = new RobustnessAggregator(results);
+        simulation.register(robustness.getSimulationHandler());
+        statistics.register(robustness.getStatisticsHandler(), robustness.getStatistics());
         final int scenarioId = 1;
 
         simulation.simulationInitiated(scenarioId);
@@ -77,7 +79,7 @@ public class RobustnessAggregatorTest {
         return new Statistic(scenarioId, -1, FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
     }
 
-    private static class Collector implements Listener {
+    private static class Collector implements StatisticListener {
 
         private final Map<Statistic, Robustness> results;
 
