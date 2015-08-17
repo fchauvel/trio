@@ -38,7 +38,7 @@ public interface SimulationListener {
      * @param sequenceId the unique ID of the sequence in the simulation
      * @param observed the unique names of the components under control in the
      * failure sequence
-     * @param controlled the unique names of components under observation in the
+     * @param duration the unique names of components under observation in the
      * failure sequence
      */
     void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration);

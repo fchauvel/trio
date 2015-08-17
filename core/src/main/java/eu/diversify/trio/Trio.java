@@ -65,7 +65,7 @@ public class Trio {
 
     private void wireThreatRanking() {
         ThreatRanking threats = new ThreatRanking(statistics);
-        simulation.register(threats);
+        simulation.register(threats.getSimulationHandler());
         statistics.register(threats.getStatisticHandler(), threats.selection());
     }
 

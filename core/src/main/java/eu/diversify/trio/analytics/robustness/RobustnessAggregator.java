@@ -20,8 +20,8 @@ package eu.diversify.trio.analytics.robustness;
 import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
+import eu.diversify.trio.simulation.events.IdleSimulationListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RobustnessAggregator {
@@ -74,8 +74,9 @@ public class RobustnessAggregator {
 
     }
 
-    private class SimulationHandler implements eu.diversify.trio.simulation.events.SimulationListener {
+    private class SimulationHandler extends IdleSimulationListener {
 
+        @Override
         public void simulationInitiated(int simulationId) {
             if (robustnesses.containsKey(simulationId)) {
                 final String description = String.format("Duplicatred scenario ID %d", simulationId);
@@ -84,15 +85,7 @@ public class RobustnessAggregator {
             robustnesses.put(simulationId, new Robustness(simulationId));
         }
 
-        public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
-        }
-
-        public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> impactedComponents) {
-        }
-
-        public void sequenceComplete(int simulationId, int sequenceId) {
-        }
-
+        @Override
         public void simulationComplete(int simulationId) {
             final Robustness robustness = robustnessOf(simulationId);
             results.statisticReady(new Statistic(simulationId, -1, KEY_ROBUSTNESS), robustness);

@@ -18,6 +18,7 @@
 package eu.diversify.trio.analytics.robustness;
 
 import eu.diversify.trio.analytics.events.Statistic;
+import eu.diversify.trio.simulation.events.IdleSimulationListener;
 import eu.diversify.trio.simulation.events.SimulationListener;
 import java.util.HashMap;
 import java.util.List;
@@ -59,31 +60,25 @@ public class FailureSequenceAggregator {
         }
     }
 
-    private class SimulationHandler implements SimulationListener {
+    private class SimulationHandler extends IdleSimulationListener {
 
+        @Override
         public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
             checkSequenceId(sequenceId);
             sequences.put(sequenceId, new FailureSequence(sequenceId, observed.size(), duration));
         }
 
+        @Override
         public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> survivors) {
             FailureSequence sequence = sequenceWithId(sequenceId);
             sequence.record(failedComponent, time, survivors.size());
         }
 
+        @Override
         public void sequenceComplete(int simulationId, int sequenceId) {
             FailureSequence sequence = sequences.remove(sequenceId);
             statistics.statisticReady(new Statistic(simulationId, sequenceId, KEY_FAILURE_SEQUENCE), sequence);
         }
-
-        public void simulationInitiated(int simulationId) {
-            // Nothing to be done
-        }
-
-        public void simulationComplete(int simulationId) {
-            // Nothing to be done
-        }
-
     }
     
     public static final String KEY_FAILURE_SEQUENCE = "robustness";

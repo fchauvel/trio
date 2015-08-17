@@ -52,7 +52,7 @@ public class ThreatRankingTest {
         simulation.register(robustness.getSimulationListener());
         
         final ThreatRanking threats = new ThreatRanking(results);
-        simulation.register(threats);
+        simulation.register(threats.getSimulationHandler());
         statistics.register(threats.getStatisticHandler(), threats.selection());
 
         simulation.simulationInitiated(1);

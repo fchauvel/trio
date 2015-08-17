@@ -15,6 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.analytics.threats;
 
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
@@ -22,6 +39,7 @@ import eu.diversify.trio.analytics.robustness.FailureSequence;
 import eu.diversify.trio.analytics.events.StatisticListener;
 import eu.diversify.trio.analytics.events.Selection;
 import eu.diversify.trio.analytics.events.Statistic;
+import eu.diversify.trio.simulation.events.IdleSimulationListener;
 import eu.diversify.trio.simulation.events.SimulationListener;
 import java.util.ArrayList;
 import static java.util.Arrays.*;
@@ -34,26 +52,54 @@ import java.util.Map;
  * Listen to the simulation and to the statistics that are published, and ranks
  * failure sequences with respect to their threat level.
  */
-public class ThreatRanking implements StatisticListener, SimulationListener {
+public class ThreatRanking implements StatisticListener {
 
     private final StatisticListener results;
     private final Map<Integer, Ranking> rankings;
+    private final SimulationHandler simulationHandler;
 
     public ThreatRanking(StatisticListener results) {
-        this.results = results; 
+        this.results = results;
         this.rankings = new HashMap<Integer, Ranking>();
+        this.simulationHandler = new SimulationHandler();
     }
 
     private final List<String> interests = asList(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
 
     public SimulationListener getSimulationHandler() {
-        return this;
+        return this.simulationHandler;
     }
-    
+
     public StatisticListener getStatisticHandler() {
         return this;
     }
-    
+
+    /**
+     * Handle specific simulation events
+     */
+    private class SimulationHandler extends IdleSimulationListener {
+
+        @Override
+        public void simulationInitiated(int simulationId) {
+            if (rankings.containsKey(simulationId)) {
+                final String description = String.format("Duplicated scenario ID %d", simulationId);
+                throw new IllegalStateException(description);
+            }
+            final Ranking ranking = new Ranking();
+            rankings.put(simulationId, ranking);
+        }
+
+        @Override
+        public void simulationComplete(int simulationId) {
+            Ranking ranking = rankings.get(simulationId);
+            if (ranking == null) {
+                final String description = String.format("Unknown simulation ID %d", simulationId);
+                throw new IllegalStateException(description);
+            }
+            results.statisticReady(new Statistic(simulationId, -1, KEY_THREAT_RANKING), ranking.rank());
+        }
+    }
+
     public Selection selection() {
         return new Selection() {
 
@@ -74,39 +120,9 @@ public class ThreatRanking implements StatisticListener, SimulationListener {
         }
     }
 
-    public void simulationInitiated(int simulationId) {
-        if (rankings.containsKey(simulationId)) {
-            final String description = String.format("Duplicated scenario ID %d", simulationId);
-            throw new IllegalStateException(description);
-        }
-        final Ranking ranking = new Ranking();
-        rankings.put(simulationId, ranking);
-    }
 
-    public void sequenceInitiated(int simulationId, int sequenceId, List<String> observed, double duration) {
-        // Nothing to be done
-    }
-
-    public void failure(int simulationId, int sequenceId, double time, String failedComponent, List<String> impactedComponents) {
-        // Nothing to be done
-    }
-
-    public void sequenceComplete(int simulationId, int sequenceId) {
-        // Nothing to be done
-    }
-
-    public void simulationComplete(int simulationId) {
-        Ranking ranking = rankings.get(simulationId);
-        if (ranking == null) {
-            final String description = String.format("Unknown simulation ID %d", simulationId);
-            throw new IllegalStateException(description);
-        }
-        results.statisticReady(new Statistic(simulationId, -1, KEY_THREAT_RANKING), ranking.rank());
-    }
-    
     public static final String KEY_THREAT_RANKING = "threat ranking";
 
-    
     private static class Ranking {
 
         private final Map<String, Threat> threats;
@@ -130,7 +146,7 @@ public class ThreatRanking implements StatisticListener, SimulationListener {
 
         public List<Threat> rank() {
             final List<Threat> results = new ArrayList<Threat>(threats.values());
-            for(Threat eachThreat: results) {
+            for (Threat eachThreat : results) {
                 eachThreat.setTotal(sequenceCount);
             }
             Collections.sort(results);
@@ -138,6 +154,5 @@ public class ThreatRanking implements StatisticListener, SimulationListener {
         }
 
     }
-
 
 }
