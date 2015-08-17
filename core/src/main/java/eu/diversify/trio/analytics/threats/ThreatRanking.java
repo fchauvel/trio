@@ -15,23 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- *
- * This file is part of TRIO.
- *
- * TRIO is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- *
- * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
- */
+
 package eu.diversify.trio.analytics.threats;
 
 import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
@@ -51,30 +35,52 @@ import java.util.Map;
  * Listen to the simulation and to the statistics that are published, and ranks
  * failure sequences with respect to their threat level.
  */
-public class ThreatRanking implements StatisticListener {
+public class ThreatRanking {
+
+    public static final String KEY_THREAT_RANKING = "threat ranking";
 
     private final StatisticListener results;
     private final Map<Integer, Ranking> rankings;
     private final SimulationHandler simulationHandler;
+    private final StatisticHandler statisticHandler;
 
     public ThreatRanking(StatisticListener results) {
+        statisticHandler = new StatisticHandler();
         this.results = results;
         this.rankings = new HashMap<Integer, Ranking>();
         this.simulationHandler = new SimulationHandler();
     }
-
-    private final List<String> interests = asList(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
 
     public SimulationListener getSimulationHandler() {
         return this.simulationHandler;
     }
 
     public StatisticListener getStatisticHandler() {
-        return this;
+        return statisticHandler;
     }
 
-    public boolean accept(Statistic statistic) {
-        return interests.contains(statistic.getName());
+    /**
+     * Handle the publication of statistics
+     */
+    private class StatisticHandler implements StatisticListener {
+
+        private final List<String> interests = asList(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
+
+        public boolean accept(Statistic statistic) {
+            return interests.contains(statistic.getName());
+        }
+
+        public void statisticReady(Statistic statistic, Object value) {
+            if (statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE)) {
+                final Ranking ranking = rankings.get(statistic.getScenarioId());
+                if (ranking == null) {
+                    final String description = String.format("Invalid scenario ID %d", statistic.getScenarioId());
+                    throw new IllegalStateException(description);
+                }
+                ranking.record((FailureSequence) value);
+            }
+        }
+
     }
 
     /**
@@ -102,20 +108,6 @@ public class ThreatRanking implements StatisticListener {
             results.statisticReady(new Statistic(simulationId, -1, KEY_THREAT_RANKING), ranking.rank());
         }
     }
-
-    public void statisticReady(Statistic statistic, Object value) {
-        if (statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE)) {
-            final Ranking ranking = rankings.get(statistic.getScenarioId());
-            if (ranking == null) {
-                final String description = String.format("Invalid scenario ID %d", statistic.getScenarioId());
-                throw new IllegalStateException(description);
-            }
-            ranking.record((FailureSequence) value);
-        }
-    }
-
-
-    public static final String KEY_THREAT_RANKING = "threat ranking";
 
     private static class Ranking {
 

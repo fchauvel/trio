@@ -15,6 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ *
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.diversify.trio.analytics.robustness;
 
 import eu.diversify.trio.analytics.events.StatisticListener;
@@ -24,6 +41,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RobustnessAggregator {
+
+    public static final String KEY_ROBUSTNESS = "overall robustness";
 
     private final eu.diversify.trio.simulation.events.SimulationListener simulationListener;
     private final StatisticListener statisticsHandler;
@@ -36,11 +55,11 @@ public class RobustnessAggregator {
         this.results = results;
         this.robustnesses = new HashMap<Integer, Robustness>();
     }
-    
+
     public eu.diversify.trio.simulation.events.SimulationListener getSimulationHandler() {
         return this.simulationListener;
     }
-    
+
     public StatisticListener getStatisticsHandler() {
         return this.statisticsHandler;
     }
@@ -68,7 +87,7 @@ public class RobustnessAggregator {
         }
 
         public boolean accept(Statistic statistic) {
-              return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
+            return statistic.getName().equals(FailureSequenceAggregator.KEY_FAILURE_SEQUENCE);
         }
 
     }
@@ -93,5 +112,4 @@ public class RobustnessAggregator {
 
     }
 
-    public static final String KEY_ROBUSTNESS = "overall robustness";
 }
