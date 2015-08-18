@@ -24,11 +24,5 @@
             <artifactId>graph</artifactId>
             <version>0.4-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>eu.diversify.trio</groupId>
-            <artifactId>utility</artifactId>
-            <version>0.4-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 </project>
