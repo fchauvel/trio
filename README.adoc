@@ -2,6 +2,8 @@
 Franck Chauvel
 2015-04-15
 
+image:https://codeship.com/projects/ad32e1e0-27d8-0133-8e78-7af7072ae828/status?branch=master[]
+
 TRIO computes robustness metrics for software architectures. These metrics include 
 an overall robustness, the most sensitive components, and the most threatening
 failure sequences.
