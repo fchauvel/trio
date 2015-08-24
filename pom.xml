@@ -53,7 +53,7 @@
                         </fileSet>
                     </fileSets>
                     <!-- File containing the merged data -->
-                    <destFile>${project.parent.build.directory}/jacoco.exec</destFile>
+                    <destFile>${project.build.directory}/jacoco.exec</destFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -106,6 +106,18 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <includeDependencySources>true</includeDependencySources>
+                </configuration>
+            </plugin>
+                                                
             
         </plugins>
     </build>
