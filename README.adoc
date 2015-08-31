@@ -2,7 +2,7 @@
 Franck Chauvel
 2015-04-15
 
-image:https://img.shields.io/github/license/fchauvel/trio.svg[]
+image:https://img.shields.io/badge/license-LGPLv3+-blue.svg[]
 image:https://img.shields.io/codeship/96888c80-27db-0133-f544-7af7072ae828.svg[]
 image:https://img.shields.io/codecov/c/github/fchauvel/trio/master.svg[]
 
