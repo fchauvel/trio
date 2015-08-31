@@ -105,31 +105,7 @@
                 </executions>
             </plugin>
             
-            <!-- Check for design issue -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <linkXref>false</linkXref>
-                    <sourceEncoding>utf-8</sourceEncoding>
-                    <rulesets>
-                        <ruleset>src/main/resources/pmd-ruleset.xml</ruleset>
-                    </rulesets>
-                    <excludeRoots>
-                        <excludeRoot>target/generated-sources/antlr4</excludeRoot>
-                    </excludeRoots>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>cpd-check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+         
             
             
             <!-- Check for bugs by static analysis -->

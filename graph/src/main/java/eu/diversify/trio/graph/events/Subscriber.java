@@ -8,6 +8,6 @@ public interface Subscriber {
    
     void onVertexCreated(int vertexId);
 
-    public void onVertexesConnected(long edgeId);
+    void onVertexesConnected(long edgeId);
 
 }

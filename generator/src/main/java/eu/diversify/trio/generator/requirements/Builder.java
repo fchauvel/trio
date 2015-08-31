@@ -147,7 +147,7 @@ public class Builder {
     private  static final int COMMAND_COUNT = Command.values().length;
     
     protected int getLocalBranchCount() {
-        if (stack.isEmpty()) return 0;
+        if (stack.isEmpty()) {return 0;}
         return stack.peek().results.size();
     }
 

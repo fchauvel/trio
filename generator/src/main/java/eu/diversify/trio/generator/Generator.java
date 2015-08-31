@@ -61,13 +61,13 @@ public class Generator {
 
     private Component component(int index, List<Integer> dependencies) {
         if (dependencies.isEmpty()) {
-            return new Component(("C" + index).intern());
+            return new Component("C" + index);
         }
 
         final FixedSizeBuilder builder = new FixedSizeBuilder(factory, dependencies.size());
         BuildRandomizer randomizer = new BuildRandomizer(builder, random, dependencies);
         Requirement requirement = randomizer.build();
-        return new Component(("C" + index).intern(), requirement);
+        return new Component("C" + index, requirement);
     }
 
     private List<Tag> defaultTags() {

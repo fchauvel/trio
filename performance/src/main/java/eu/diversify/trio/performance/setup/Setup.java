@@ -78,9 +78,11 @@ public class Setup {
 
     public String summary() {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(String.format(" - %d topologies(s) ;%n", taskCount()));
-        buffer.append(String.format(" - from files '%s' in '%s' ;%n", graphFilePattern, graphDirectory));
-        buffer.append(String.format(" - %d %% as warmup.%n", (int) (warmupRatio * 100)));
+        buffer
+                .append(String.format(" - %d topologies(s) ;%n", taskCount()))
+                .append(String.format(" - from files '%s' in '%s' ;%n", graphFilePattern, graphDirectory))
+                .append(String.format(" - %d %% as warmup.%n", (int) (warmupRatio * 100)));
+       
         return buffer.toString();
     }
 

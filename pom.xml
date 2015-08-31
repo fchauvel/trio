@@ -23,6 +23,32 @@
 
     <build>
         <plugins>
+            <!-- Check for design issue -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <linkXref>false</linkXref>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <rulesets>
+                        <ruleset>src/main/resources/pmd-ruleset.xml</ruleset>
+                    </rulesets>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources/antlr4</excludeRoot>
+                    </excludeRoots>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>cpd-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <!-- Unit Testing -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -69,16 +95,16 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-                    <execution>
+                    <!--<execution>
                         <id>default-check</id>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <rules><!-- implementation is needed only for Maven 2 -->
+                            <rules>
                                 <rule implementation="org.jacoco.maven.RuleConfiguration">
                                     <element>BUNDLE</element>
-                                    <limits><!-- implementation is needed only for Maven 2 -->
+                                    <limits>
                                         <limit implementation="org.jacoco.report.check.Limit">
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
@@ -88,7 +114,7 @@
                                 </rule>
                             </rules>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
             

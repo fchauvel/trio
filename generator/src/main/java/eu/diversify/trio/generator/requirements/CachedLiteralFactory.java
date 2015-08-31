@@ -41,13 +41,13 @@ public class CachedLiteralFactory extends RequirementFactory {
         this.size = limit;
         this.prebuilt = new Require[CAPACITY];
         for (int i = 0; i < size; i++) {
-            prebuilt[i] = new Require(("C" + i).intern());
+            prebuilt[i] = new Require("C");
         }
     }
 
     @Override
     public Requirement createRequire(int hash) {
-        return (prebuilt[hash] != null) ? prebuilt[hash] : new Require(("C" + hash).intern());
+        return (prebuilt[hash] != null) ? prebuilt[hash] : new Require("C" + hash);
     }
 
     @Override

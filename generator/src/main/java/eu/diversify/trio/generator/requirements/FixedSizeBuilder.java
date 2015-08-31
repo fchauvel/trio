@@ -27,7 +27,7 @@ public class FixedSizeBuilder extends Builder {
         this.minimumFinalSize = 1;
         this.lastCommand = null;
     }
-    
+
     @Override
     public void addNot() {
         addNegation();
@@ -58,15 +58,12 @@ public class FixedSizeBuilder extends Builder {
 
     private void addNegation() {
         final int branchCount = getLocalBranchCount();
-        if (branchCount == 0) {
-
-        } else if (branchCount == 1) {
-
-        } else if (branchCount > 1) {
+        if (branchCount < 0) {
+            throw new RuntimeException("Invalid branch count '" + branchCount + "'");
+        }
+        if (branchCount > 1) {
             minimumFinalSize++;
 
-        } else {
-            throw new RuntimeException("Invalid branch count " + branchCount);
         }
     }
 
@@ -104,15 +101,10 @@ public class FixedSizeBuilder extends Builder {
             throw new RuntimeException("Invalid branch count " + branchCount);
         }
     }
-
-    @Override
-    public void closeOperator() {
-        super.closeOperator();
-    }
-
+    
     @Override
     public List<Command> getAllowedCommands() {
-        assert minimumFinalSize >= currentSize : "Illegal expansion! " ;
+        assert minimumFinalSize >= currentSize : "Illegal expansion! ";
 
         List<Command> commands = super.getAllowedCommands();
 
@@ -138,16 +130,16 @@ public class FixedSizeBuilder extends Builder {
             commands.remove(CLOSE);
         }
 
-        assert !(isTooSmall() && commands.isEmpty()): "No action can be triggered anymore! " +  summary();
+        assert !(isTooSmall() && commands.isEmpty()) : "No action can be triggered anymore! " + summary();
         return commands;
     }
-    
+
     private String summary() {
         return String.format("[TFS = %d ; MFS = %d ; CS = %d]", desiredSize, minimumFinalSize, currentSize);
     }
 
     public boolean hasRoomForANewBranch() {
-        int costOfNewBranch = (getLocalBranchCount() < 2) ? 1 : 2;
+        int costOfNewBranch = getLocalBranchCount() < 2 ? 1 : 2;
         return desiredSize - minimumFinalSize >= costOfNewBranch;
     }
 
