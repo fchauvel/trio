@@ -3,6 +3,7 @@ package eu.diversify.trio.performance.ui;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Summarize the status of a given benchmark on a given output.
@@ -18,7 +19,12 @@ public class Summary {
     private double averageDuration;
 
     public Summary(OutputStream out) {
-        this.output = new PrintWriter(new OutputStreamWriter(out));
+        try {
+            this.output = new PrintWriter(new OutputStreamWriter(out, "UTF-8"));
+        
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
         setProgress(DEFAULT_INITIAL_PROGRESS);
         this.averageDuration = DEFAULT_INITIAL_PROGRESS;
     }

@@ -19,7 +19,7 @@ public class CsvReader {
 
         Map<Integer, Vertex> vertexes = new HashMap<>();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         String lineOfText = readFirstLine(reader);
         while (lineOfText != null) {
             String[] parts = split(lineOfText);

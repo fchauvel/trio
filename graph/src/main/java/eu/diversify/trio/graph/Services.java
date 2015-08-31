@@ -10,7 +10,7 @@ public class Services {
     
     private static Services services;
     
-    public static Services registry() {
+    public static synchronized Services registry() {
         if (services == null) {
             services = new Services();
         }

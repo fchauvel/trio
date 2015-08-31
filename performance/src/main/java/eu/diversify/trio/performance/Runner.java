@@ -83,8 +83,9 @@ public class Runner {
         ui.info("Reading configuration in '" + arguments.getSetupFile() + "'");
         final Properties properties = new Properties();
         try {
-
-            properties.load(new FileInputStream(arguments.getSetupFile()));
+            try (FileInputStream input = new FileInputStream(arguments.getSetupFile())) {
+                properties.load(input);
+            }
 
         } catch (IOException ex) {
             final String description

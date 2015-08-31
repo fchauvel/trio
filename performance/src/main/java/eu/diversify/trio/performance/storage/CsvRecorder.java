@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -39,9 +40,9 @@ public class CsvRecorder implements Listener {
     
     private void printValues(Properties properties) {
         int counter = 0;
-        for (Object eachKey : properties.keySet()) {
+        for (Map.Entry eachEntry : properties.entrySet()) {
             counter++;
-            output.print(properties.get(eachKey));
+            output.print(eachEntry.getValue());
             if (counter < properties.size()) {
                 output.print(fieldSeparator);
             }
