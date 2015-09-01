@@ -10,6 +10,20 @@ TRIO computes robustness metrics for software architectures. These metrics inclu
 an overall robustness, the most sensitive components, and the most threatening
 failure sequences.
 
+== Publications
+
+A detailed description of the robustness metrics used by TRIO is given in the 
+following publications:
+
+* Franck Chauvel, Hui Song, Nicolas Ferry, Franck Fleurey. Robustness Indicators for 
+Cloud-Based Systems Topologies. In Proceedings of the 7th IEEE/ACM International 
+Conference on Utility and Cloud Computing (UCC 2014). 2014. IEEE Computer Society, 
+Washington DC, USA. pp 307-316
+
+* Franck Chauvel, Hui Song, Nicolas Ferry, Franck Fleurey.  http://www.journalofcloudcomputing.com/content/4/1/18[Evaluating robustness 
+of cloud-based systems. Journal of Cloud Computing 2015, 4:18.]
+
+
 == Overview
 
 As shown in the following example, TRIO takes as input a simple description of the components that form
