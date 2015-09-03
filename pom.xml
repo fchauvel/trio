@@ -22,7 +22,7 @@
     <groupId>net.fchauvel.trio</groupId>
     <artifactId>root</artifactId>
     <packaging>pom</packaging>
-    <version>0.4</version>
+    <version>0.4.1-SNAPSHOT</version>
     <url>http://fchauvel.github.com/trio</url>
   
     <name>TRIO</name>

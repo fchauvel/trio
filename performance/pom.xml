@@ -27,7 +27,7 @@
     <parent>
         <groupId>net.fchauvel.trio</groupId>
         <artifactId>root</artifactId>
-        <version>0.4</version>
+        <version>0.4.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
         
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>net.fchauvel.trio</groupId>
             <artifactId>generator</artifactId>
-            <version>0.4</version>
+            <version>0.4.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     
