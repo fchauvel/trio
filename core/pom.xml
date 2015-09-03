@@ -24,13 +24,13 @@
     
     <groupId>net.fchauvel.trio</groupId>
     <artifactId>core</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <name>TRIO :: Core</name>
     
     <parent>
         <groupId>net.fchauvel.trio</groupId>
         <artifactId>root</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.4</version>
         <relativePath>..</relativePath>
     </parent>
     
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>net.fchauvel.trio</groupId>
             <artifactId>graph</artifactId> 
-            <version>0.4-SNAPSHOT</version>              
+            <version>0.4</version>              
         </dependency>
     
     </dependencies>
