@@ -25,7 +25,7 @@
     <packaging>jar</packaging>
     
     <parent>
-        <groupId>eu.diversify.trio</groupId>
+        <groupId>net.fchauvel.trio</groupId>
         <artifactId>root</artifactId>
         <version>0.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -38,7 +38,7 @@
     
     <dependencies>
         <dependency>
-            <groupId>eu.diversify.trio</groupId>
+            <groupId>net.fchauvel.trio</groupId>
             <artifactId>generator</artifactId>
             <version>0.4-SNAPSHOT</version>
         </dependency>
@@ -56,7 +56,7 @@
                     </descriptors> 
                     <archive>
                         <manifest>
-                            <mainClass>eu.diversify.trio.performance.ui.Controller</mainClass>
+                            <mainClass>net.fchauvel.trio.performance.ui.Controller</mainClass>
                         </manifest>
                     </archive>                                       
                 </configuration>

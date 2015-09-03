@@ -22,13 +22,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>eu.diversify.trio</groupId>
+    <groupId>net.fchauvel.trio</groupId>
     <artifactId>core</artifactId>
     <version>0.4-SNAPSHOT</version>
     <name>TRIO :: Core</name>
     
     <parent>
-        <groupId>eu.diversify.trio</groupId>
+        <groupId>net.fchauvel.trio</groupId>
         <artifactId>root</artifactId>
         <version>0.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
@@ -43,7 +43,7 @@
         </dependency>
        
         <dependency>
-            <groupId>eu.diversify.trio</groupId>
+            <groupId>net.fchauvel.trio</groupId>
             <artifactId>graph</artifactId> 
             <version>0.4-SNAPSHOT</version>              
         </dependency>
