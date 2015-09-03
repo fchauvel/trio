@@ -1,20 +1,4 @@
 /**
- * This file is part of TRIO :: Performance.
- *
- * TRIO :: Performance is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * TRIO :: Performance is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with TRIO :: Performance.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
  * This file is part of TRIO.
  *
  * TRIO is free software: you can redistribute it and/or modify
@@ -30,9 +14,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with TRIO.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.diversify.trio.performance;
+/**
+ * This file is part of TRIO.
+ *
+ * TRIO is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * TRIO is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with TRIO. If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.diversify.trio.performance.ui;
 
-import eu.diversify.trio.performance.ui.UI;
+import eu.diversify.trio.performance.Arguments;
 import eu.diversify.trio.performance.setup.Setup;
 import eu.diversify.trio.performance.setup.SetupStore;
 import eu.diversify.trio.performance.storage.CsvRecorder;
@@ -46,11 +46,11 @@ import java.util.Properties;
 /**
  * Entry point of the performance test
  */
-public class Runner {
+public class Controller {
 
     public static void main(String[] args) {
         try {
-            Runner runner = new Runner(Arguments.readFrom(args));
+            Controller runner = new Controller(Arguments.readFrom(args));
             runner.run();
 
         } catch (IllegalArgumentException error) {
@@ -62,9 +62,13 @@ public class Runner {
     private final UI ui;
     private final EventBroker events;
 
-    public Runner(Arguments arguments) {
+    public Controller(Arguments arguments) {
+        this(arguments, new UI());
+    }
+
+    public Controller(Arguments arguments, UI ui) {
         this.arguments = arguments;
-        this.ui = new UI();
+        this.ui = ui;
         this.events = new EventBroker();
     }
 
@@ -91,7 +95,7 @@ public class Runner {
 
         final CsvRecorder recorder = new CsvRecorder(outputFile);
         events.subscribe(benchmark.id(), recorder);
-        
+
         benchmark.run();
     }
 
