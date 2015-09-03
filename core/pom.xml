@@ -85,7 +85,7 @@
                     </descriptors> 
                     <archive>
                         <manifest>
-                            <mainClass>eu.diversify.trio.Main</mainClass>
+                            <mainClass>net.fchauvel.trio.Main</mainClass>
                         </manifest>
                     </archive>                                       
                 </configuration>

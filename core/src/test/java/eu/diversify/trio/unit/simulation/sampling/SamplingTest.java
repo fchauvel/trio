@@ -148,12 +148,12 @@
  */
 package eu.diversify.trio.unit.simulation.sampling;
 
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.simulation.AssemblyState;
-import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.simulation.sampling.ProportionalSampling;
-import eu.diversify.trio.simulation.sampling.Sampler;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.simulation.AssemblyState;
+import net.fchauvel.trio.simulation.Topology;
+import net.fchauvel.trio.simulation.sampling.ProportionalSampling;
+import net.fchauvel.trio.simulation.sampling.Sampler;
 import java.util.HashMap;
 import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;

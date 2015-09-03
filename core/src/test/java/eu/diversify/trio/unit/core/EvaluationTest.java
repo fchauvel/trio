@@ -148,16 +148,14 @@
  */
 package eu.diversify.trio.unit.core;
 
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.Evaluation.*;
-
-import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.core.requirements.Conjunction;
-import eu.diversify.trio.core.requirements.Disjunction;
-import eu.diversify.trio.core.requirements.Negation;
-import eu.diversify.trio.core.requirements.Nothing;
-import eu.diversify.trio.core.requirements.Require;
+import net.fchauvel.trio.core.Component;
+import static net.fchauvel.trio.core.Evaluation.*;
+import net.fchauvel.trio.core.AssemblyVisitor;
+import net.fchauvel.trio.core.requirements.Conjunction;
+import net.fchauvel.trio.core.requirements.Disjunction;
+import net.fchauvel.trio.core.requirements.Negation;
+import net.fchauvel.trio.core.requirements.Nothing;
+import net.fchauvel.trio.core.requirements.Require;
 import eu.diversify.trio.unit.core.requirements.RequirementSamples;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

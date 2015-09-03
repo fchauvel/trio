@@ -149,7 +149,7 @@
 
 package eu.diversify.trio.acceptance.driver;
 
-import eu.diversify.trio.Configuration;
+import net.fchauvel.trio.Configuration;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

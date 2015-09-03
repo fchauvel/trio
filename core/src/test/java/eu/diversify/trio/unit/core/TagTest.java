@@ -149,10 +149,10 @@
 
 package eu.diversify.trio.unit.core;
 
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.DefaultAssemblyVisitor;
-import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.core.Tag;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.core.DefaultAssemblyVisitor;
+import net.fchauvel.trio.core.AssemblyVisitor;
+import net.fchauvel.trio.core.Tag;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

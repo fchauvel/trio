@@ -150,16 +150,16 @@
 
 package eu.diversify.trio.unit.core.requirements.stats;
 
-import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.core.requirements.stats.LeafCount;
+import net.fchauvel.trio.core.requirements.Requirement;
+import net.fchauvel.trio.core.requirements.stats.LeafCount;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static eu.diversify.trio.core.Evaluation.evaluate;
-import static eu.diversify.trio.core.requirements.Factory.*;
+import static net.fchauvel.trio.core.Evaluation.evaluate;
+import static net.fchauvel.trio.core.requirements.Factory.*;
 
 
 import static org.hamcrest.MatcherAssert.*;

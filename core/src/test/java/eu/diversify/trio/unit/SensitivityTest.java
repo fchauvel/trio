@@ -150,21 +150,21 @@
 package eu.diversify.trio.unit;
 
 import eu.diversify.trio.Samples;
-import eu.diversify.trio.Trio;
+import net.fchauvel.trio.Trio;
 
 import org.junit.Test;
-import eu.diversify.trio.core.validation.InvalidSystemException;
-import eu.diversify.trio.simulation.filter.TaggedAs;
-import eu.diversify.trio.simulation.RandomSimulation;
-import eu.diversify.trio.simulation.Simulation;
+import net.fchauvel.trio.core.validation.InvalidSystemException;
+import net.fchauvel.trio.simulation.filter.TaggedAs;
+import net.fchauvel.trio.simulation.RandomSimulation;
+import net.fchauvel.trio.simulation.Simulation;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import eu.diversify.trio.core.storage.Storage;
-import eu.diversify.trio.core.storage.StorageError;
-import eu.diversify.trio.simulation.filter.Filter;
+import net.fchauvel.trio.core.storage.Storage;
+import net.fchauvel.trio.core.storage.StorageError;
+import net.fchauvel.trio.simulation.filter.Filter;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

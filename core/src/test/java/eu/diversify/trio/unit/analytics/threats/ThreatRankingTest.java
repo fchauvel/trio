@@ -165,13 +165,13 @@
  */
 package eu.diversify.trio.unit.analytics.threats;
 
-import eu.diversify.trio.analytics.threats.Threat;
-import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
-import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.analytics.threats.ThreatRanking;
-import eu.diversify.trio.SimulationDispatcher;
-import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import net.fchauvel.trio.analytics.threats.Threat;
+import net.fchauvel.trio.analytics.events.StatisticListener;
+import net.fchauvel.trio.analytics.robustness.FailureSequenceAggregator;
+import net.fchauvel.trio.analytics.events.Statistic;
+import net.fchauvel.trio.analytics.threats.ThreatRanking;
+import net.fchauvel.trio.SimulationDispatcher;
+import net.fchauvel.trio.analytics.events.IdleStatisticListener;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
 import java.util.List;
@@ -194,7 +194,7 @@ public class ThreatRankingTest {
         final SimulationDispatcher simulation = new SimulationDispatcher();
         final Collector results = new Collector();
 
-        final eu.diversify.trio.StatisticDispatcher statistics = new eu.diversify.trio.StatisticDispatcher();
+        final net.fchauvel.trio.StatisticDispatcher statistics = new net.fchauvel.trio.StatisticDispatcher();
 
         final FailureSequenceAggregator robustness = new FailureSequenceAggregator(statistics);
         simulation.register(robustness.getSimulationListener());

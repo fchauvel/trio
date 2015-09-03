@@ -165,12 +165,11 @@
  */
 package eu.diversify.trio.unit.core;
 
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.core.Tag;
-
-import static eu.diversify.trio.core.requirements.Factory.*;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.core.AssemblyVisitor;
+import net.fchauvel.trio.core.Tag;
+import static net.fchauvel.trio.core.requirements.Factory.*;
 
 import java.util.ArrayList;
 import java.util.Collection;

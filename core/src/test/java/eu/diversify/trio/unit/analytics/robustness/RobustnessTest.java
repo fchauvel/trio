@@ -148,7 +148,7 @@
  */
 package eu.diversify.trio.unit.analytics.robustness;
 
-import eu.diversify.trio.analytics.robustness.Robustness;
+import net.fchauvel.trio.analytics.robustness.Robustness;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.equalTo;

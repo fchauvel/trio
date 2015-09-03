@@ -149,11 +149,11 @@
 
 package eu.diversify.trio.unit;
 
-import eu.diversify.trio.analytics.events.IdleStatisticListener;
-import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.analytics.robustness.Robustness;
-import eu.diversify.trio.analytics.sensitivity.Sensitivity;
-import eu.diversify.trio.analytics.threats.Threat;
+import net.fchauvel.trio.analytics.events.IdleStatisticListener;
+import net.fchauvel.trio.analytics.events.Statistic;
+import net.fchauvel.trio.analytics.robustness.Robustness;
+import net.fchauvel.trio.analytics.sensitivity.Sensitivity;
+import net.fchauvel.trio.analytics.threats.Threat;
 import java.util.List;
 
 /**

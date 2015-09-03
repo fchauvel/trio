@@ -148,15 +148,15 @@
  */
 package eu.diversify.trio.unit.core;
 
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.Dispatcher;
-import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.core.Tag;
-import eu.diversify.trio.core.requirements.Conjunction;
-import eu.diversify.trio.core.requirements.Disjunction;
-import eu.diversify.trio.core.requirements.Negation;
-import eu.diversify.trio.core.requirements.Nothing;
-import eu.diversify.trio.core.requirements.Require;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.core.Dispatcher;
+import net.fchauvel.trio.core.AssemblyVisitor;
+import net.fchauvel.trio.core.Tag;
+import net.fchauvel.trio.core.requirements.Conjunction;
+import net.fchauvel.trio.core.requirements.Disjunction;
+import net.fchauvel.trio.core.requirements.Negation;
+import net.fchauvel.trio.core.requirements.Nothing;
+import net.fchauvel.trio.core.requirements.Require;
 import eu.diversify.trio.unit.core.requirements.RequirementSamples;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -408,7 +408,7 @@ public class DispatcherTest {
     
     @Test
     public void enterSystemShouldBeProperlyDispatched() {
-        final eu.diversify.trio.core.Assembly data = new eu.diversify.trio.core.Assembly(new Component("A"));
+        final net.fchauvel.trio.core.Assembly data = new net.fchauvel.trio.core.Assembly(new Component("A"));
 
         context.checking(new Expectations() {
             {
@@ -424,7 +424,7 @@ public class DispatcherTest {
 
     @Test
     public void exitSystemShouldBeProperlyDispatched() {
-        final eu.diversify.trio.core.Assembly data = new eu.diversify.trio.core.Assembly(new Component("A"));
+        final net.fchauvel.trio.core.Assembly data = new net.fchauvel.trio.core.Assembly(new Component("A"));
 
         context.checking(new Expectations() {
             {

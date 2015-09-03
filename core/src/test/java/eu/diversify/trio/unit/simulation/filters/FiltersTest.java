@@ -149,13 +149,14 @@
 
 package eu.diversify.trio.unit.simulation.filters;
 
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.*;
-import eu.diversify.trio.simulation.AssemblyState;
-import eu.diversify.trio.simulation.Topology;
-import eu.diversify.trio.simulation.filter.All;
-import eu.diversify.trio.simulation.filter.Filter;
-import eu.diversify.trio.simulation.filter.TaggedAs;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.core.Tag;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.simulation.AssemblyState;
+import net.fchauvel.trio.simulation.Topology;
+import net.fchauvel.trio.simulation.filter.All;
+import net.fchauvel.trio.simulation.filter.Filter;
+import net.fchauvel.trio.simulation.filter.TaggedAs;
 import java.util.*;
 import junit.framework.TestCase;
 import org.junit.Test;

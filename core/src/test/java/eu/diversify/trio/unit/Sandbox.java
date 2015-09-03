@@ -148,15 +148,15 @@
  */
 package eu.diversify.trio.unit;
 
-import eu.diversify.trio.Trio;
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.storage.InMemoryStorage;
-import eu.diversify.trio.core.storage.StorageError;
-import eu.diversify.trio.core.storage.parsing.Builder;
-import eu.diversify.trio.core.storage.parsing.SyntaxError;
-import eu.diversify.trio.simulation.RandomSimulation;
-import eu.diversify.trio.simulation.Simulation;
-import eu.diversify.trio.simulation.filter.TaggedAs;
+import net.fchauvel.trio.Trio;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.core.storage.InMemoryStorage;
+import net.fchauvel.trio.core.storage.StorageError;
+import net.fchauvel.trio.core.storage.parsing.Builder;
+import net.fchauvel.trio.core.storage.parsing.SyntaxError;
+import net.fchauvel.trio.simulation.RandomSimulation;
+import net.fchauvel.trio.simulation.Simulation;
+import net.fchauvel.trio.simulation.filter.TaggedAs;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;

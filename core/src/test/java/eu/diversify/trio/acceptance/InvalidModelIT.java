@@ -149,7 +149,7 @@
 
 package eu.diversify.trio.acceptance;
 
-import eu.diversify.trio.Configuration;
+import net.fchauvel.trio.Configuration;
 import eu.diversify.trio.acceptance.driver.TrioRequest;
 import eu.diversify.trio.acceptance.driver.TrioResponse;
 import java.io.IOException;

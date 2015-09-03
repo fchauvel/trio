@@ -182,10 +182,10 @@
  */
 package eu.diversify.trio.unit.core;
 
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.core.requirements.Require;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.core.AssemblyVisitor;
+import net.fchauvel.trio.core.requirements.Requirement;
+import net.fchauvel.trio.core.requirements.Require;
 
 import junit.framework.TestCase;
 import org.jmock.Expectations;

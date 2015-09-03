@@ -149,10 +149,10 @@
 
 package eu.diversify.trio.unit.core.storage;
 
-import eu.diversify.trio.core.Tag;
-import eu.diversify.trio.core.requirements.Requirement;
-import eu.diversify.trio.core.Component;
-import eu.diversify.trio.core.Assembly;
+import net.fchauvel.trio.core.Tag;
+import net.fchauvel.trio.core.requirements.Requirement;
+import net.fchauvel.trio.core.Component;
+import net.fchauvel.trio.core.Assembly;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
@@ -160,8 +160,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static eu.diversify.trio.core.storage.parsing.Builder.*;
-import static eu.diversify.trio.core.requirements.Factory.*;
+import static net.fchauvel.trio.core.storage.parsing.Builder.*;
+import static net.fchauvel.trio.core.requirements.Factory.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 

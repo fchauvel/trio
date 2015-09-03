@@ -165,9 +165,9 @@
  */
 package eu.diversify.trio.unit;
 
-import eu.diversify.trio.StatisticDispatcher;
-import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Statistic;
+import net.fchauvel.trio.StatisticDispatcher;
+import net.fchauvel.trio.analytics.events.StatisticListener;
+import net.fchauvel.trio.analytics.events.Statistic;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;

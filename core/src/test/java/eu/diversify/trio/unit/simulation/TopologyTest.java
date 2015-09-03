@@ -148,11 +148,10 @@
  */
 package eu.diversify.trio.unit.simulation;
 
-import eu.diversify.trio.simulation.AssemblyState;
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Factory.*;
+import net.fchauvel.trio.simulation.AssemblyState;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.core.Component;
+import static net.fchauvel.trio.core.requirements.Factory.*;
 
 import junit.framework.TestCase;
 import org.junit.Test;

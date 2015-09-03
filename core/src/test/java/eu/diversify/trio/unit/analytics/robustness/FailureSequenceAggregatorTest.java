@@ -148,12 +148,12 @@
  */
 package eu.diversify.trio.unit.analytics.robustness;
 
-import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
-import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.analytics.robustness.FailureSequence;
-import eu.diversify.trio.SimulationDispatcher;
-import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import net.fchauvel.trio.analytics.robustness.FailureSequenceAggregator;
+import net.fchauvel.trio.analytics.events.StatisticListener;
+import net.fchauvel.trio.analytics.events.Statistic;
+import net.fchauvel.trio.analytics.robustness.FailureSequence;
+import net.fchauvel.trio.SimulationDispatcher;
+import net.fchauvel.trio.analytics.events.IdleStatisticListener;
 
 import static java.util.Arrays.asList;
 import java.util.HashMap;

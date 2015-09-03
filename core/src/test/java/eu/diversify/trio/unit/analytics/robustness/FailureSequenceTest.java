@@ -165,7 +165,7 @@
  */
 package eu.diversify.trio.unit.analytics.robustness;
 
-import eu.diversify.trio.analytics.robustness.FailureSequence;
+import net.fchauvel.trio.analytics.robustness.FailureSequence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;

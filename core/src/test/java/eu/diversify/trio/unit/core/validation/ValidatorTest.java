@@ -155,11 +155,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.validation.Validator;
-
-import static eu.diversify.trio.core.Evaluation.*;
-import static eu.diversify.trio.core.storage.parsing.Builder.build;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.core.validation.Validator;
+import static net.fchauvel.trio.core.Evaluation.*;
+import static net.fchauvel.trio.core.storage.parsing.Builder.build;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

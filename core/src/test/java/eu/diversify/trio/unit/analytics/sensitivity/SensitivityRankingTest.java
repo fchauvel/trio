@@ -148,12 +148,12 @@
  */
 package eu.diversify.trio.unit.analytics.sensitivity;
 
-import eu.diversify.trio.analytics.sensitivity.SensitivityRanking;
-import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.analytics.sensitivity.Sensitivity;
-import eu.diversify.trio.SimulationDispatcher;
-import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import net.fchauvel.trio.analytics.sensitivity.SensitivityRanking;
+import net.fchauvel.trio.analytics.events.StatisticListener;
+import net.fchauvel.trio.analytics.events.Statistic;
+import net.fchauvel.trio.analytics.sensitivity.Sensitivity;
+import net.fchauvel.trio.SimulationDispatcher;
+import net.fchauvel.trio.analytics.events.IdleStatisticListener;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;

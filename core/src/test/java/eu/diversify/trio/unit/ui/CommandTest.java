@@ -148,7 +148,7 @@
  */
 package eu.diversify.trio.unit.ui;
 
-import eu.diversify.trio.ui.Command;
+import net.fchauvel.trio.ui.Command;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -157,7 +157,7 @@ import org.junit.runners.JUnit4;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static eu.diversify.trio.ui.Command.*;
+import static net.fchauvel.trio.ui.Command.*;
 
 /**
  * Specification of the Command object

@@ -149,13 +149,12 @@
 
 package eu.diversify.trio;
 
-import eu.diversify.trio.core.Assembly;
-import eu.diversify.trio.core.Component;
-
-import static eu.diversify.trio.core.requirements.Factory.*;
-import eu.diversify.trio.core.storage.InMemoryStorage;
-import eu.diversify.trio.core.storage.Storage;
-import eu.diversify.trio.core.storage.parsing.Builder;
+import net.fchauvel.trio.core.Assembly;
+import net.fchauvel.trio.core.Component;
+import static net.fchauvel.trio.core.requirements.Factory.*;
+import net.fchauvel.trio.core.storage.InMemoryStorage;
+import net.fchauvel.trio.core.storage.Storage;
+import net.fchauvel.trio.core.storage.parsing.Builder;
 import java.util.HashMap;
 import java.util.Map;
 

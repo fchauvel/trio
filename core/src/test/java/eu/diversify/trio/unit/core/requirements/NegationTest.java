@@ -150,11 +150,11 @@
 
 package eu.diversify.trio.unit.core.requirements;
 
-import eu.diversify.trio.core.DefaultAssemblyVisitor;
-import eu.diversify.trio.core.AssemblyVisitor;
-import eu.diversify.trio.core.requirements.Conjunction;
-import eu.diversify.trio.core.requirements.Negation;
-import eu.diversify.trio.core.requirements.Require;
+import net.fchauvel.trio.core.DefaultAssemblyVisitor;
+import net.fchauvel.trio.core.AssemblyVisitor;
+import net.fchauvel.trio.core.requirements.Conjunction;
+import net.fchauvel.trio.core.requirements.Negation;
+import net.fchauvel.trio.core.requirements.Require;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;

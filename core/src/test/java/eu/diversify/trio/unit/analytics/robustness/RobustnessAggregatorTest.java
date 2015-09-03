@@ -165,14 +165,14 @@
  */
 package eu.diversify.trio.unit.analytics.robustness;
 
-import eu.diversify.trio.analytics.events.StatisticListener;
-import eu.diversify.trio.analytics.events.Statistic;
-import eu.diversify.trio.analytics.robustness.RobustnessAggregator;
-import eu.diversify.trio.analytics.robustness.FailureSequence;
-import eu.diversify.trio.analytics.robustness.FailureSequenceAggregator;
-import eu.diversify.trio.analytics.robustness.Robustness;
-import eu.diversify.trio.SimulationDispatcher;
-import eu.diversify.trio.analytics.events.IdleStatisticListener;
+import net.fchauvel.trio.analytics.events.StatisticListener;
+import net.fchauvel.trio.analytics.events.Statistic;
+import net.fchauvel.trio.analytics.robustness.RobustnessAggregator;
+import net.fchauvel.trio.analytics.robustness.FailureSequence;
+import net.fchauvel.trio.analytics.robustness.FailureSequenceAggregator;
+import net.fchauvel.trio.analytics.robustness.Robustness;
+import net.fchauvel.trio.SimulationDispatcher;
+import net.fchauvel.trio.analytics.events.IdleStatisticListener;
 import java.util.HashMap;
 import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -191,7 +191,7 @@ public class RobustnessAggregatorTest {
     @Test
     public void shouldComputeAverageRobustnessProperly() {
         SimulationDispatcher simulation = new SimulationDispatcher();
-        eu.diversify.trio.StatisticDispatcher statistics = new eu.diversify.trio.StatisticDispatcher();
+        net.fchauvel.trio.StatisticDispatcher statistics = new net.fchauvel.trio.StatisticDispatcher();
 
         Collector results = new Collector();
         RobustnessAggregator robustness = new RobustnessAggregator(results);
